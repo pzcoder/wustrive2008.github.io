@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><![CDATA[wustrive's Hexo blog]]></title>
+  <subtitle><![CDATA[hexo demo]]></subtitle>
+  <link href="/atom.xml" rel="self"/>
+  <link href="https://wustrive2008.github.io/"/>
+  <updated>2015-03-20T14:36:04.578Z</updated>
+  <id>https://wustrive2008.github.io/</id>
+  
+  <author>
+    <name><![CDATA[wustrive]]></name>
+    <email><![CDATA[wustrive_2008@126.com]]></email>
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[categories]]></title>
+    <link href="https://wustrive2008.github.io/2015/03/20/categories/"/>
+    <id>https://wustrive2008.github.io/2015/03/20/categories/</id>
+    <published>2015-03-20T13:40:06.000Z</published>
+    <updated>2015-03-20T14:36:04.578Z</updated>
+    <content type="html"><![CDATA[<h3 id="测试分类">测试分类</h3><blockquote>
+<p>引用文字<br>引用文字</p>
+</blockquote>
+<p>1, fdsfdsfds<br>2, fdsfeeeee<br>3, fdsfsd</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[测试分类]]>
+    
+    </summary>
+    
+      <category term="categories" scheme="https://wustrive2008.github.io/tags/categories/"/>
+    
+      <category term="text" scheme="https://wustrive2008.github.io/tags/text/"/>
+    
+      <category term="text" scheme="https://wustrive2008.github.io/categories/text/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[text]]></title>
+    <link href="https://wustrive2008.github.io/2015/03/20/text/"/>
+    <id>https://wustrive2008.github.io/2015/03/20/text/</id>
+    <published>2015-03-20T13:35:25.000Z</published>
+    <updated>2015-03-20T14:35:54.549Z</updated>
+    <content type="html"><![CDATA[<h2 id="text文章">text文章</h2><ul>
+<li>来了来了</li>
+<li>书上说</li>
+<li>叮叮当当</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">print</span><span class="params">(<span class="string">"hello hexo"</span>)</span></span></span><br></pre></td></tr></table></figure>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="text文章">text文章</h2><ul>
+<li>来了来了</li>
+<li>书上说</li>
+<li>叮叮当当</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter]]>
+    </summary>
+    
+      <category term="text" scheme="https://wustrive2008.github.io/tags/text/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Hello World]]></title>
+    <link href="https://wustrive2008.github.io/2015/03/20/hello-world/"/>
+    <id>https://wustrive2008.github.io/2015/03/20/hello-world/</id>
+    <published>2015-03-20T13:29:29.699Z</published>
+    <updated>2015-03-20T13:15:02.329Z</updated>
+    <content type="html"><![CDATA[<p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io]]>
+    </summary>
+    
+  </entry>
+  
+</feed>
