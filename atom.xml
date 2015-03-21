@@ -43,13 +43,14 @@
     <link href="https://wustrive2008.github.io/2015/03/20/text/"/>
     <id>https://wustrive2008.github.io/2015/03/20/text/</id>
     <published>2015-03-20T13:35:25.000Z</published>
-    <updated>2015-03-20T14:35:54.549Z</updated>
+    <updated>2015-03-20T17:48:24.310Z</updated>
     <content type="html"><![CDATA[<h2 id="text文章">text文章</h2><ul>
 <li>来了来了</li>
 <li>书上说</li>
 <li>叮叮当当</li>
 </ul>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">print</span><span class="params">(<span class="string">"hello hexo"</span>)</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Caption</span></span><br><span class="line">$(<span class="string">'.article-entry'</span>).each(<span class="function"><span class="keyword">function</span><span class="params">(i)</span></span>&#123;</span><br><span class="line">$(<span class="keyword">this</span>).find(<span class="string">'img'</span>).each(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</span><br><span class="line"><span class="keyword">if</span> ($(<span class="keyword">this</span>).parent().hasClass(<span class="string">'fancybox'</span>)) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> alt = <span class="keyword">this</span>.alt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// if (alt) $(this).after('&lt;span class="caption"&gt;' + alt + '&lt;/span&gt;'); 这个去掉</span></span><br><span class="line"></span><br><span class="line">$(<span class="keyword">this</span>).wrap(<span class="string">'&lt;a href="'</span> + <span class="keyword">this</span>.src + <span class="string">'" title="'</span> + alt + <span class="string">'" class="fancybox"&gt;&lt;/a&gt;'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">$(<span class="keyword">this</span>).find(<span class="string">'.fancybox'</span>).each(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</span><br><span class="line">$(<span class="keyword">this</span>).attr(<span class="string">'rel'</span>, <span class="string">'article'</span> + i);</span><br><span class="line">&#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">print</span><span class="params">(<span class="string">"fdsfdsfds"</span>)</span></span></span><br></pre></td></tr></table></figure>
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="text文章">text文章</h2><ul>
@@ -57,7 +58,7 @@
 <li>书上说</li>
 <li>叮叮当当</li>
 </ul>
-<figure class="highlight stylus"><table><tr><td class="gutter]]>
+<figure class="highlight javascript"><table><tr><td class="gu]]>
     </summary>
     
       <category term="text" scheme="https://wustrive2008.github.io/tags/text/"/>
