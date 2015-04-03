@@ -4,7 +4,7 @@
   <subtitle><![CDATA[生活，工作记录]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="https://wustrive2008.github.io/"/>
-  <updated>2015-03-21T15:08:45.373Z</updated>
+  <updated>2015-04-03T19:19:51.482Z</updated>
   <id>https://wustrive2008.github.io/</id>
   
   <author>
@@ -13,6 +13,21 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[qiniuimg]]></title>
+    <link href="https://wustrive2008.github.io/2015/04/04/qiniuimg/"/>
+    <id>https://wustrive2008.github.io/2015/04/04/qiniuimg/</id>
+    <published>2015-04-03T19:07:09.000Z</published>
+    <updated>2015-04-03T19:19:51.482Z</updated>
+    <content type="html"><![CDATA[<p><img src="img/sj.jpg" alt="图片"></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><img src="img/sj.jpg" alt="图片"></p>
+]]>
+    </summary>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[log4j配置参考]]></title>
@@ -114,7 +129,7 @@ log4j.appender.E.<span class="keyword">layout</span>.ConversionPattern = <span c
     <link href="https://wustrive2008.github.io/2015/03/21/hexo%E5%8D%9A%E5%AE%A2%E4%B9%8Bpacman/"/>
     <id>https://wustrive2008.github.io/2015/03/21/hexo博客之pacman/</id>
     <published>2015-03-21T12:35:25.000Z</published>
-    <updated>2015-03-21T14:55:15.240Z</updated>
+    <updated>2015-04-03T18:54:13.499Z</updated>
     <content type="html"><![CDATA[<h1 id="下面是本博客的搭建记录">下面是本博客的搭建记录</h1><h2 id="准备">准备</h2><h3 id="软件环境">软件环境</h3><ol>
 <li>windows 8.1</li>
 <li>nodejs  <a href="https://nodejs.org/" target="_blank" rel="external">官网</a></li>
@@ -140,6 +155,7 @@ log4j.appender.E.<span class="keyword">layout</span>.ConversionPattern = <span c
 <h3 id="代码高亮不显示问题">代码高亮不显示问题</h3><p>将主配置文件中的：<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">highlight</span>:</span><br><span class="line">  <span class="attribute">enable</span>: true</span><br><span class="line">  <span class="attribute">line_number</span>: true</span><br><span class="line">  <span class="attribute">tab_replace</span>:</span><br></pre></td></tr></table></figure></p>
 <p>拷贝到主题配置的_config.yml文件中</p>
 <h3 id="pacman主题author图片显示问题">pacman主题author图片显示问题</h3><p>修改主题的_config.yml文件中的author_img配置:<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">author_img:</span> ..<span class="regexp">/img/</span>author.jpg</span><br></pre></td></tr></table></figure></p>
+<h3 id="参考">参考</h3><p><a href="http://ibruce.info/2013/11/22/hexo-your-blog/" target="_blank" rel="external">hexo你的博客</a></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<h1 id="下面是本博客的搭建记录">下面是本博客的搭建记录</h1><h2 id="准备">准备</h2><h3 id="软件环境">软件环境</h3><ol>
