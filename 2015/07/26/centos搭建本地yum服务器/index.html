@@ -4,29 +4,19 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>chkconfig构建linux服务 | wustrive&#39;s blog</title>
+    <title>centos搭建本地yum服务器 | wustrive&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="wustrive">
     
-    <meta name="description" content="手动构建linux服务Linux运行级别
-0 - 停机
-1 - 单用户模式
-2 - 多用户，没有NFS和网络
-3 - 完全多用户
-4 - 暂无
-5 - 图形界面
-6 - 重启
-
- 默认的运行级别在/etc/inittab中设置 
-写服务控制脚本 示例：
-12345678910111213141516">
+    <meta name="description" content="YUM是Yellow dog Updater, Modified的缩写，是由Duke University所发起的计划，目的就是为了解决RPM的依赖关系的问题，方便使用者进行软件的安装、升级等等工作。在此在特别说明的是，YUM只是为了解决RPM的依赖关系的问题，而不是一种其它的软件安装模式。
+虽然在">
     
     
     
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="wustrive" />
-    <meta name="twitter:title" content="chkconfig构建linux服务 | wustrive&#39;s blog" />
+    <meta name="twitter:title" content="centos搭建本地yum服务器 | wustrive&#39;s blog" />
       
     
     
@@ -93,15 +83,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/07/26/chkconfig构建linux服务/" title="chkconfig构建linux服务" itemprop="url">chkconfig构建linux服务</a>
+      <a href="/2015/07/26/centos搭建本地yum服务器/" title="centos搭建本地yum服务器" itemprop="url">centos搭建本地yum服务器</a>
   </h1>
   <p class="article-author">By
     
       <a href="https://wustrive2008.github.io" title="wustrive">wustrive</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-07-26T12:27:41.000Z" itemprop="datePublished">2015-07-26</time>
-    更新日期:<time datetime="2015-07-26T13:39:51.852Z" itemprop="dateModified">2015-07-26</time>
+    <time datetime="2015-07-26T13:02:51.000Z" itemprop="datePublished">2015-07-26</time>
+    更新日期:<time datetime="2015-07-26T14:08:17.401Z" itemprop="dateModified">2015-07-26</time>
     
   </p>
 </header>
@@ -110,38 +100,28 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#手动构建linux服务"><span class="toc-number">1.</span> <span class="toc-text">手动构建linux服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux运行级别"><span class="toc-number">1.1.</span> <span class="toc-text">Linux运行级别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#写服务控制脚本"><span class="toc-number">1.2.</span> <span class="toc-text">写服务控制脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装服务"><span class="toc-number">1.3.</span> <span class="toc-text">安装服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用服务"><span class="toc-number">1.4.</span> <span class="toc-text">使用服务</span></a></li></ol></li></ol>
+		
 		</div>
 		
-		<h2 id="手动构建linux服务">手动构建linux服务</h2><h3 id="Linux运行级别">Linux运行级别</h3><ul>
-<li>0 - 停机</li>
-<li>1 - 单用户模式</li>
-<li>2 - 多用户，没有NFS和网络</li>
-<li>3 - 完全多用户</li>
-<li>4 - 暂无</li>
-<li>5 - 图形界面</li>
-<li>6 - 重启</li>
-</ul>
-<p><strong> 默认的运行级别在/etc/inittab中设置 </strong></p>
-<h3 id="写服务控制脚本">写服务控制脚本</h3><p><strong> 示例：</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#!/bin/sh   </span></span><br><span class="line"><span class="comment">#   </span></span><br><span class="line"><span class="comment"># memcached:    MemCached Daemon   </span></span><br><span class="line"><span class="comment">#   </span></span><br><span class="line"><span class="comment"># chkconfig:    35 90 25  </span></span><br><span class="line"><span class="comment"># description:  MemCached Daemon   </span></span><br><span class="line"><span class="comment">#   </span></span><br><span class="line"><span class="comment"># Source function library.   </span></span><br><span class="line">. /etc/rc.d/init.d/<span class="built_in">functions</span>   </span><br><span class="line">. /etc/sysconfig/network   </span><br><span class="line"><span class="function"><span class="title">start</span></span>()   </span><br><span class="line">&#123;   </span><br><span class="line">        <span class="built_in">echo</span> -n $<span class="string">"Starting memcached: "</span>  </span><br><span class="line">        daemon <span class="variable">$MEMCACHED</span> -u lbt <span class="operator">-d</span> -m <span class="number">1024</span> <span class="operator">-l</span> <span class="number">192.168</span>.<span class="number">32.193</span> -p <span class="number">12000</span> </span><br><span class="line">        <span class="built_in">echo</span>   </span><br><span class="line">&#125;   </span><br><span class="line"><span class="function"><span class="title">stop</span></span>()   </span><br><span class="line">&#123;   </span><br><span class="line">        <span class="built_in">echo</span> -n $<span class="string">"Shutting down memcached: "</span>  </span><br><span class="line">        killproc memcached   </span><br><span class="line">        <span class="built_in">echo</span>   </span><br><span class="line">&#125;   </span><br><span class="line">MEMCACHED=<span class="string">"/usr/local/bin/memcached"</span>  </span><br><span class="line">[ <span class="operator">-f</span> <span class="variable">$MEMCACHED</span> ] || <span class="built_in">exit</span> <span class="number">1</span>  </span><br><span class="line"><span class="comment"># See how we were called.   </span></span><br><span class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span>   </span><br><span class="line">  start)   </span><br><span class="line">        start   </span><br><span class="line">        ;;   </span><br><span class="line">  stop)   </span><br><span class="line">        stop   </span><br><span class="line">        ;;   </span><br><span class="line">  restart)   </span><br><span class="line">        stop   </span><br><span class="line">        sleep <span class="number">3</span>  </span><br><span class="line">        start   </span><br><span class="line">        ;;   </span><br><span class="line">    *)   </span><br><span class="line">        <span class="built_in">echo</span> $<span class="string">"Usage: <span class="variable">$0</span> &#123;start|stop|restart&#125;"</span>  </span><br><span class="line">        <span class="built_in">exit</span> <span class="number">1</span>  </span><br><span class="line"><span class="keyword">esac</span>   </span><br><span class="line"><span class="built_in">exit</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
-<p><strong> 说明 </strong></p>
-<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># chkconfig:    35 90 25     </span></span><br><span class="line"><span class="preprocessor"># description:  MemCached Daemon</span></span><br></pre></td></tr></table></figure>
-<p>这两行必须，chkconfig 35 90 25  ,数字分别代表，启动级别，启动运行 ，关闭顺序</p>
-<h3 id="安装服务">安装服务</h3><ol>
-<li>将脚本拷贝到/etc/init.d/目录</li>
-<li>chkconfig add  servername(脚本名称)</li>
-<li>chkconfig —level 35 servername on </li>
-<li>chkconfig  —list | grep servername</li>
-</ol>
-<h3 id="使用服务">使用服务</h3><pre><code><span class="keyword">service</span>  servername  <span class="literal">start</span>|<span class="literal">stop</span>|<span class="literal">restart</span>
-</code></pre>  
+		<p>YUM是Yellow dog Updater, Modified的缩写，是由Duke University所发起的计划，目的就是为了解决RPM的依赖关系的问题，方便使用者进行软件的安装、升级等等工作。在此在特别说明的是，YUM只是为了解决RPM的依赖关系的问题，而不是一种其它的软件安装模式。</p>
+<p>虽然在centos中可以直接使用yum源，但是也存在着与外网隔绝的现状，因此需要搭建本地yum源  </p>
+<p>系统：centos 6.5  </p>
+<p>1、将光盘挂载到/mnt下面<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># mount /dev/cdrom /mnt</span></span><br></pre></td></tr></table></figure></p>
+<p>2、删除系统自带的repo文件<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># cd /etc/yum.repos.d/  </span></span><br><span class="line"><span class="preprocessor"># mkdir bak  </span></span><br><span class="line"><span class="preprocessor"># mv *.repo bak</span></span><br></pre></td></tr></table></figure></p>
+<p>3、安装createrepo（其实只要安装createrepo即可以，但是需要其他依赖包，所以也得一起装上）<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># cd /mnt/Packages/  </span></span><br><span class="line"><span class="preprocessor"># rpm -ivh libxml2-python-2.7.6-14.el6.x86_64.rpm   </span></span><br><span class="line"><span class="preprocessor"># rpm -ivh deltarpm-3.5-0.5.20090913git.el6.x86_64.rpm   </span></span><br><span class="line"><span class="preprocessor"># rpm -ivh python-deltarpm-3.5-0.5.20090913git.el6.x86_64.rpm   </span></span><br><span class="line"><span class="preprocessor"># rpm -ivh createrepo-0.9.9-18.el6.noarch.rpm</span></span><br></pre></td></tr></table></figure></p>
+<p>4、使用createrepo命令创建yum仓库，创建索引信息<br>注：这里我们把yum仓库建立在/doiido/local<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># mkdir /doiido/local  </span></span><br><span class="line"><span class="preprocessor"># cp -rv /mnt/Packages/* /doiido/local  </span></span><br><span class="line"><span class="preprocessor"># cd /doiido/local  </span></span><br><span class="line"><span class="preprocessor"># createrepo -v /doiido/local</span></span><br></pre></td></tr></table></figure></p>
+<p>5、如若需要分组信息<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># cp <span class="regexp">/mnt/</span>repodata<span class="regexp">/b4e0b9342ef85d3059ff095fa7f140f654c2cb492837de689a58c581207d9632-c6-x86_64-comps.xml /</span>doiido<span class="regexp">/local/</span>comps.xml  </span><br><span class="line"># createrepo -g <span class="regexp">/doiido/</span>local<span class="regexp">/comps.xml /</span>doiido<span class="regexp">/local</span></span><br></pre></td></tr></table></figure></p>
+<p>6、编辑自己的repo文件<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># vi /etc/yum.repos.d/local.repo  </span></span><br><span class="line"><span class="preprocessor">#库名称  </span></span><br><span class="line">[local_server]  </span><br><span class="line">  </span><br><span class="line"><span class="preprocessor">#名称描述  </span></span><br><span class="line">name=Thisis a local repo  </span><br><span class="line">  </span><br><span class="line"><span class="preprocessor">#yum源目录  </span></span><br><span class="line">baseurl=file:<span class="comment">///doiido/local  </span></span><br><span class="line">  </span><br><span class="line"><span class="preprocessor">#是否启用该yum源，0为禁用  </span></span><br><span class="line">enabled=<span class="number">1</span>  </span><br><span class="line">  </span><br><span class="line"><span class="preprocessor">#检查GPG-KEY（0为不检查，1为检查）  </span></span><br><span class="line">gpgcheck=<span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<p>7、加载yum缓存<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># yum clean all  </span></span><br><span class="line"><span class="preprocessor"># yum makecache</span></span><br></pre></td></tr></table></figure></p>
+<p>8、测试下载<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># yum -y install php</span></span><br></pre></td></tr></table></figure></p>
+<p>这里就可以看到可以直接安装php，而不需要通过网上去下载。</p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/chkconfig/">chkconfig</a><a href="/tags/服务器/">服务器</a>
+  <span></span> <a href="/tags/Centos/">Centos</a><a href="/tags/Linux/">Linux</a><a href="/tags/yum/">yum</a><a href="/tags/软件/">软件</a>
   </div>
 
 
@@ -154,7 +134,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="https://wustrive2008.github.io/2015/07/26/chkconfig构建linux服务/" data-title="chkconfig构建linux服务 | wustrive&#39;s blog" data-tsina="null" class="share clearfix">
+  <div data-url="https://wustrive2008.github.io/2015/07/26/centos搭建本地yum服务器/" data-title="centos搭建本地yum服务器 | wustrive&#39;s blog" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -163,19 +143,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/07/26/memcached服务安装及使用/" title="memcached高速缓存服务安装及使用">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  memcached高速缓存服务安装及使用</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/07/26/读书笔记-支付战争/"  title="支付战争">
+<a href="/2015/07/26/CentOS6.5下samba服务器搭建与配置/"  title="CentOS6.5下samba服务器搭建与配置">
  <strong>NEXT:</strong><br/> 
- <span>支付战争
+ <span>CentOS6.5下samba服务器搭建与配置
 </span>
 </a>
 </div>
@@ -192,7 +164,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#手动构建linux服务"><span class="toc-number">1.</span> <span class="toc-text">手动构建linux服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux运行级别"><span class="toc-number">1.1.</span> <span class="toc-text">Linux运行级别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#写服务控制脚本"><span class="toc-number">1.2.</span> <span class="toc-text">写服务控制脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装服务"><span class="toc-number">1.3.</span> <span class="toc-text">安装服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用服务"><span class="toc-number">1.4.</span> <span class="toc-text">使用服务</span></a></li></ol></li></ol>
+  
   </div>
 
 <div id="asidepart">

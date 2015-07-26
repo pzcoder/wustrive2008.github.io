@@ -4,7 +4,7 @@
   <subtitle><![CDATA[life work study notes]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="https://wustrive2008.github.io/"/>
-  <updated>2015-07-26T13:37:55.140Z</updated>
+  <updated>2015-07-26T14:08:17.401Z</updated>
   <id>https://wustrive2008.github.io/</id>
   
   <author>
@@ -13,6 +13,348 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[centos搭建本地yum服务器]]></title>
+    <link href="https://wustrive2008.github.io/2015/07/26/centos%E6%90%AD%E5%BB%BA%E6%9C%AC%E5%9C%B0yum%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    <id>https://wustrive2008.github.io/2015/07/26/centos搭建本地yum服务器/</id>
+    <published>2015-07-26T13:02:51.000Z</published>
+    <updated>2015-07-26T14:08:17.401Z</updated>
+    <content type="html"><![CDATA[<p>YUM是Yellow dog Updater, Modified的缩写，是由Duke University所发起的计划，目的就是为了解决RPM的依赖关系的问题，方便使用者进行软件的安装、升级等等工作。在此在特别说明的是，YUM只是为了解决RPM的依赖关系的问题，而不是一种其它的软件安装模式。</p>
+<p>虽然在centos中可以直接使用yum源，但是也存在着与外网隔绝的现状，因此需要搭建本地yum源  </p>
+<p>系统：centos 6.5  </p>
+<p>1、将光盘挂载到/mnt下面<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># mount /dev/cdrom /mnt</span></span><br></pre></td></tr></table></figure></p>
+<p>2、删除系统自带的repo文件<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># cd /etc/yum.repos.d/  </span></span><br><span class="line"><span class="preprocessor"># mkdir bak  </span></span><br><span class="line"><span class="preprocessor"># mv *.repo bak</span></span><br></pre></td></tr></table></figure></p>
+<p>3、安装createrepo（其实只要安装createrepo即可以，但是需要其他依赖包，所以也得一起装上）<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># cd /mnt/Packages/  </span></span><br><span class="line"><span class="preprocessor"># rpm -ivh libxml2-python-2.7.6-14.el6.x86_64.rpm   </span></span><br><span class="line"><span class="preprocessor"># rpm -ivh deltarpm-3.5-0.5.20090913git.el6.x86_64.rpm   </span></span><br><span class="line"><span class="preprocessor"># rpm -ivh python-deltarpm-3.5-0.5.20090913git.el6.x86_64.rpm   </span></span><br><span class="line"><span class="preprocessor"># rpm -ivh createrepo-0.9.9-18.el6.noarch.rpm</span></span><br></pre></td></tr></table></figure></p>
+<p>4、使用createrepo命令创建yum仓库，创建索引信息<br>注：这里我们把yum仓库建立在/doiido/local<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># mkdir /doiido/local  </span></span><br><span class="line"><span class="preprocessor"># cp -rv /mnt/Packages/* /doiido/local  </span></span><br><span class="line"><span class="preprocessor"># cd /doiido/local  </span></span><br><span class="line"><span class="preprocessor"># createrepo -v /doiido/local</span></span><br></pre></td></tr></table></figure></p>
+<p>5、如若需要分组信息<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># cp <span class="regexp">/mnt/</span>repodata<span class="regexp">/b4e0b9342ef85d3059ff095fa7f140f654c2cb492837de689a58c581207d9632-c6-x86_64-comps.xml /</span>doiido<span class="regexp">/local/</span>comps.xml  </span><br><span class="line"># createrepo -g <span class="regexp">/doiido/</span>local<span class="regexp">/comps.xml /</span>doiido<span class="regexp">/local</span></span><br></pre></td></tr></table></figure></p>
+<p>6、编辑自己的repo文件<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># vi /etc/yum.repos.d/local.repo  </span></span><br><span class="line"><span class="preprocessor">#库名称  </span></span><br><span class="line">[local_server]  </span><br><span class="line">  </span><br><span class="line"><span class="preprocessor">#名称描述  </span></span><br><span class="line">name=Thisis a local repo  </span><br><span class="line">  </span><br><span class="line"><span class="preprocessor">#yum源目录  </span></span><br><span class="line">baseurl=file:<span class="comment">///doiido/local  </span></span><br><span class="line">  </span><br><span class="line"><span class="preprocessor">#是否启用该yum源，0为禁用  </span></span><br><span class="line">enabled=<span class="number">1</span>  </span><br><span class="line">  </span><br><span class="line"><span class="preprocessor">#检查GPG-KEY（0为不检查，1为检查）  </span></span><br><span class="line">gpgcheck=<span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<p>7、加载yum缓存<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># yum clean all  </span></span><br><span class="line"><span class="preprocessor"># yum makecache</span></span><br></pre></td></tr></table></figure></p>
+<p>8、测试下载<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># yum -y install php</span></span><br></pre></td></tr></table></figure></p>
+<p>这里就可以看到可以直接安装php，而不需要通过网上去下载。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>YUM是Yellow dog Updater, Modified的缩写，是由Duke University所发起的计划，目的就是为了解决RPM的依赖关系的问题，方便使用者进行软件的安装、升级等等工作。在此在特别说明的是，YUM只是为了解决RPM的依赖关系的问题，而不是一种其]]>
+    </summary>
+    
+      <category term="Centos" scheme="https://wustrive2008.github.io/tags/Centos/"/>
+    
+      <category term="Linux" scheme="https://wustrive2008.github.io/tags/Linux/"/>
+    
+      <category term="yum" scheme="https://wustrive2008.github.io/tags/yum/"/>
+    
+      <category term="软件" scheme="https://wustrive2008.github.io/tags/%E8%BD%AF%E4%BB%B6/"/>
+    
+      <category term="Linux" scheme="https://wustrive2008.github.io/categories/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[CentOS6.5下samba服务器搭建与配置]]></title>
+    <link href="https://wustrive2008.github.io/2015/07/26/CentOS6.5%E4%B8%8Bsamba%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA%E4%B8%8E%E9%85%8D%E7%BD%AE/"/>
+    <id>https://wustrive2008.github.io/2015/07/26/CentOS6.5下samba服务器搭建与配置/</id>
+    <published>2015-07-26T12:52:19.000Z</published>
+    <updated>2015-07-26T14:00:21.212Z</updated>
+    <content type="html"><![CDATA[<h3 id="一、samba服务器的安装与配置">一、samba服务器的安装与配置</h3><ol>
+<li><p>samba服务器所需的软件包：</p>
+<p> [root@localhost ~]# yum -y install samba samba-common samba-client </p>
+</li>
+<li><p>samba服务器的主配置文件</p>
+<p> [root@localhost ~]# vim /etc/samba/smb.conf </p>
+ <figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line">[global]</span><br><span class="line"></span><br><span class="line"><span class="comment"># ----------------------- Network Related Options -------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="variable">workgroup =</span> MYGROUP 工作组名称，可随便写</span><br><span class="line"></span><br><span class="line">server <span class="variable">string =</span> MY Samba Server Version %v 服务器描述，可随便写</span><br><span class="line"></span><br><span class="line">; netbios <span class="variable">name =</span> MYSERVER</span><br><span class="line"></span><br><span class="line">; <span class="variable">interfaces =</span> lo eth0 <span class="number">192.168</span>.<span class="number">12.2</span>/<span class="number">24</span> <span class="number">192.168</span>.<span class="number">13.2</span>/<span class="number">24</span> 这两条相当于samba服务器特有 的防火墙机制</span><br><span class="line"></span><br><span class="line">; hosts <span class="variable">allow =</span> <span class="number">127</span>. <span class="number">192.168</span>.<span class="number">12</span>. <span class="number">192.168</span>.<span class="number">13</span>.</span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------- Logging Options -----------------------------</span></span><br><span class="line"></span><br><span class="line">log <span class="variable">file =</span> /var/log/samba/log.%m samba的日志文件及命名格式</span><br><span class="line"></span><br><span class="line"><span class="comment"># max 50KB per log file, then rotate</span></span><br><span class="line"></span><br><span class="line">max log <span class="variable">size =</span> <span class="number">50</span> 最大日志存储量</span><br><span class="line"></span><br><span class="line"><span class="comment"># ----------------------- Standalone Server Options ------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="variable">security =</span> user 访问samba的用户级别（share/user/domain）</span><br><span class="line"></span><br><span class="line">passdb <span class="variable">backend =</span> tdbsam</span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------- Printing Options -----------------------------</span></span><br><span class="line"></span><br><span class="line">load <span class="variable">printers =</span> no 是否启用打印机功能，默认为yes</span><br><span class="line"></span><br><span class="line">cups <span class="variable">options =</span> raw</span><br><span class="line"></span><br><span class="line">; printcap <span class="variable">name =</span> /etc/printcap</span><br><span class="line"></span><br><span class="line"><span class="comment">#obtain list of printers automatically on SystemV</span></span><br><span class="line"></span><br><span class="line">; printcap <span class="variable">name =</span> lpstat</span><br><span class="line"></span><br><span class="line">; <span class="variable">printing =</span> cups</span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------- Filesystem Options ---------------------------</span></span><br><span class="line"></span><br><span class="line">[homes] 在客户端显示的共享目录名称</span><br><span class="line"></span><br><span class="line"><span class="variable">comment =</span> homes directory 此共享目录描述</span><br><span class="line"></span><br><span class="line"><span class="variable">browseable =</span> no 不在客户端显示共享目录（即不显示[homes]）</span><br><span class="line"></span><br><span class="line"><span class="variable">writable =</span> no 不可写</span><br><span class="line"></span><br><span class="line">read <span class="variable">only=</span>yes 可读取</span><br><span class="line"></span><br><span class="line">create <span class="variable">mode =</span> <span class="number">0664</span> samba用户在自己家目录（默认/home/sambauser）下新建 文件的默认权限为<span class="number">0644</span>（<span class="number">0</span>为acl权限）</span><br><span class="line"></span><br><span class="line">directory <span class="variable">mode =</span> <span class="number">0775</span> samba用户在自己家目录（默认/home/sambauser）下新建 目录的默认权限为<span class="number">0775</span>（<span class="number">0</span>为acl权限）</span><br><span class="line"></span><br><span class="line">[printers] 打印功能共享目录</span><br><span class="line"></span><br><span class="line"><span class="variable">comment =</span> All Printers</span><br><span class="line"></span><br><span class="line"><span class="variable">path =</span> /var/spool/samba</span><br><span class="line"></span><br><span class="line"><span class="variable">browseable =</span> no</span><br><span class="line"></span><br><span class="line">guest <span class="variable">ok =</span> no</span><br><span class="line"></span><br><span class="line"><span class="variable">writable =</span> no</span><br><span class="line"></span><br><span class="line"><span class="variable">printable =</span> yes</span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------------------------- user public options -------------------------</span></span><br><span class="line"></span><br><span class="line">[wxwsmb] 服务器共享目录名称</span><br><span class="line"></span><br><span class="line"><span class="variable">comment =</span> user public directory</span><br><span class="line"></span><br><span class="line"><span class="variable">path=</span>/tmp/public 实际的共享目录绝对路径</span><br><span class="line"></span><br><span class="line"><span class="variable">browseable =</span> yes</span><br><span class="line"></span><br><span class="line"><span class="variable">writable =</span> yes</span><br><span class="line"></span><br><span class="line">read <span class="variable">only=</span> yes</span><br><span class="line"></span><br><span class="line"><span class="variable">public=</span> yes 可以共享</span><br><span class="line"></span><br><span class="line">write <span class="variable">list=</span>@wxwsmb 可以共享此目录的samba用户组</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动/重启服务</p>
+<p> [root@localhost ~]# service smb restart</p>
+<p> 关闭 SMB 服务： [确定]</p>
+<p> 启动 SMB 服务： [确定]</p>
+<p> [root@localhost ~]# service nmb restart</p>
+<p> 关闭 NMB 服务： [确定]</p>
+<p> 启动 NMB 服务： [确定]</p>
+</li>
+<li><p>查看状态</p>
+<p> [root@localhost ~]# netstat -ltunp | grep smb 查看网络端口的监控状态</p>
+<p> tcp 0 0 0.0.0.0:139 0.0.0.0:* LISTEN 1507/smbd</p>
+<p> tcp 0 0 0.0.0.0:445 0.0.0.0:* LISTEN 1507/smbd</p>
+<p> tcp 0 0 :::139 :::* LISTEN 1507/smbd</p>
+<p> tcp 0 0 :::445 :::* LISTEN 1507/smbd</p>
+</li>
+</ol>
+<h3 id="二、创建samba用户">二、创建samba用户</h3><p>[root@localhost ~]# groupadd wxwsmb</p>
+<p>[root@localhost ~]# useradd -g wxwsmb smb2</p>
+<p>[root@localhost ~]# pdbedit -a -u smb2 创建samba用户</p>
+<p>new password:</p>
+<p>retype new password:</p>
+<p>Unix username: smb2</p>
+<p>NT username:</p>
+<p>Account Flags: [U ]</p>
+<p>User SID: S-1-5-21-1442997883-3833565404-3457035396-1002</p>
+<p>Primary Group SID: S-1-5-21-1442997883-3833565404-3457035396-513</p>
+<h3 id="三、测试（服务器ip地址为192-168-1-24）">三、测试（服务器ip地址为192.168.1.24）</h3><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@localhost ~]# smbclient -<span class="keyword">L</span> <span class="comment">//192.168.1.24 -U smb2</span></span><br><span class="line"></span><br><span class="line">Enter smb2's password:</span><br><span class="line"></span><br><span class="line">Domain=[MYGROUP] OS=[Unix] Server=[Samba 3.6.9-164.el6]</span><br><span class="line"></span><br><span class="line">Sharename <span class="keyword">Type</span> Comment</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">wxwsmb Disk user public directory</span><br><span class="line"></span><br><span class="line">IPC$ IPC IPC Service (MY Samba Server <span class="keyword">Version</span> 3.6.9-164.el6)</span><br><span class="line"></span><br><span class="line">smb2 Disk homes directory</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost ~]# mount -t cifs <span class="comment">//192.168.1.24/smb2 /mnt -o username=smb2</span></span><br><span class="line"></span><br><span class="line">Password: 输入设定的samba用户密码</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# df -<span class="literal">h</span></span><br><span class="line"></span><br><span class="line">Filesystem Size Used Avail <span class="keyword">Use</span>% Mounted <span class="keyword">on</span></span><br><span class="line"></span><br><span class="line">/dev/sda2 49G 5.8G 40G 13% /</span><br><span class="line"></span><br><span class="line">tmpfs 398M 0 398M 0% /dev/shm</span><br><span class="line"></span><br><span class="line">/dev/sda1 194M 28M 157M 15% /<span class="keyword">boot</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//192.168.1.24/smb2 49G 5.8G 40G 13% /mnt</span></span><br></pre></td></tr></table></figure>
+<h3 id="四、注意事项：">四、注意事项：</h3><p>1、记得将防火墙（也可以将防火墙开启通过制定规则来使服务器与客户端通信）和selinux关闭；</p>
+<p>2、共享目录开放的权限要跟目录本身的权限一致才能达到想要的你想要的效果。</p>
+<h4 id="常见问题：">常见问题：</h4><p>windows中输入用户账号密码提示账号密码错误，使用</p>
+<p>smbclient -L //192.168.32.220 -U lbt</p>
+<p>在命令行登录，错误信息：</p>
+<p>session setup failed: NT_STATUS_LOGON_FAILURE</p>
+<p>解决办法：</p>
+<p>这是因为此用户没有成为samba服务的用户，解决办法是将此系统用户加入到samba中：</p>
+<p>执行命令： smbpasswd -a username</p>
+<p>设置密码即可</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h3 id="一、samba服务器的安装与配置">一、samba服务器的安装与配置</h3><ol>
+<li><p>samba服务器所需的软件包：</p>
+<p> [root@localhost ~]# yum -y install samba samba-common sam]]>
+    </summary>
+    
+      <category term="Centos" scheme="https://wustrive2008.github.io/tags/Centos/"/>
+    
+      <category term="Linux" scheme="https://wustrive2008.github.io/tags/Linux/"/>
+    
+      <category term="samba" scheme="https://wustrive2008.github.io/tags/samba/"/>
+    
+      <category term="文件共享" scheme="https://wustrive2008.github.io/tags/%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%AB/"/>
+    
+      <category term="Linux" scheme="https://wustrive2008.github.io/categories/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Docker安装JavaWeb(Tomcat)运行环境]]></title>
+    <link href="https://wustrive2008.github.io/2015/07/26/Docker%E5%AE%89%E8%A3%85JavaWeb(Tomcat)%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83/"/>
+    <id>https://wustrive2008.github.io/2015/07/26/Docker安装JavaWeb(Tomcat)运行环境/</id>
+    <published>2015-07-26T12:43:05.000Z</published>
+    <updated>2015-07-26T13:45:53.321Z</updated>
+    <content type="html"><![CDATA[<p>docker 安装条件：</p>
+<ol>
+<li>开通cpu虚拟化技术 BIOS设置</li>
+<li>宿主主机要求64位操作系统</li>
+</ol>
+<p>测试环境：ubuntu 14.04 64bit</p>
+<h3 id="安装docker">安装docker</h3><ol>
+<li><p>安装最新版本的docker</p>
+<p> <code>wget -qO- https://get.docker.com/ | sh</code></p>
+</li>
+<li><p>查看版本</p>
+<p> <code>doceker vresion</code></p>
+</li>
+<li><p>运行测试</p>
+<p> <code>docker run hello-world</code></p>
+</li>
+</ol>
+<h3 id="去除掉sudo">去除掉sudo</h3><blockquote>
+<p>在Ubuntu下，在执行Docker时，每次都要输入sudo，同时输入密码，很累人的，这里微调一下，把当前用户执行权限添加到相应的docker用户组里面。</p>
+</blockquote>
+<p><strong>步骤</strong></p>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># 添加一个新的docker用户组</span></span><br><span class="line">sudo groupadd docker</span><br><span class="line"><span class="preprocessor"># 添加当前用户到docker用户组里，注意这里的yongboy为ubuntu server登录用户名</span></span><br><span class="line">sudo gpasswd -a yongboy docker</span><br><span class="line"><span class="preprocessor"># 重启Docker后台监护进程</span></span><br><span class="line">sudo service docker restart</span><br><span class="line"><span class="preprocessor"># 重启之后，尝试一下，是否生效</span></span><br><span class="line">docker version</span><br><span class="line"><span class="preprocessor">#若还未生效，则系统重启，则生效</span></span><br><span class="line">sudo reboot</span><br></pre></td></tr></table></figure>
+<h3 id="安装docker镜像">安装docker镜像</h3><ol>
+<li><p>安装镜像</p>
+<p> <code>docker pull learn/tutorial</code></p>
+</li>
+<li><p>测试效果</p>
+<p> <code>docker run learn/tutorial /bin/echo hello world</code></p>
+</li>
+<li><p>进入虚拟机</p>
+<p> <code>docker run -i -t learn/tutorial /bin/bash</code></p>
+</li>
+</ol>
+<h3 id="虚拟机环境部署">虚拟机环境部署</h3><ol>
+<li><p>安装ssh服务</p>
+ <figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">apt-<span class="keyword">get</span> update</span><br><span class="line">apt-<span class="keyword">get</span> install openssh-server</span><br><span class="line">which sshd</span><br><span class="line">/usr/sbin/sshd</span><br><span class="line">mkdir /var/<span class="command">run</span>/sshd</span><br><span class="line">passwd <span class="comment">#输入用户密码，我这里设置为123456，便于SSH客户端登陆使用</span></span><br><span class="line"><span class="keyword">exit</span> <span class="comment">#退出</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取到刚才操作的实例容器ID</p>
+ <figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#docker ps -<span class="keyword">l</span></span><br><span class="line">CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES</span><br><span class="line">b5b8dd5e603e learn/<span class="keyword">tutorial</span>:latest /bin/bash 3 minutes ago <span class="keyword">Exit</span> 0 thirsty_pasteur</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>状态保存</p>
+<p> <code>docker commit b5b8dd5e603e learn/tutorial</code></p>
+</li>
+<li><p>以后台进程方式长期运行此镜像实例</p>
+<p> <code>docker run -d -p 22 -p 800:8080 learn/tutorial /usr/sbin/sshd -D</code></p>
+</li>
+<li><p>查看实例运行状态</p>
+ <figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wustrive<span class="variable">@ubuntu</span><span class="symbol">:~</span><span class="variable">$ </span>sudo docker ps</span><br><span class="line"><span class="constant">CONTAINER ID </span>       <span class="constant">IMAGE </span>              <span class="constant">COMMAND </span>              <span class="constant">CREATED </span>            <span class="constant">STATUS </span>             <span class="constant">PORTS </span>                                         <span class="constant">NAMES</span></span><br><span class="line">b5b8dd5e603e        learn/tutorial      <span class="string">"/usr/sbin/sshd -D"</span>   <span class="number">31</span> minutes ago      <span class="constant">Up </span><span class="number">31</span> minutes       <span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span><span class="symbol">:</span><span class="number">32768</span>-&gt;<span class="number">22</span>/tcp, <span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span><span class="symbol">:</span><span class="number">800</span>-&gt;<span class="number">8080</span>/tcp   elegant_davinci</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ssh登录镜像</p>
+<p> <code>ssh root@127.0.0.1 -p 32768</code></p>
+</li>
+<li><p>安装/运行javaweb部署运行环境</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 在ubuntu 12.04上安装oracle jdk 7</span><br><span class="line">apt-get <span class="operator"><span class="keyword">install</span> python-software-properties</span><br><span class="line"><span class="keyword">add</span>-apt-repository ppa:webupd8team/java</span><br><span class="line">apt-<span class="keyword">get</span> <span class="keyword">update</span></span><br><span class="line">apt-<span class="keyword">get</span> <span class="keyword">install</span> -y wget</span><br><span class="line">apt-<span class="keyword">get</span> <span class="keyword">install</span> oracle-java7-installer</span><br><span class="line">java -<span class="keyword">version</span></span><br><span class="line"># 下载tomcat <span class="number">7.0</span><span class="number">.47</span></span><br><span class="line">wget http://mirrors.hust.edu.cn/apache/tomcat/tomcat-<span class="number">7</span>/v7<span class="number">.0</span><span class="number">.63</span>/<span class="keyword">bin</span>/apache-tomcat-<span class="number">7.0</span><span class="number">.63</span>.tar.gz</span><br><span class="line"># 解压，运行</span><br><span class="line">tar xvf apache-tomcat-<span class="number">7.0</span><span class="number">.47</span>.tar.gz</span><br><span class="line">cd apache-tomcat-<span class="number">7.0</span><span class="number">.47</span></span><br><span class="line"><span class="keyword">bin</span>/startup.sh</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>访问服务</p>
+<p> 访问宿主主机800端口</p>
+<p> 如：<code>curl http://192.168.32.151:800</code></p>
+</li>
+<li><p>保存镜像</p>
+<p> <code>docker commit b5b8dd5e603e java/tomcat</code></p>
+</li>
+</ol>
+<h3 id="docker常用命令">docker常用命令</h3><ul>
+<li><p>docker version</p>
+<p>  显示 Docker 版本信息。</p>
+</li>
+<li><p>docker info  </p>
+<p>  检查docker安装是否正确</p>
+</li>
+<li><p>docker search</p>
+<p>  从 Docker Hub 中搜索符合条件的镜像。</p>
+<p>  —automated 只列出 automated build类型的镜像；</p>
+<p>  —no-trunc 可显示完整的镜像描述；</p>
+<p>  -s 40 列出收藏数不小于40的镜像。</p>
+</li>
+<li><p>sudo docker pull centos:7  </p>
+<p>  从 Docker Hub 中拉取或者更新指定镜像。</p>
+<p>  -a 拉取所有 tagged 镜像 。</p>
+</li>
+<li><p>docker images</p>
+<p> 列出本地所有镜像。其中 [name] 对镜像名称进行关键词查询。</p>
+<p> -a 列出所有镜像（含过程镜像）；</p>
+<p> -f 过滤镜像，如： -f [‘dangling=true’] 只列出满足dangling=true 条件的镜像；</p>
+<p> —no-trunc 可显示完整的镜像ID；</p>
+<p> -q 仅列出镜像ID。</p>
+<p> —tree 以树状结构列出镜像的所有提交历史。</p>
+</li>
+<li><p>docker run centos /bin/echo Hello Docker </p>
+<p>  运行镜像</p>
+</li>
+<li><p>docker stop $sample_job</p>
+<p>  停止名为sample_job的容器</p>
+</li>
+<li><p>docker commit $sample_job job1</p>
+<p>  容器状态保存为镜像</p>
+</li>
+<li><p>docker ps</p>
+<p>  列出所有运行中的容器</p>
+<p>  -a 列出所有容器（含沉睡镜像）；</p>
+<p>  —before=”nginx” 列出在某一容器之前创建的容器，接受容器名称和ID作为参数；</p>
+<p>  —since=”nginx” 列出在某一容器之后创建的容器，接受容器名称和ID作为参数；</p>
+<p>  -l 仅列出最新创建的一个容器；</p>
+<p>  —no-trunc 显示完整的容器ID；</p>
+<p>  -n=4 列出最近创建的4个容器；</p>
+<p>  -q 仅列出容器ID；</p>
+<p>  -s 显示容器大小。</p>
+</li>
+<li><p>docker rmi</p>
+<p>  从本地移除一个或多个指定的镜像。</p>
+<p>  -f 强行移除该镜像，即使其正被使用</p>
+<p>  —no-prune 不移除该镜像的过程镜像，默认移除\</p>
+</li>
+<li><p>docker rm</p>
+<p>  -f 强行移除该容器，即使其正在运行；</p>
+<p>  -l 移除容器间的网络连接，而非容器本身；</p>
+<p>  -v 移除与容器关联的空间。</p>
+</li>
+<li><p>docker history</p>
+<p>  查看指定镜像的创建历史。</p>
+<p>  —no-trunc 显示完整的提交记录；</p>
+<p>  -q 仅列出提交记录ID。</p>
+</li>
+<li><p>docker start|stop|restart</p>
+<p>  启动、停止和重启一个或多个指定容器。</p>
+<p>  -a 待完成</p>
+<p>  -i 启动一个容器并进入交互模式；</p>
+<p>  -t 10 停止或者重启容器的超时时间（秒），超时后系统将杀死进程。</p>
+</li>
+<li><p>docker kill</p>
+<p>  杀死一个或多个指定容器进程。</p>
+<p>  -s “KILL” 自定义发送至容器的信号。</p>
+</li>
+<li><p>docker events</p>
+<p>  从服务器拉取个人动态，可选择时间区间。</p>
+</li>
+<li><p>docker save</p>
+<p>  将指定镜像保存成 tar 归档文件， docker load 的逆操作。保存后再加载（saved-loaded）的镜像不会丢失提交历史和层，可以回滚。</p>
+</li>
+<li><p>docker load</p>
+<p>  从 tar 镜像归档中载入镜像， docker save 的逆操作。保存后再加载（saved-loaded）的镜像不会丢失提交历史和层，可以回滚。</p>
+<p>  -i “debian.tar” 指定载入的镜像归档。</p>
+</li>
+<li><p>docker export</p>
+<p>  将指定的容器保存成 tar 归档文件， docker import 的逆操作。导出后导入（exported-imported)）的容器会丢失所有的提交历史，无法回滚。</p>
+</li>
+<li><p>docker import</p>
+<p>  从归档文件（支持远程文件）创建一个镜像， export 的逆操作，可为导入镜像打上标签。导出后导入（exported-imported)）的容器会丢失所有的提交历史，无法回滚。</p>
+</li>
+<li><p>docker top</p>
+<p>  查看一个正在运行容器进程，支持 ps 命令参数。</p>
+</li>
+<li><p>docker inspect</p>
+<p>  检查镜像或者容器的参数，默认返回 JSON 格式。</p>
+<p>  -f 指定返回值的模板文件。</p>
+</li>
+<li><p>docker pause</p>
+<p>  暂停某一容器的所有进程。</p>
+</li>
+<li><p>docker unpause</p>
+<p>  恢复某一容器的所有进程。</p>
+</li>
+<li><p>docker tag</p>
+<p>  标记本地镜像，将其归入某一仓库。</p>
+<p>  -f 覆盖已有标记。</p>
+</li>
+<li><p>docker push</p>
+<p>  将镜像推送至远程仓库，默认为 Docker Hub 。</p>
+</li>
+<li><p>docker logs</p>
+<p>  获取容器运行时的输出日志。</p>
+<p>  -f 跟踪容器日志的最近更新；</p>
+<p>  -t 显示容器日志的时间戳；</p>
+<p>  —tail=”10” 仅列出最新10条容器日志。</p>
+</li>
+<li><p>docker run</p>
+<p>  启动一个容器，在其中运行指定命令。</p>
+<p>  -a stdin 指定标准输入输出内容类型，可选 STDIN/STDOUT/STDERR 三项；</p>
+<p>  -d 后台运行容器，并返回容器ID；</p>
+<p>  -i 以交互模式运行容器，通常与 -t 同时使用；</p>
+<p>  -t 为容器重新分配一个伪输入终端，通常与 -i 同时使用；</p>
+<p>  —name=”nginx-lb” 为容器指定一个名称；</p>
+<p>  —dns 8.8.8.8 指定容器使用的DNS服务器，默认和宿主一致；</p>
+<p>  —dns-search example.com 指定容器DNS搜索域名，默认和宿主一致；</p>
+<p>  -h “mars” 指定容器的hostname；</p>
+<p>  -e username=”ritchie” 设置环境变量；</p>
+<p>  —env-file=[] 从指定文件读入环境变量；</p>
+<p>  —cpuset=”0-2” or —cpuset=”0,1,2” 绑定容器到指定CPU运行；</p>
+<p>  -c 待完成</p>
+<p>  -m 待完成</p>
+<p>  —-net=”bridge” 指定容器的网络连接类型</p>
+<p>  —link=[] 待完成</p>
+<p>  —expose=[] 待完成</p>
+</li>
+</ul>
+<h3 id="常见问题">常见问题</h3><ol>
+<li><p>执行docker命令提示：</p>
+<p> <code>Get http:///var/run/docker.sock/v1.19/containers/json: dial unix /var/run/docker.sock: no such file or directory. Are you trying to connect to a TLS-enabled daemon without TLS?</code></p>
+</li>
+</ol>
+<p><strong>解决办法:</strong></p>
+<figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install apparmor</span><br><span class="line"></span><br><span class="line"><span class="keyword">service</span> docker <span class="literal">restart</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>挂载宿主主机目录</li>
+</ol>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -v /home/dock/<span class="constant">Downloads</span><span class="symbol">:/usr/Downloads</span> ubuntu64 /bin/bash</span><br></pre></td></tr></table></figure>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>docker 安装条件：</p>
+<ol>
+<li>开通cpu虚拟化技术 BIOS设置</li>
+<li>宿主主机要求64位操作系统</li>
+</ol>
+<p>测试环境：ubuntu 14.04 64bit</p>
+<h3 id="安装docker">安装docker</]]>
+    </summary>
+    
+      <category term="Docker" scheme="https://wustrive2008.github.io/tags/Docker/"/>
+    
+      <category term="Java" scheme="https://wustrive2008.github.io/tags/Java/"/>
+    
+      <category term="Linux" scheme="https://wustrive2008.github.io/tags/Linux/"/>
+    
+      <category term="Tomcat" scheme="https://wustrive2008.github.io/tags/Tomcat/"/>
+    
+      <category term="虚拟机" scheme="https://wustrive2008.github.io/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/"/>
+    
+      <category term="Linux" scheme="https://wustrive2008.github.io/categories/Linux/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[memcached高速缓存服务安装及使用]]></title>
@@ -210,62 +552,50 @@ DELETED</span>
   </entry>
   
   <entry>
-    <title><![CDATA[活着]]></title>
-    <link href="https://wustrive2008.github.io/2015/07/26/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E6%B4%BB%E7%9D%80/"/>
-    <id>https://wustrive2008.github.io/2015/07/26/读书笔记-活着/</id>
+    <title><![CDATA[解忧杂货店]]></title>
+    <link href="https://wustrive2008.github.io/2015/07/26/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E8%A7%A3%E5%BF%A7%E6%9D%82%E8%B4%A7%E5%BA%97/"/>
+    <id>https://wustrive2008.github.io/2015/07/26/读书笔记-解忧杂货店/</id>
     <published>2015-07-26T11:41:13.000Z</published>
-    <updated>2015-07-26T13:15:27.206Z</updated>
-    <content type="html"><![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>《活着》</p>
-<h5 id="作者">作者</h5><p>余华 </p>
-<h5 id="作者简介">作者简介</h5><p>余华，1960年出生，1983年开始写作。至今已经出版长篇小说4部，中短篇小说集6部，随笔集4部。主要作品有《兄弟》《活着》《许三观卖血记》《在细雨中呼喊》等。其作品已被翻译成20多种语言在美国、英国、法国、德国、意大利、西班牙、荷兰、瑞典、挪威、希腊、俄罗斯、保加利亚、匈牙利、捷克、塞尔维亚、斯洛伐克、波兰、巴西、以色列、日本、韩国、越南、泰国和印度等国出版。曾获意大利格林扎纳·卡佛文学奖（1998年）、法国文学和艺术骑士勋章（2004年）、中华图书特殊贡献奖（2005年）、法国国际信使外国小说奖（2008年）等。</p>
-<h5 id="阅读方式">阅读方式</h5><p>纸质书 作家出版社</p>
-<h5 id="阅读日期">阅读日期</h5><p>2013.6</p>
-<h3 id="书籍简介">书籍简介</h3><p>《活着(新版)》讲述了农村人福贵悲惨的人生遭遇。福贵本是个阔少爷，可他嗜赌如命，终于赌光了家业，一贫如洗。他的父亲被他活活气死，母亲则在穷困中患了重病，福贵前去求药，却在途中被国民党抓去当壮丁。经过几番波折回到家里，才知道母亲早已去世，妻子家珍含辛茹苦地养大两个儿女。此后更加悲惨的命运一次又一次降临到福贵身上，他的妻子、儿女和孙子相继死去，最后只剩福贵和一头老牛相依为命，但老人依旧活着，仿佛比往日更加洒脱与坚强。<br>《活着(新版)》荣获意大利格林扎纳•卡佛文学奖最高奖项（1998年）、台湾《中国时报》10本好书奖（1994年）、香港“博益”15本好书奖（1994年）、第三届世界华文“冰心文学奖”（2002年），入选香港《亚洲周刊》评选的“20世纪中文小说百年百强”、中国百位批评家和文学编辑评选的“20世纪90年代最有影响的10部作品”。</p>
+    <updated>2015-07-26T13:16:55.271Z</updated>
+    <content type="html"><![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>解忧杂货店</p>
+<h5 id="作者">作者</h5><p>(日)东野圭吾 </p>
+<h5 id="作者简介">作者简介</h5><p>东野圭吾<br>日本著名作家。<br>1985年，《放学后》获第31届江户川乱步奖，开始专职写作；<br>1999年，《秘密》获第52届日本推理作家协会奖；<br>2005年出版的《嫌疑人X的献身》史无前例地同时获得第134届直木奖、第6届本格推理小说大奖，以及年度三大推理小说排行榜第1名；<br>2008年，《流星之绊》获第43届新风奖；<br>2009年出版的《新参者》获两大推理小说排行榜年度第1名；<br>2012年，《解忧杂货店》获第7届中央公论文艺奖。<br>2014年，《祈りの幕が下りる時》（暂译《祈祷落幕时》）获第48届吉川英治文学奖。</p>
+<h5 id="阅读方式">阅读方式</h5><p>电子书 kindle</p>
+<h5 id="阅读日期">阅读日期</h5><p>2015.6</p>
+<h3 id="书籍简介">书籍简介</h3><p>现代人内心流失的东西，这家杂货店能帮你找回——<br>僻静的街道旁有一家杂货店，只要写下烦恼投进卷帘门的投信口，第二天就会在店后的牛奶箱里得到回答。<br>因男友身患绝症，年轻女孩静子在爱情与梦想间徘徊；克郎为了音乐梦想离家漂泊，却在现实中寸步难行；少年浩介面临家庭巨变，挣扎在亲情与未来的迷茫中……<br>他们将困惑写成信投进杂货店，随即奇妙的事情竟不断发生。<br>生命中的一次偶然交会，将如何演绎出截然不同的人生？<br>如今回顾写作过程，我发现自己始终在思考一个问题：站在人生的岔路口，人究竟应该怎么做？我希望读者能在掩卷时喃喃自语：我从未读过这样的小说。——东野圭吾</p>
 <h3 id="摘录笔记">摘录笔记</h3><ol>
-<li>没有什么比时间更具有说服力了，因为时间无需通知我们就可以改变一切。</li>
-<li>以笑的方式哭，在死亡的伴随下活着。</li>
-<li>作为一个词语，“ 活着”在我们中国的语言里充满了力量，它的力量不是来自于喊叫，也不是来自于进攻，而是忍受，去忍受生命赋予我们的责任，去忍受现实给予我们的幸福和苦难、无聊和平庸。</li>
-<li>最初我们来到这个世界，是因为不得不来；最终我们离开这个世界，是因为不得不走。</li>
-<li>做人不能忘记四条，话不要说错，床不要睡错，门槛不要踏错，口袋不要摸错。</li>
-<li>人类无法忍受太多的真实。</li>
-<li>人啊，活着时受了再多的苦，到了快死的时候也会想个法子来宽慰自己。</li>
-<li>做人还是平常点好，争这个争那个，争来争去赔了自己的命。像我这样，说起来是越混越没出息，可寿命长，我认识的人一个挨着一个死去，我还活着。</li>
-<li>一个人命再大，要是自己想死，那就怎么也活不了。</li>
-<li>我知道他不会和我拼命了，可他说的话就像是一把钝刀子在割我的脖子，脑袋掉不下来，倒是疼得死去活来。</li>
-<li>你千万别糊涂，死人都还想活过来，你一个大活人可不能去死。</li>
-<li>这里所说的高尚不是那种单纯的美好，而是对一切事物理解之后的超然，对善与恶一视同仁，用同情的目光看待世界。</li>
-<li>写作过程让我明白，人是为活着本身而活着，而不是为活着之外的事物所活着。</li>
-<li>“人只要活得高兴，穷也不怕。”</li>
-<li>只要一家人天天在一起，也就不在乎什么福分了。</li>
-<li>我看着那条弯曲着通向城里的小路，听不到我儿子赤脚跑来的声音，月光照在路上，像是撒满了盐。</li>
-<li>少年去游荡，中年想掘藏，老年做和尚。</li>
-<li>人是为活着本身而活着，而不是为了活着之外的任何事物所活着。</li>
-<li>我看到老人的脊背和牛背一样黝黑，两个进入垂暮的生命将那块古板的田地耕得哗哗翻动，犹如水面上荡起的波浪。</li>
-<li>老子就是啃你家祖坟里的烂骨头，也不会向你要饭。</li>
-<li>他们脸上的皱纹里积满了阳光和泥土，他们向我微笑时，我看到空洞的嘴里牙齿所剩无几。他们时常流出浑浊的眼泪，这倒不是因为他们时常悲伤，他们在高兴时甚至是在什么事都没有的平静时刻，也会泪流而出。然后举起和乡间泥路一样粗糙的手指，擦去眼泪，如同掸去身上的稻草。</li>
-<li>内心让他真实地了解自己，一旦了解了自己也就了解了世界。</li>
-<li>我知道黄昏正在转瞬即逝，黑夜从天而降了。我看到广阔的土地袒露着结实的胸膛，那是召唤的姿态，就像女人召唤着他们的儿女，土地召唤着黑夜降临。</li>
-<li>他是可以看到自己过去的模样的人 准确看到自己年轻走路的姿态 甚至可以看到自己如何衰老</li>
-<li>我看到广阔的土地袒露着结实的胸膛，那是召唤的姿态，就像女人们召唤着她们的儿女，土地召唤着黑夜的来临。</li>
-<li>他喜欢回想过去，喜欢讲述自己，似乎这样一来，他就可以一次一次的重度此生了。</li>
+<li>心，一旦离开了，就再不会回来。</li>
+<li>人与人之间情断义绝，并不需要什么具体的理由。就算表面上有，也很可能只是心已经离开的结果，事后才编造出的借口而已。因为倘若心没有离开，当将会导致关系破裂的事态发生时，理应有人努力去挽救。如果没有，说明其实关係早已破裂。</li>
+<li>其实很久以前我就知道自己应该怎样选择，只是一直无法下决心舍弃梦想。到现在，我依然不知道怎样才能做到这一点。打个比方，这就如同单相思的感觉，明知恋情不会有结果，却还是忘不了对方。</li>
+<li>我的回答之所以发挥了作用，原因不是别的，是因为他们自己很努力。如果自己不想积极认真地生活，不管得到什么样的回答都没用。</li>
+<li>满脑子天真想法的人，在社会上吃点苦头也是好事。</li>
+<li>就算是恨，也是一种很抽象的感情。</li>
+<li>你的地图是一张白纸，所以即使想决定目的地，也不知道路在哪里。</li>
+<li>虽然至今为止的道路绝非一片坦途，但想到正因为活着才有机会感受到痛楚，我就成功克服了种种困难。</li>
+<li>这么多年咨询信看下来，让我逐渐明白一件事。很多时候，咨询的人心里已经有了答案，来咨询只是想确认自己的决定是对的。所以有些人读过回信后，会再次写信过来，大概就是因为回答的内容和他的想法不一样。</li>
+<li>他觉得一个人奋斗更轻松自在。跟没有干劲的人在一起厮混，只会徒增压力。</li>
+<li>其实所有纠结做选择的人心里早就有了答案，咨询只是想得到心里内心所倾向的选择。最终的所谓命运 还是自己一步步走出来的。</li>
+<li>很多时候，咨询的人心里已经有了答案，来咨询只是想确认自己的决定是对的。</li>
+<li>如果把向我咨询的人比喻做迷途的羊羔，那么他们通常手中都拿着地图，却没去看。</li>
 </ol>
-<h3 id="心得笔记">心得笔记</h3><p>这位名叫“福贵”的老人成长于解放前期，经历了抗日战争、国内革命战争、新中国成立、大跃进时代、文革时代、改革开放初期，他的一生实则是现代中国的演变史。虽然故事情节以他及他的一家为主，但反映出来的场景却是多方位的，它让我们见识了战争的残酷，见证了神化的中国，更让我们80年后的年轻一代了解什么是文革。作为21世纪的年轻人，是应该必定是一个没有前途的民族，因而，我们更应该了解并牢记这段历史，而这也许是《活着》带给我们的启发和引思吧。</p>
-<p>在描述苦难时代的背景下，“福贵”老人也经历了人生所有的痛苦，当他看着一个个亲人离自己而去的时候，心底实际是在滴血，是在哭泣，但他仍然挺过来了，依然乐观、豁达地面对着人生，在年近古稀之时，以一头耕牛为伴，却没有一丝的沮丧。在他的脸上，我们看不到生活有多么的不好，看不到对世道的厌倦，有的只是岁月留下的沧桑，有的只是他带给我们的人生取向。</p>
-<p>“福贵”老人其实只是广大中国农民的一个缩影罢了，在他们身上遗存了太多优良品德，勤劳、善良、任劳任怨、乐观、坚韧，正是无数像“福贵”这样的老百姓，我们的国家才能在那无尽的灾难中挺过来。</p>
-<p>如今，中国的很多农民每年都要为了生计从自己的故土奔向陌生的城市，做着最辛苦的工作，得到的是最低微的收入，他们骨子里的品质让他们无怨无悔。面对困难他们勇往直前，他们才是真的勇士。因而，《活着》是一面人性的镜子，它让我们知道什么样的品质才是中华民族优良的品质，才是民族希望所在。它带给我们的还有很多，对于“福贵”这样的农民来说，土地就是命，就是生命意义所在，那么，对于我们年轻一代来说，生命的意义又是什么呢？</p>
-<p>当今的社会竞争激烈，它并不像某些人所讲的那样美好，并不像某些歌曲所颂扬的那般幸福，他们所看见的只是他们的快乐，而广大农民却是很艰难的。现在的“三农”问题并不是那么容易解决。我想，我们只有从自身做起，不断提升自己、充实自己，并极富热情地关注这个社会尽自己所能去帮助和关心他人，这样就已经很不错了。</p>
-<p>2003年的SARS，2004年的禽流感，2008的冰冻灾害，所有的一切让我感觉到了活着的艰难，我们并不比“福贵”老人幸福多少，所承载的压力与顾虑是很大的。《活着》当中的余杰、何清涟，是他们让我们感知社会并不是一片漆黑，而是有一丝光在暗暗地照着。即便生活再困苦，我们还是可以像“福贵”一样，很好地活着，人生的艰难才刚刚开始。</p>
-<p>《活着》确实被赋予太多的内涵，无疑是一种享受，它让我能更清晰地了解这个社会，了解人生的意义，也许是终生受益吧。</p>
+<h3 id="心得笔记">心得笔记</h3><p>[转]<br>朋友介绍《解忧杂货店》给我的时候，我看到作者是东野圭吾就觉可能又是一本惊悚的悬疑小说了。耐着性子读完后惊喜的发现，作者一改以往所写的推理小说框架，推理情节贯彻全书，悬疑而不惊栗，内容紧凑却又轻松，布局精妙。</p>
+<p>　　各式各样的烦恼人人都有，东野圭吾先生运用了小说撰写技巧将人们心中深层的烦恼编写成感人的故事。故事背景以日本的一家传统杂货店作为空间的主轴，巧妙地运用了这家杂货店，让时空在此交汇成一个点。在杂货店的前、后门让书信穿越时空相互往来，串起整部书吸引人的内容。故事以三位孤儿院长大的孩子，由于某些动机抢夺钱财逃到了这家杂货店而开始。小说最重要的主题——烦恼经由手写的书信来往，丝丝入扣的情节牵引读者的心随之起伏。</p>
+<p>　　如果问我这本书最想推介给哪些人阅读，我想应该是给对自我缺乏信心的人。当我读完时，思考与揣测作者想要传达什么样的人生观给读者？我个人解读如下：人需要对自我有相当坚定的自信心，成功在于自信心而非在于选择；命运是掌握在自己手中，无论身处什么样的环境或是面对未知的未来，自己才是百分之百的控制者；每个人都需要诚实的面对环境给予的挑战；烦恼来自于自己无法控制的外在人、事、物，而我们却如着魔似的想要控制无法控制的环境状态。</p>
+<p>　　《解忧杂货店》描写的烦恼皆是发生在你我周遭不为人知亦或你我自身的故事。因为发生在生活中，所以书籍畅销。它就是这样的写实，却又戏剧化，然而作者真的仅是想传达戏剧内容吗？举几则书中的烦恼故事：月亮兔小姐是一名奥运选手，正当密集训练之际，男朋友却患了不治之症。月亮兔小姐并未按照杂货店解忧的建议，而是根据自己的想法来决定未来。因为生活的因素，想要放弃白天的正职转而工作从事夜晚的酒店坐台，当事者也没有听从杂货店给予的建议而决定未来。为了尊重作者也尊重尚未阅读此书的读者，我仅举两个书中的烦恼故事作为说明。</p>
+<p>　　我想东野先生似乎要表达“一个人在犹豫不决及彷徨无措时，只要冷静的自我思考后，其实任何的决定都是对的，只要自己决定之后勇往直前，都会获得美好的结局”，这是我对此书所下的结论。如果说什么样的人适合阅读这部小说，我想归类如下：常去寺庙朝拜求签的人，希望神明来帮他／她做决定；对事情总要想找到最佳决策的人；怀疑自己的人。</p>
+<p>　　我做个这样的对应假说：</p>
+<p>　　《解忧杂货店》书中的浪矢杂货店是否与我们去过的庙宇相似？杂货店中无论是老板爷爷或是三位孤儿院的年轻人，如同我们所求的神明。不知道这样的假说对应关系读者是否认同？往往我们到庙宇去求箴诗，无非就是想要神明帮我们做个决定。生活中常常出现有人被寺庙、神棍骗财骗色的新闻，屡见不鲜，是否也显示出人们自信心的脆弱，一旦身旁出现心怀不轨而又自信心强的人即可控制你的未来。</p>
+<p>　　我深信每个人的一生所拥有的好运和坏运都是均等的，只是好、坏运根据时间与严重性的不同才会让你觉得烦恼或不顺心。《解忧杂货店》内所有问题的结果其实旁观者对于好坏看法都不一样，与杂货店书信往来就是处理烦恼的过程。这些咨询烦恼的人，自己多半没有按照建议行动，但是来来往往过程中帮助了烦恼者自己探索自己认清了自己的真正面目，最后找到了属于自己最佳的答案。这是否才是最好的解答？</p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>《活着》</p>
-<h5 id="作者">作者</h5><p>余华 </p>
-<h5 id="作者简介">作者简介</h5><p>余华，1960年出生，1983年开始写作。至今已经出版长篇小]]>
+    <![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>解忧杂货店</p>
+<h5 id="作者">作者</h5><p>(日)东野圭吾 </p>
+<h5 id="作者简介">作者简介</h5><p>东野圭吾<br>日本著名作家。<br>1985年]]>
     </summary>
     
-      <category term="余华" scheme="https://wustrive2008.github.io/tags/%E4%BD%99%E5%8D%8E/"/>
+      <category term="东野圭吾" scheme="https://wustrive2008.github.io/tags/%E4%B8%9C%E9%87%8E%E5%9C%AD%E5%90%BE/"/>
     
-      <category term="活着" scheme="https://wustrive2008.github.io/tags/%E6%B4%BB%E7%9D%80/"/>
+      <category term="解忧杂货店" scheme="https://wustrive2008.github.io/tags/%E8%A7%A3%E5%BF%A7%E6%9D%82%E8%B4%A7%E5%BA%97/"/>
     
       <category term="读书笔记" scheme="https://wustrive2008.github.io/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
     
@@ -331,50 +661,62 @@ DELETED</span>
   </entry>
   
   <entry>
-    <title><![CDATA[解忧杂货店]]></title>
-    <link href="https://wustrive2008.github.io/2015/07/26/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E8%A7%A3%E5%BF%A7%E6%9D%82%E8%B4%A7%E5%BA%97/"/>
-    <id>https://wustrive2008.github.io/2015/07/26/读书笔记-解忧杂货店/</id>
+    <title><![CDATA[活着]]></title>
+    <link href="https://wustrive2008.github.io/2015/07/26/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E6%B4%BB%E7%9D%80/"/>
+    <id>https://wustrive2008.github.io/2015/07/26/读书笔记-活着/</id>
     <published>2015-07-26T11:41:13.000Z</published>
-    <updated>2015-07-26T13:16:55.271Z</updated>
-    <content type="html"><![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>解忧杂货店</p>
-<h5 id="作者">作者</h5><p>(日)东野圭吾 </p>
-<h5 id="作者简介">作者简介</h5><p>东野圭吾<br>日本著名作家。<br>1985年，《放学后》获第31届江户川乱步奖，开始专职写作；<br>1999年，《秘密》获第52届日本推理作家协会奖；<br>2005年出版的《嫌疑人X的献身》史无前例地同时获得第134届直木奖、第6届本格推理小说大奖，以及年度三大推理小说排行榜第1名；<br>2008年，《流星之绊》获第43届新风奖；<br>2009年出版的《新参者》获两大推理小说排行榜年度第1名；<br>2012年，《解忧杂货店》获第7届中央公论文艺奖。<br>2014年，《祈りの幕が下りる時》（暂译《祈祷落幕时》）获第48届吉川英治文学奖。</p>
-<h5 id="阅读方式">阅读方式</h5><p>电子书 kindle</p>
-<h5 id="阅读日期">阅读日期</h5><p>2015.6</p>
-<h3 id="书籍简介">书籍简介</h3><p>现代人内心流失的东西，这家杂货店能帮你找回——<br>僻静的街道旁有一家杂货店，只要写下烦恼投进卷帘门的投信口，第二天就会在店后的牛奶箱里得到回答。<br>因男友身患绝症，年轻女孩静子在爱情与梦想间徘徊；克郎为了音乐梦想离家漂泊，却在现实中寸步难行；少年浩介面临家庭巨变，挣扎在亲情与未来的迷茫中……<br>他们将困惑写成信投进杂货店，随即奇妙的事情竟不断发生。<br>生命中的一次偶然交会，将如何演绎出截然不同的人生？<br>如今回顾写作过程，我发现自己始终在思考一个问题：站在人生的岔路口，人究竟应该怎么做？我希望读者能在掩卷时喃喃自语：我从未读过这样的小说。——东野圭吾</p>
+    <updated>2015-07-26T13:15:27.206Z</updated>
+    <content type="html"><![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>《活着》</p>
+<h5 id="作者">作者</h5><p>余华 </p>
+<h5 id="作者简介">作者简介</h5><p>余华，1960年出生，1983年开始写作。至今已经出版长篇小说4部，中短篇小说集6部，随笔集4部。主要作品有《兄弟》《活着》《许三观卖血记》《在细雨中呼喊》等。其作品已被翻译成20多种语言在美国、英国、法国、德国、意大利、西班牙、荷兰、瑞典、挪威、希腊、俄罗斯、保加利亚、匈牙利、捷克、塞尔维亚、斯洛伐克、波兰、巴西、以色列、日本、韩国、越南、泰国和印度等国出版。曾获意大利格林扎纳·卡佛文学奖（1998年）、法国文学和艺术骑士勋章（2004年）、中华图书特殊贡献奖（2005年）、法国国际信使外国小说奖（2008年）等。</p>
+<h5 id="阅读方式">阅读方式</h5><p>纸质书 作家出版社</p>
+<h5 id="阅读日期">阅读日期</h5><p>2013.6</p>
+<h3 id="书籍简介">书籍简介</h3><p>《活着(新版)》讲述了农村人福贵悲惨的人生遭遇。福贵本是个阔少爷，可他嗜赌如命，终于赌光了家业，一贫如洗。他的父亲被他活活气死，母亲则在穷困中患了重病，福贵前去求药，却在途中被国民党抓去当壮丁。经过几番波折回到家里，才知道母亲早已去世，妻子家珍含辛茹苦地养大两个儿女。此后更加悲惨的命运一次又一次降临到福贵身上，他的妻子、儿女和孙子相继死去，最后只剩福贵和一头老牛相依为命，但老人依旧活着，仿佛比往日更加洒脱与坚强。<br>《活着(新版)》荣获意大利格林扎纳•卡佛文学奖最高奖项（1998年）、台湾《中国时报》10本好书奖（1994年）、香港“博益”15本好书奖（1994年）、第三届世界华文“冰心文学奖”（2002年），入选香港《亚洲周刊》评选的“20世纪中文小说百年百强”、中国百位批评家和文学编辑评选的“20世纪90年代最有影响的10部作品”。</p>
 <h3 id="摘录笔记">摘录笔记</h3><ol>
-<li>心，一旦离开了，就再不会回来。</li>
-<li>人与人之间情断义绝，并不需要什么具体的理由。就算表面上有，也很可能只是心已经离开的结果，事后才编造出的借口而已。因为倘若心没有离开，当将会导致关系破裂的事态发生时，理应有人努力去挽救。如果没有，说明其实关係早已破裂。</li>
-<li>其实很久以前我就知道自己应该怎样选择，只是一直无法下决心舍弃梦想。到现在，我依然不知道怎样才能做到这一点。打个比方，这就如同单相思的感觉，明知恋情不会有结果，却还是忘不了对方。</li>
-<li>我的回答之所以发挥了作用，原因不是别的，是因为他们自己很努力。如果自己不想积极认真地生活，不管得到什么样的回答都没用。</li>
-<li>满脑子天真想法的人，在社会上吃点苦头也是好事。</li>
-<li>就算是恨，也是一种很抽象的感情。</li>
-<li>你的地图是一张白纸，所以即使想决定目的地，也不知道路在哪里。</li>
-<li>虽然至今为止的道路绝非一片坦途，但想到正因为活着才有机会感受到痛楚，我就成功克服了种种困难。</li>
-<li>这么多年咨询信看下来，让我逐渐明白一件事。很多时候，咨询的人心里已经有了答案，来咨询只是想确认自己的决定是对的。所以有些人读过回信后，会再次写信过来，大概就是因为回答的内容和他的想法不一样。</li>
-<li>他觉得一个人奋斗更轻松自在。跟没有干劲的人在一起厮混，只会徒增压力。</li>
-<li>其实所有纠结做选择的人心里早就有了答案，咨询只是想得到心里内心所倾向的选择。最终的所谓命运 还是自己一步步走出来的。</li>
-<li>很多时候，咨询的人心里已经有了答案，来咨询只是想确认自己的决定是对的。</li>
-<li>如果把向我咨询的人比喻做迷途的羊羔，那么他们通常手中都拿着地图，却没去看。</li>
+<li>没有什么比时间更具有说服力了，因为时间无需通知我们就可以改变一切。</li>
+<li>以笑的方式哭，在死亡的伴随下活着。</li>
+<li>作为一个词语，“ 活着”在我们中国的语言里充满了力量，它的力量不是来自于喊叫，也不是来自于进攻，而是忍受，去忍受生命赋予我们的责任，去忍受现实给予我们的幸福和苦难、无聊和平庸。</li>
+<li>最初我们来到这个世界，是因为不得不来；最终我们离开这个世界，是因为不得不走。</li>
+<li>做人不能忘记四条，话不要说错，床不要睡错，门槛不要踏错，口袋不要摸错。</li>
+<li>人类无法忍受太多的真实。</li>
+<li>人啊，活着时受了再多的苦，到了快死的时候也会想个法子来宽慰自己。</li>
+<li>做人还是平常点好，争这个争那个，争来争去赔了自己的命。像我这样，说起来是越混越没出息，可寿命长，我认识的人一个挨着一个死去，我还活着。</li>
+<li>一个人命再大，要是自己想死，那就怎么也活不了。</li>
+<li>我知道他不会和我拼命了，可他说的话就像是一把钝刀子在割我的脖子，脑袋掉不下来，倒是疼得死去活来。</li>
+<li>你千万别糊涂，死人都还想活过来，你一个大活人可不能去死。</li>
+<li>这里所说的高尚不是那种单纯的美好，而是对一切事物理解之后的超然，对善与恶一视同仁，用同情的目光看待世界。</li>
+<li>写作过程让我明白，人是为活着本身而活着，而不是为活着之外的事物所活着。</li>
+<li>“人只要活得高兴，穷也不怕。”</li>
+<li>只要一家人天天在一起，也就不在乎什么福分了。</li>
+<li>我看着那条弯曲着通向城里的小路，听不到我儿子赤脚跑来的声音，月光照在路上，像是撒满了盐。</li>
+<li>少年去游荡，中年想掘藏，老年做和尚。</li>
+<li>人是为活着本身而活着，而不是为了活着之外的任何事物所活着。</li>
+<li>我看到老人的脊背和牛背一样黝黑，两个进入垂暮的生命将那块古板的田地耕得哗哗翻动，犹如水面上荡起的波浪。</li>
+<li>老子就是啃你家祖坟里的烂骨头，也不会向你要饭。</li>
+<li>他们脸上的皱纹里积满了阳光和泥土，他们向我微笑时，我看到空洞的嘴里牙齿所剩无几。他们时常流出浑浊的眼泪，这倒不是因为他们时常悲伤，他们在高兴时甚至是在什么事都没有的平静时刻，也会泪流而出。然后举起和乡间泥路一样粗糙的手指，擦去眼泪，如同掸去身上的稻草。</li>
+<li>内心让他真实地了解自己，一旦了解了自己也就了解了世界。</li>
+<li>我知道黄昏正在转瞬即逝，黑夜从天而降了。我看到广阔的土地袒露着结实的胸膛，那是召唤的姿态，就像女人召唤着他们的儿女，土地召唤着黑夜降临。</li>
+<li>他是可以看到自己过去的模样的人 准确看到自己年轻走路的姿态 甚至可以看到自己如何衰老</li>
+<li>我看到广阔的土地袒露着结实的胸膛，那是召唤的姿态，就像女人们召唤着她们的儿女，土地召唤着黑夜的来临。</li>
+<li>他喜欢回想过去，喜欢讲述自己，似乎这样一来，他就可以一次一次的重度此生了。</li>
 </ol>
-<h3 id="心得笔记">心得笔记</h3><p>[转]<br>朋友介绍《解忧杂货店》给我的时候，我看到作者是东野圭吾就觉可能又是一本惊悚的悬疑小说了。耐着性子读完后惊喜的发现，作者一改以往所写的推理小说框架，推理情节贯彻全书，悬疑而不惊栗，内容紧凑却又轻松，布局精妙。</p>
-<p>　　各式各样的烦恼人人都有，东野圭吾先生运用了小说撰写技巧将人们心中深层的烦恼编写成感人的故事。故事背景以日本的一家传统杂货店作为空间的主轴，巧妙地运用了这家杂货店，让时空在此交汇成一个点。在杂货店的前、后门让书信穿越时空相互往来，串起整部书吸引人的内容。故事以三位孤儿院长大的孩子，由于某些动机抢夺钱财逃到了这家杂货店而开始。小说最重要的主题——烦恼经由手写的书信来往，丝丝入扣的情节牵引读者的心随之起伏。</p>
-<p>　　如果问我这本书最想推介给哪些人阅读，我想应该是给对自我缺乏信心的人。当我读完时，思考与揣测作者想要传达什么样的人生观给读者？我个人解读如下：人需要对自我有相当坚定的自信心，成功在于自信心而非在于选择；命运是掌握在自己手中，无论身处什么样的环境或是面对未知的未来，自己才是百分之百的控制者；每个人都需要诚实的面对环境给予的挑战；烦恼来自于自己无法控制的外在人、事、物，而我们却如着魔似的想要控制无法控制的环境状态。</p>
-<p>　　《解忧杂货店》描写的烦恼皆是发生在你我周遭不为人知亦或你我自身的故事。因为发生在生活中，所以书籍畅销。它就是这样的写实，却又戏剧化，然而作者真的仅是想传达戏剧内容吗？举几则书中的烦恼故事：月亮兔小姐是一名奥运选手，正当密集训练之际，男朋友却患了不治之症。月亮兔小姐并未按照杂货店解忧的建议，而是根据自己的想法来决定未来。因为生活的因素，想要放弃白天的正职转而工作从事夜晚的酒店坐台，当事者也没有听从杂货店给予的建议而决定未来。为了尊重作者也尊重尚未阅读此书的读者，我仅举两个书中的烦恼故事作为说明。</p>
-<p>　　我想东野先生似乎要表达“一个人在犹豫不决及彷徨无措时，只要冷静的自我思考后，其实任何的决定都是对的，只要自己决定之后勇往直前，都会获得美好的结局”，这是我对此书所下的结论。如果说什么样的人适合阅读这部小说，我想归类如下：常去寺庙朝拜求签的人，希望神明来帮他／她做决定；对事情总要想找到最佳决策的人；怀疑自己的人。</p>
-<p>　　我做个这样的对应假说：</p>
-<p>　　《解忧杂货店》书中的浪矢杂货店是否与我们去过的庙宇相似？杂货店中无论是老板爷爷或是三位孤儿院的年轻人，如同我们所求的神明。不知道这样的假说对应关系读者是否认同？往往我们到庙宇去求箴诗，无非就是想要神明帮我们做个决定。生活中常常出现有人被寺庙、神棍骗财骗色的新闻，屡见不鲜，是否也显示出人们自信心的脆弱，一旦身旁出现心怀不轨而又自信心强的人即可控制你的未来。</p>
-<p>　　我深信每个人的一生所拥有的好运和坏运都是均等的，只是好、坏运根据时间与严重性的不同才会让你觉得烦恼或不顺心。《解忧杂货店》内所有问题的结果其实旁观者对于好坏看法都不一样，与杂货店书信往来就是处理烦恼的过程。这些咨询烦恼的人，自己多半没有按照建议行动，但是来来往往过程中帮助了烦恼者自己探索自己认清了自己的真正面目，最后找到了属于自己最佳的答案。这是否才是最好的解答？</p>
+<h3 id="心得笔记">心得笔记</h3><p>这位名叫“福贵”的老人成长于解放前期，经历了抗日战争、国内革命战争、新中国成立、大跃进时代、文革时代、改革开放初期，他的一生实则是现代中国的演变史。虽然故事情节以他及他的一家为主，但反映出来的场景却是多方位的，它让我们见识了战争的残酷，见证了神化的中国，更让我们80年后的年轻一代了解什么是文革。作为21世纪的年轻人，是应该必定是一个没有前途的民族，因而，我们更应该了解并牢记这段历史，而这也许是《活着》带给我们的启发和引思吧。</p>
+<p>在描述苦难时代的背景下，“福贵”老人也经历了人生所有的痛苦，当他看着一个个亲人离自己而去的时候，心底实际是在滴血，是在哭泣，但他仍然挺过来了，依然乐观、豁达地面对着人生，在年近古稀之时，以一头耕牛为伴，却没有一丝的沮丧。在他的脸上，我们看不到生活有多么的不好，看不到对世道的厌倦，有的只是岁月留下的沧桑，有的只是他带给我们的人生取向。</p>
+<p>“福贵”老人其实只是广大中国农民的一个缩影罢了，在他们身上遗存了太多优良品德，勤劳、善良、任劳任怨、乐观、坚韧，正是无数像“福贵”这样的老百姓，我们的国家才能在那无尽的灾难中挺过来。</p>
+<p>如今，中国的很多农民每年都要为了生计从自己的故土奔向陌生的城市，做着最辛苦的工作，得到的是最低微的收入，他们骨子里的品质让他们无怨无悔。面对困难他们勇往直前，他们才是真的勇士。因而，《活着》是一面人性的镜子，它让我们知道什么样的品质才是中华民族优良的品质，才是民族希望所在。它带给我们的还有很多，对于“福贵”这样的农民来说，土地就是命，就是生命意义所在，那么，对于我们年轻一代来说，生命的意义又是什么呢？</p>
+<p>当今的社会竞争激烈，它并不像某些人所讲的那样美好，并不像某些歌曲所颂扬的那般幸福，他们所看见的只是他们的快乐，而广大农民却是很艰难的。现在的“三农”问题并不是那么容易解决。我想，我们只有从自身做起，不断提升自己、充实自己，并极富热情地关注这个社会尽自己所能去帮助和关心他人，这样就已经很不错了。</p>
+<p>2003年的SARS，2004年的禽流感，2008的冰冻灾害，所有的一切让我感觉到了活着的艰难，我们并不比“福贵”老人幸福多少，所承载的压力与顾虑是很大的。《活着》当中的余杰、何清涟，是他们让我们感知社会并不是一片漆黑，而是有一丝光在暗暗地照着。即便生活再困苦，我们还是可以像“福贵”一样，很好地活着，人生的艰难才刚刚开始。</p>
+<p>《活着》确实被赋予太多的内涵，无疑是一种享受，它让我能更清晰地了解这个社会，了解人生的意义，也许是终生受益吧。</p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>解忧杂货店</p>
-<h5 id="作者">作者</h5><p>(日)东野圭吾 </p>
-<h5 id="作者简介">作者简介</h5><p>东野圭吾<br>日本著名作家。<br>1985年]]>
+    <![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>《活着》</p>
+<h5 id="作者">作者</h5><p>余华 </p>
+<h5 id="作者简介">作者简介</h5><p>余华，1960年出生，1983年开始写作。至今已经出版长篇小]]>
     </summary>
     
-      <category term="东野圭吾" scheme="https://wustrive2008.github.io/tags/%E4%B8%9C%E9%87%8E%E5%9C%AD%E5%90%BE/"/>
+      <category term="余华" scheme="https://wustrive2008.github.io/tags/%E4%BD%99%E5%8D%8E/"/>
     
-      <category term="解忧杂货店" scheme="https://wustrive2008.github.io/tags/%E8%A7%A3%E5%BF%A7%E6%9D%82%E8%B4%A7%E5%BA%97/"/>
+      <category term="活着" scheme="https://wustrive2008.github.io/tags/%E6%B4%BB%E7%9D%80/"/>
     
       <category term="读书笔记" scheme="https://wustrive2008.github.io/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
     
