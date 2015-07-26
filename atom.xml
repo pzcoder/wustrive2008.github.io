@@ -101,7 +101,7 @@ DELETED</span>
     <link href="https://wustrive2008.github.io/2015/07/26/chkconfig%E6%9E%84%E5%BB%BAlinux%E6%9C%8D%E5%8A%A1/"/>
     <id>https://wustrive2008.github.io/2015/07/26/chkconfig构建linux服务/</id>
     <published>2015-07-26T12:27:41.000Z</published>
-    <updated>2015-07-26T13:28:43.772Z</updated>
+    <updated>2015-07-26T13:39:51.852Z</updated>
     <content type="html"><![CDATA[<h2 id="手动构建linux服务">手动构建linux服务</h2><h3 id="Linux运行级别">Linux运行级别</h3><ul>
 <li>0 - 停机</li>
 <li>1 - 单用户模式</li>
@@ -123,10 +123,8 @@ DELETED</span>
 <li>chkconfig —level 35 servername on </li>
 <li>chkconfig  —list | grep servername</li>
 </ol>
-<h3 id="使用服务">使用服务</h3><ol>
-<li>service  servername  start|stop|restart</li>
-</ol>
-]]></content>
+<h3 id="使用服务">使用服务</h3><pre><code><span class="keyword">service</span>  servername  <span class="literal">start</span>|<span class="literal">stop</span>|<span class="literal">restart</span>
+</code></pre>]]></content>
     <summary type="html">
     <![CDATA[<h2 id="手动构建linux服务">手动构建linux服务</h2><h3 id="Linux运行级别">Linux运行级别</h3><ul>
 <li>0 - 停机</li>
