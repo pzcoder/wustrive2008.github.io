@@ -4,7 +4,7 @@
   <subtitle><![CDATA[life work study notes]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="https://wustrive2008.github.io/"/>
-  <updated>2015-07-26T12:41:18.599Z</updated>
+  <updated>2015-07-26T13:37:55.140Z</updated>
   <id>https://wustrive2008.github.io/</id>
   
   <author>
@@ -15,11 +15,329 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[解忧杂货店]]></title>
-    <link href="https://wustrive2008.github.io/2015/07/26/%E8%A7%A3%E5%BF%A7%E6%9D%82%E8%B4%A7%E5%BA%97/"/>
-    <id>https://wustrive2008.github.io/2015/07/26/解忧杂货店/</id>
+    <title><![CDATA[memcached高速缓存服务安装及使用]]></title>
+    <link href="https://wustrive2008.github.io/2015/07/26/memcached%E6%9C%8D%E5%8A%A1%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/"/>
+    <id>https://wustrive2008.github.io/2015/07/26/memcached服务安装及使用/</id>
+    <published>2015-07-26T12:30:41.000Z</published>
+    <updated>2015-07-26T13:37:55.140Z</updated>
+    <content type="html"><![CDATA[<h3 id="安装Memcached">安装Memcached</h3><h4 id="request">request</h4><ol>
+<li>gcc</li>
+</ol>
+<p>yum install gcc</p>
+<ol>
+<li>libevent</li>
+</ol>
+<p>yum install libevent*</p>
+<h4 id="install">install</h4><pre><code>./configure --with-libevent=/usr
+<span class="built_in">make</span> &amp;&amp; sudo <span class="built_in">make</span> install
+</code></pre><h4 id="start">start</h4><pre><code>sudo /usr/<span class="keyword">local</span>/bin/memcached -<span class="keyword">d</span> -<span class="keyword">m</span> 10 -<span class="keyword">u</span> root -<span class="keyword">l</span> 192.168.32.193 -p 12000 -c 256 -P /tmp/memcached.pid
+</code></pre><p>-d选项是启动一个守护进程，<br>-m是分配给Memcache使用的内存数量，单位是MB，我这里是10MB，<br>-u是运行Memcache的用户，我这里是root，<br>-l是监听的服务器IP地址，如果有多个地址的话，我这里指定了服务器的IP地址192.168.0.200，<br>-p是设置Memcache监听的端口，我这里设置了12000，最好是1024以上的端口，<br>-c选项是最大运行的并发连接数，默认是1024，我这里设置了256，按照你服务器的负载量来设定，<br>-P是设置保存Memcache的pid文件，我这里是保存在 /tmp/memcached.pid</p>
+<h4 id="shutdown">shutdown</h4><pre><code><span class="built_in">kill</span> <span class="string">'cat /tmp/memcached.pid'</span>
+</code></pre><h4 id="test">test</h4><pre><code>telnet 192.168.32.193 12000
+#基本协议
+<span class="operator"><span class="keyword">set</span> key1 <span class="number">0</span> <span class="number">180</span> <span class="number">3</span>
+abc
+STORED
+<span class="keyword">add</span> key1 <span class="number">0</span> <span class="number">180</span> <span class="number">3</span>
+xyz
+NOT_STORED
+<span class="keyword">get</span> key1
+<span class="keyword">VALUE</span> key1 <span class="number">0</span> <span class="number">3</span>
+abc
+<span class="keyword">END</span>
+<span class="keyword">replace</span> key1 <span class="number">0</span> <span class="number">180</span> <span class="number">3</span>
+xyz
+STORED
+<span class="keyword">get</span> key1
+<span class="keyword">VALUE</span> key1 <span class="number">0</span> <span class="number">3</span>
+xyz
+<span class="keyword">END</span>
+<span class="keyword">delete</span> key1
+DELETED</span>
+</code></pre><h4 id="自动启动">自动启动</h4><ol>
+<li><p>启动脚本 存入/etc/init.d/memcached</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#!/bin/sh   </span></span><br><span class="line"><span class="comment">#   </span></span><br><span class="line"><span class="comment"># memcached:    MemCached Daemon   </span></span><br><span class="line"><span class="comment">#   </span></span><br><span class="line"><span class="comment"># chkconfig:    - 90 25  </span></span><br><span class="line"><span class="comment"># description:  MemCached Daemon   </span></span><br><span class="line"><span class="comment">#   </span></span><br><span class="line"><span class="comment"># Source function library.   </span></span><br><span class="line">. /etc/rc.d/init.d/<span class="built_in">functions</span>   </span><br><span class="line">. /etc/sysconfig/network   </span><br><span class="line"><span class="comment">#[ $&#123;NETWORKING&#125; = "no" ] &amp;&amp; exit 0  </span></span><br><span class="line"><span class="comment">#[ -r /etc/sysconfig/dund ] || exit 0  </span></span><br><span class="line"><span class="comment">#. /etc/sysconfig/dund   </span></span><br><span class="line"><span class="comment">#[ -z "$DUNDARGS" ] &amp;&amp; exit 0  </span></span><br><span class="line"><span class="function"><span class="title">start</span></span>()   </span><br><span class="line">&#123;   </span><br><span class="line">        <span class="built_in">echo</span> -n $<span class="string">"Starting memcached: "</span>  </span><br><span class="line">        daemon <span class="variable">$MEMCACHED</span> -u lbt <span class="operator">-d</span> -m <span class="number">1024</span> <span class="operator">-l</span> <span class="number">192.168</span>.<span class="number">32.193</span> -p <span class="number">12000</span> </span><br><span class="line">        <span class="built_in">echo</span>   </span><br><span class="line">&#125;   </span><br><span class="line"><span class="function"><span class="title">stop</span></span>()   </span><br><span class="line">&#123;   </span><br><span class="line">        <span class="built_in">echo</span> -n $<span class="string">"Shutting down memcached: "</span>  </span><br><span class="line">        killproc memcached   </span><br><span class="line">        <span class="built_in">echo</span>   </span><br><span class="line">&#125;   </span><br><span class="line">MEMCACHED=<span class="string">"/usr/local/bin/memcached"</span>  </span><br><span class="line">[ <span class="operator">-f</span> <span class="variable">$MEMCACHED</span> ] || <span class="built_in">exit</span> <span class="number">1</span>  </span><br><span class="line"><span class="comment"># See how we were called.   </span></span><br><span class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span>   </span><br><span class="line">  start)   </span><br><span class="line">        start   </span><br><span class="line">        ;;   </span><br><span class="line">  stop)   </span><br><span class="line">        stop   </span><br><span class="line">        ;;   </span><br><span class="line">  restart)   </span><br><span class="line">        stop   </span><br><span class="line">        sleep <span class="number">3</span>  </span><br><span class="line">        start   </span><br><span class="line">        ;;   </span><br><span class="line">    *)   </span><br><span class="line">        <span class="built_in">echo</span> $<span class="string">"Usage: <span class="variable">$0</span> &#123;start|stop|restart&#125;"</span>  </span><br><span class="line">        <span class="built_in">exit</span> <span class="number">1</span>  </span><br><span class="line"><span class="keyword">esac</span>   </span><br><span class="line"><span class="built_in">exit</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行以下命令   </p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chkconfig  <span class="comment">--add memcached </span></span><br><span class="line">chkconfig  <span class="comment">--level 235  memcached  on</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试使用</p>
+<pre><code>chkconfig  --list | grep mem
+
+/etc/rc.d/init.d/memcached  <span class="literal">start</span>  
+/etc/rc.d/init.d/memcached  <span class="literal">stop</span>
+/etc/rc.d/init.d/memcached  <span class="literal">restart</span>
+或
+<span class="keyword">service</span> memcached <span class="literal">start</span>
+<span class="keyword">service</span> memcached <span class="literal">stop</span>
+<span class="keyword">service</span> memcached <span class="literal">restart</span>
+</code></pre></li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h3 id="安装Memcached">安装Memcached</h3><h4 id="request">request</h4><ol>
+<li>gcc</li>
+</ol>
+<p>yum install gcc</p>
+<ol>
+<li>libevent</li>
+</ol]]>
+    </summary>
+    
+      <category term="java" scheme="https://wustrive2008.github.io/tags/java/"/>
+    
+      <category term="linux" scheme="https://wustrive2008.github.io/tags/linux/"/>
+    
+      <category term="memcached" scheme="https://wustrive2008.github.io/tags/memcached/"/>
+    
+      <category term="缓存" scheme="https://wustrive2008.github.io/tags/%E7%BC%93%E5%AD%98/"/>
+    
+      <category term="缓存" scheme="https://wustrive2008.github.io/categories/%E7%BC%93%E5%AD%98/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[chkconfig构建linux服务]]></title>
+    <link href="https://wustrive2008.github.io/2015/07/26/chkconfig%E6%9E%84%E5%BB%BAlinux%E6%9C%8D%E5%8A%A1/"/>
+    <id>https://wustrive2008.github.io/2015/07/26/chkconfig构建linux服务/</id>
+    <published>2015-07-26T12:27:41.000Z</published>
+    <updated>2015-07-26T13:28:43.772Z</updated>
+    <content type="html"><![CDATA[<h2 id="手动构建linux服务">手动构建linux服务</h2><h3 id="Linux运行级别">Linux运行级别</h3><ul>
+<li>0 - 停机</li>
+<li>1 - 单用户模式</li>
+<li>2 - 多用户，没有NFS和网络</li>
+<li>3 - 完全多用户</li>
+<li>4 - 暂无</li>
+<li>5 - 图形界面</li>
+<li>6 - 重启</li>
+</ul>
+<p><strong> 默认的运行级别在/etc/inittab中设置 </strong></p>
+<h3 id="写服务控制脚本">写服务控制脚本</h3><p><strong> 示例：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#!/bin/sh   </span></span><br><span class="line"><span class="comment">#   </span></span><br><span class="line"><span class="comment"># memcached:    MemCached Daemon   </span></span><br><span class="line"><span class="comment">#   </span></span><br><span class="line"><span class="comment"># chkconfig:    35 90 25  </span></span><br><span class="line"><span class="comment"># description:  MemCached Daemon   </span></span><br><span class="line"><span class="comment">#   </span></span><br><span class="line"><span class="comment"># Source function library.   </span></span><br><span class="line">. /etc/rc.d/init.d/<span class="built_in">functions</span>   </span><br><span class="line">. /etc/sysconfig/network   </span><br><span class="line"><span class="function"><span class="title">start</span></span>()   </span><br><span class="line">&#123;   </span><br><span class="line">        <span class="built_in">echo</span> -n $<span class="string">"Starting memcached: "</span>  </span><br><span class="line">        daemon <span class="variable">$MEMCACHED</span> -u lbt <span class="operator">-d</span> -m <span class="number">1024</span> <span class="operator">-l</span> <span class="number">192.168</span>.<span class="number">32.193</span> -p <span class="number">12000</span> </span><br><span class="line">        <span class="built_in">echo</span>   </span><br><span class="line">&#125;   </span><br><span class="line"><span class="function"><span class="title">stop</span></span>()   </span><br><span class="line">&#123;   </span><br><span class="line">        <span class="built_in">echo</span> -n $<span class="string">"Shutting down memcached: "</span>  </span><br><span class="line">        killproc memcached   </span><br><span class="line">        <span class="built_in">echo</span>   </span><br><span class="line">&#125;   </span><br><span class="line">MEMCACHED=<span class="string">"/usr/local/bin/memcached"</span>  </span><br><span class="line">[ <span class="operator">-f</span> <span class="variable">$MEMCACHED</span> ] || <span class="built_in">exit</span> <span class="number">1</span>  </span><br><span class="line"><span class="comment"># See how we were called.   </span></span><br><span class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span>   </span><br><span class="line">  start)   </span><br><span class="line">        start   </span><br><span class="line">        ;;   </span><br><span class="line">  stop)   </span><br><span class="line">        stop   </span><br><span class="line">        ;;   </span><br><span class="line">  restart)   </span><br><span class="line">        stop   </span><br><span class="line">        sleep <span class="number">3</span>  </span><br><span class="line">        start   </span><br><span class="line">        ;;   </span><br><span class="line">    *)   </span><br><span class="line">        <span class="built_in">echo</span> $<span class="string">"Usage: <span class="variable">$0</span> &#123;start|stop|restart&#125;"</span>  </span><br><span class="line">        <span class="built_in">exit</span> <span class="number">1</span>  </span><br><span class="line"><span class="keyword">esac</span>   </span><br><span class="line"><span class="built_in">exit</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p><strong> 说明 </strong></p>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># chkconfig:    35 90 25     </span></span><br><span class="line"><span class="preprocessor"># description:  MemCached Daemon</span></span><br></pre></td></tr></table></figure>
+<p>这两行必须，chkconfig 35 90 25  ,数字分别代表，启动级别，启动运行 ，关闭顺序</p>
+<h3 id="安装服务">安装服务</h3><ol>
+<li>将脚本拷贝到/etc/init.d/目录</li>
+<li>chkconfig add  servername(脚本名称)</li>
+<li>chkconfig —level 35 servername on </li>
+<li>chkconfig  —list | grep servername</li>
+</ol>
+<h3 id="使用服务">使用服务</h3><ol>
+<li>service  servername  start|stop|restart</li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="手动构建linux服务">手动构建linux服务</h2><h3 id="Linux运行级别">Linux运行级别</h3><ul>
+<li>0 - 停机</li>
+<li>1 - 单用户模式</li>
+<li>2 - 多用户，没有NFS和网络</li>
+<li>]]>
+    </summary>
+    
+      <category term="Linux" scheme="https://wustrive2008.github.io/tags/Linux/"/>
+    
+      <category term="chkconfig" scheme="https://wustrive2008.github.io/tags/chkconfig/"/>
+    
+      <category term="服务器" scheme="https://wustrive2008.github.io/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+      <category term="Linux" scheme="https://wustrive2008.github.io/categories/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[支付战争]]></title>
+    <link href="https://wustrive2008.github.io/2015/07/26/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E6%94%AF%E4%BB%98%E6%88%98%E4%BA%89/"/>
+    <id>https://wustrive2008.github.io/2015/07/26/读书笔记-支付战争/</id>
+    <published>2015-07-26T12:19:00.000Z</published>
+    <updated>2015-07-26T13:19:40.567Z</updated>
+    <content type="html"><![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>支付战争·互联网金融创世纪</p>
+<h5 id="作者">作者</h5><p>埃里克•杰克逊(Eric M. Jackson)</p>
+<h5 id="作者简介">作者简介</h5><p>PayPal成立初期的高管之一，曾担任PayPal产品营销总监。CapLinked公司的联合创始人兼CEO。CapLinked是一家专为投资人、创业者等提供简单高效投资协作平台的创业公司。</p>
+<h5 id="阅读方式">阅读方式</h5><p>电子书 kindle</p>
+<h5 id="阅读日期">阅读日期</h5><p>2015.6</p>
+<h3 id="书籍简介">书籍简介</h3><p>这是一个野心勃勃的创业计划，在线支付鼻祖PayPal试图创造一个“统治世界”的金融操作系统，并在全球成功推广一款颠覆式的互联网产品。<br>《支付战争》的作者是“PayPal黑帮”成员之一，他真实还原了这个伟大产品是如何诞生的，以及在后来的发展壮大之路上，如何应对融资紧张、突破增长瓶颈，在竞争者凶猛围剿与平台商霸王条款的夹击下，逆境求生，改变业务模式，最终完成IPO，并成功出售给竞争对手eBay的全过程。<br>PayPal充满韧性的年轻创业家们，在后来的商业之路上开创了硅谷投资界的新格局，打造了多家新创公司，其中有7家市值超过10亿美元，如领英（LinkedIn）、特斯拉（Tesla）、YouTube等。《支付战争》带领我们回到“PayPal黑帮”最初的战场：山寨产品不断涌现，赤字危机节节逼近，公司几经易主，重组后文化冲突尖锐，网络诈骗汹涌来袭，客服危机迫在眉睫，媒体质疑层出不穷，罢免埃隆•马斯克掀起血雨腥风……当全世界与它为敌，看PayPal如何接受残酷洗礼，浴火重生！</p>
+<h3 id="摘录笔记">摘录笔记</h3><p>1999年第四季度</p>
+<p>彼得 • 蒂尔的 Confinity 推出产品 Paypal，这个产品可以让任意用户在知道对方电子邮件地址的情况下向对方转账，而此前这种交易只能通过手写的支票。6个星期之后，埃隆 • 马斯克创立 X.com。</p>
+<p>2000年新春</p>
+<p>新春钟声敲响的时候，Paypal 有了第10000个用户，它获取用户的手段是通过病毒营销，首先，Paypal 会给所有新注册的用户账户打10美元，同时，如果某用户推荐了新的用户，那么推荐人也会获得10美元的奖励。2000年1月末，通过让 eBay 的买卖双方使用 Paypal 来支付，Paypal 的用户数到达10万。</p>
+<p>2000年2月</p>
+<p>Paypal 与 X.com 合并，事实上这个合并意义重大，而且显示出交易双方创始人的不同寻常之处。合并之前的 Paypal 与 X.com 各有大约20万用户，Paypal 在 eBay 货物陈列上的份额是8%左右，而 X.com 在5%左右，但 X.com 比 Paypal 有更多的现金储备，同时也能提供更多的增值服务。彼得 • 蒂尔在《Zero to One》这本书的第四章中写道：</p>
+<p>我们公司的办公大楼在 Palo Auto 的大学街上，和 X.com 的公司隔了4个街区，X.com 的产品和我们的极为相似，到了1999年末，我们陷入了全面战争。Paypal 许多员工周工作时间达到了100小时，毫无疑问，结果不尽如人意，因为我们关注的不是客观的生产效率，而是打败 X.com 公司。我们公司的一个工程师甚至为了达到这个目的还设计了一枚炸弹……</p>
+<p>彼得 • 蒂尔说，处理合并之后的竞争不是件简单的事情，有时你不得不投入战斗。需要的时候，你不仅要战斗，还必须得赢，没有中间选择：要么和风细雨润物无声，要么暴风骤雨速战速决。合并之后的新公司仍然维持着两边原有的产品和系统架构，Paypal 每天都有1.2万的新用户注册，而 X.com 由于取消了每个用户20美元的补贴，注册人数急剧下降。从现在看来，Paypal 与 X.com 合并不但让这两家公司摆脱了恶性竞争，而且给十几年后的中国互联网市场带来了可参考的范例，后来，中国移动互联网市场发生了多起这样的合并。</p>
+<p>2000年3月</p>
+<p>在线支付真正成为一个行业，竞争变得更加激烈，多家公司从不同方向进入这个市场，比如雅虎通过 dotBank 进入这一领域。对于 Paypal 来说，他们的好消息就是，他们在纳斯达克崩盘之前完成了1亿美元的融资。但是不幸的是，有了一些重量级的玩家，比如 eBay，也通过收购进入市场。eBay 是通过收购 Billpoint 进入这一市场的，由于在线支付的主要用户群体集中在 eBay 上面，因此，eBay 拥有无与伦比的主场优势，这个优势就如同在淘宝和天猫上的支付宝的优势一样。</p>
+<p>2000年4月初</p>
+<p>Paypal 用户达到100万，当月新增用户为50万，每天平均支付金额为200万美元，但问题也随之而来，第一个问题是客服问题，每天都有将近几千封电子邮件如洪水猛兽一般涌来，由于 Paypal 处理的是用户的金钱问题，因此用户的耐心非常有限，这给 Paypal 的客服工作造成了极大压力，4月初的时候，Paypal 积累未回复的客户邮件数量是10万封，当时还没有 Zendesk 这样的非常方便的客户关怀系统，Paypal 不得不自己着手解决这个问题。</p>
+<p>第二个问题是应用性能问题，从4月份开始，Paypal 的网站变得越来越慢，也更加不稳定，网页的加载时间变长，用户在登录账户的时候经常会遇见错误信息，在这种情况下，Paypal 不得不停止统计 统治世界指数 来给业已超负荷的应用系统和数据库带啦更大的压力，当时还没有 SaaS 方式的APM 服务(第一个 SaaS APM 服务商8年后才会创立)。同时，Paypal 和 X.com 使用的技术栈也有不同，Paypal 是 UNIX 和 Oracle，而 X.com 则是基于 NT 的技术栈,两家公司的工程师为扩容使用什么技术争执不休。第三个问题则是业务模式问题，由于当时的 Paypal 是一个纯烧钱的模式，每一个新用户的注册都要发奖金，每一笔交易都要向信用卡协会交2%的手续费，导致公司每个月都要烧钱上千万美元，每一笔交易都要亏损3.5%。在这三个问题的挑战之下，合并之后的公司大部分部门陷入瘫痪状态。</p>
+<p>2000年5月5日</p>
+<p>彼得 • 蒂尔因为筋疲力尽而辞职，埃隆 • 马斯克成为新的掌舵人。埃隆 • 马斯克和戴维 • 萨克斯组建了新的产品团队并命名为「生产者」，作者埃里克 • 杰克逊被任命为唯一的市场营销人员。生产者团队组建以后，积极推动业务模式的改变，努力推动向卖家收费的策略，同时，积极减少信用卡交易在所有交易中的比例，通过这一方式，虽然公司仍然处于亏损状态，但是每笔交易的交易利润开始从-3.5%逐渐回升。</p>
+<p>2000年7月</p>
+<p>Paypal 一直凑活着使用的数据库系统几乎到达容量上限，因而引发了升级到2.0系统的话题。X.com 的工程师一直坚持2.0系统要建立在 Windows NT 系统之上，而埃隆 • 马斯克支持这一决定，并暂停了所有新功能的开发以尽快完成2.0版本。在这一要命的时刻，公司又遭遇了诈骗危机，最大一笔单笔诈骗金额达到570万美元，真是屋漏偏逢连夜雨。生产者团队虽然想出了应对烧钱的办法，但是由于2.0版本的事情无法获得任何开发资源的支持。同时，埃隆 • 马斯克又打算移除 Paypal 品牌，统一使用 X.com 品牌。</p>
+<p>2000年9月</p>
+<p>埃隆 • 马斯克被扳倒，彼得 • 蒂尔归来。彼得 • 蒂尔重新掌权后，2.0版本计划被束之高阁，公司努力改变居高不下的亏损状况，升级战略初步奏效，很多个人用户升级为企业用户。</p>
+<p>2000年第四季度</p>
+<p>Paypal 注册用户达到500万，每天的总支付金额达到600万美元，这些交易中有2/3来自企业账户，为公司带来了740万美元的收入。虽然仍然有2540万美元的赤字，但前一季度的收入只有100万美元，而运营损失高达3670万美元。</p>
+<p>2001年开始后</p>
+<p>Paypal 开始了一系列产品的创新，使得第一季度的用户数达到720万，每天的总支付金额达到700万美元，为公司带来了1320万美元的收入。</p>
+<p>2001年第三季度</p>
+<p>Paypal 收入3020万美元，第三季度，收入4010万美元，并首度实现盈利。 我们可以看到，上面这些神奇的变化，是发生在短短的两年里，如果 Paypal 后来没有卖给 eBay，如果能够保持同样的发展速度，可能现在整个世界互联网金融领域的格局会完全改变。</p>
+<h3 id="心得笔记">心得笔记</h3><p>[转]<br>最近国内创业圈几乎都被一本书刷屏了——彼得·蒂尔的《从0到1》。而《支付战争》讲的就是这位大神如何从0到1创立并发展Paypal的故事。 </p>
+<p>如果你不熟悉Paypal，那么可将其近似理解为“美国的支付宝”。投资基金出身的彼得·蒂尔早在1998年就发现了在线支付的大市场，于是网罗了一帮青年才俊——那真是青年才俊，整个公司平均年龄才25岁，这帮人也成了后来著名的“Paypal黑帮”。本书作者是Paypal第27位成员，在还没有搞清楚具体要来做什么的情况下，就从安达信这种当年的金饭碗辞了职，投奔蒂尔而来，参与并见证了Paypal改变世界的旅程。 </p>
+<p>而这段旅程从一开始就注定惊心动魄。Paypal支付工具发布仅6周，山寨者dotBank和X.com便横空出世，市场瞬间陷入混战。Paypal首先从eBay用户资源入手，很快打开了局面，但任何创新都会马上被对手复制，火拼厮杀成了常态。疲于应付竞争让公司损耗了大量的时间精力，而无暇真正根据用户需求和市场发展自身，这让彼得·蒂尔深为困扰。正是出于这个原因，他决定与X.com合并，让行业重新洗牌，这也使得他们成功躲过了2000年互联网泡沫的冲击。 </p>
+<p>但好景不长，财大气粗的eBay马上也加入了战场，并不断凭借主场优势发布霸王条款，扶持自家小弟Billpoint，经常打得Paypal措手不及。“外患”不断，合并后的X.com也同时饱受“内忧”，原来两个公司的不同品牌、不同文化，甚至程序员开发基于不同的平台，导致双方矛盾日益尖锐，结果是彼得·蒂尔辞职，埃隆·马斯克掌舵。然而形势依旧严峻，对手攻势猛烈、规模迅速扩张而客服跟不上、诈骗横行导致巨额亏损，最后因为是否保留Paypal品牌的问题，Paypal和X.com两派的暗战终于引爆。5个月后，埃隆·马斯克出局，彼得·蒂尔重出江湖。 </p>
+<p>要是商战电视剧，到这完全可以精彩“剧终”了，但现实远要更残酷得多。我们都知道最后Paypal以15亿美元卖给了eBay，而其中的曲折坎坷、孤注一掷、铤而走险，都远远超过了任何一个顶尖编剧的想象——刁钻的用户、难缠的对手，更大的压力来自舆论、诈骗团伙甚至政府监管部门。本来公司第二天就要IPO了，突然有不知名的小公司跳出来告你侵权，又有州政府杀出来说你“违反了某规定”，让上市险些功亏一篑。“终于渡过了一劫，但回过头看，这才只是热身而已。”全书不下十几处这样的表述，让你的心一直揪着，就像追悬疑剧，永远想赶紧点开下一集。 </p>
+<p>如果真要拍成电视，彼得·蒂尔可谓名副其实的霸道总裁。除了高颜值、好身材、多金、CEO这些标配之外，他在其他方面的多才多艺，简直超越了地球人的范畴——要是有编剧敢这么写，一定早被吐槽成筛子了：斯坦福高材生，而且主修哲学；创办独立学生报纸。你以为他是文艺咖？No No No，他的老本行是对冲基金，凭心算能将除法计算到小数点后四位，并且还是美国国际象棋联合会前国手，在Paypal上市的庆祝会上，一人对付十位高管，同时下十盘国际象棋（而只有一人赢了他）。作为一名力挽狂澜的CEO，必然很高冷吧？No No No，他一直是T恤衫休闲裤，为了鼓舞员工，竟然答应如果公司达到目标业绩就把头发染成蓝色（后来业绩差了一点点）。EQ/IQ，QQ通，文理兼修、刚柔并济，就连独特的性取向这条都占了。如此丧心病狂的软硬件配置，就算把手撕鬼子这种技能按在他身上，我也觉得合情合理，心服口服。 </p>
+<p>当然，说正经的，这书可谓彼得·蒂尔创新理念的最佳诠释：如何从0到1？为何要避免竞争（与X.com合并，接受eBay的收购）？如何打造帮派文化？看完全书，你都会有更深刻的理解。在书的最后，作者简要罗列了Paypal黑帮成员们后来的发展：彼得·蒂尔继续做投资，仅从投资Facebook上就获益数千倍；里德·霍夫曼创立了LinkedIn，打造新型企业雇员关系；埃隆·马斯克创立SpaceX和特斯拉，玩进了太空；马克斯·列夫琴开创了Slide公司，陈士骏创立了YouTube……这种超豪华阵容，会让你恍惚有种对着96级北影表演系毕业照看当今影视圈的即视感；或者说，Paypal黑帮就是世界的蓝翔技校，挖掘技术嗷嗷强——只不过他们擅长的不是挖土，而是掘金。 </p>
+<p>自然，他们绝不只是掘金，他们是真的在改变世界。想想“手填汇款单”这种遥远的事情，仔细算来也不过就在几年前。而如今便捷的手机支付成了家常便饭，滴滴快的烧钱大战、微信红包狂潮，也已经让我们对中国版的支付战争有了切身体验。秉承“打得过就打，打不过就联合”的理念，优酷土豆合并了，滴滴快的在一起了，那么未来支付宝与微信是否也会成为幸福的一对儿，也许我们真的可以拭目以待。 </p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>支付战争·互联网金融创世纪</p>
+<h5 id="作者">作者</h5><p>埃里克•杰克逊(Eric M. Jackson)</p>
+<h5 id="作者简介">作者简介</h5><p>]]>
+    </summary>
+    
+      <category term="paypal" scheme="https://wustrive2008.github.io/tags/paypal/"/>
+    
+      <category term="奇点" scheme="https://wustrive2008.github.io/tags/%E5%A5%87%E7%82%B9/"/>
+    
+      <category term="支付" scheme="https://wustrive2008.github.io/tags/%E6%94%AF%E4%BB%98/"/>
+    
+      <category term="皮特·泰尔" scheme="https://wustrive2008.github.io/tags/%E7%9A%AE%E7%89%B9%C2%B7%E6%B3%B0%E5%B0%94/"/>
+    
+      <category term="读书笔记" scheme="https://wustrive2008.github.io/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="读书笔记" scheme="https://wustrive2008.github.io/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[活着]]></title>
+    <link href="https://wustrive2008.github.io/2015/07/26/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E6%B4%BB%E7%9D%80/"/>
+    <id>https://wustrive2008.github.io/2015/07/26/读书笔记-活着/</id>
     <published>2015-07-26T11:41:13.000Z</published>
-    <updated>2015-07-26T12:41:18.599Z</updated>
+    <updated>2015-07-26T13:15:27.206Z</updated>
+    <content type="html"><![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>《活着》</p>
+<h5 id="作者">作者</h5><p>余华 </p>
+<h5 id="作者简介">作者简介</h5><p>余华，1960年出生，1983年开始写作。至今已经出版长篇小说4部，中短篇小说集6部，随笔集4部。主要作品有《兄弟》《活着》《许三观卖血记》《在细雨中呼喊》等。其作品已被翻译成20多种语言在美国、英国、法国、德国、意大利、西班牙、荷兰、瑞典、挪威、希腊、俄罗斯、保加利亚、匈牙利、捷克、塞尔维亚、斯洛伐克、波兰、巴西、以色列、日本、韩国、越南、泰国和印度等国出版。曾获意大利格林扎纳·卡佛文学奖（1998年）、法国文学和艺术骑士勋章（2004年）、中华图书特殊贡献奖（2005年）、法国国际信使外国小说奖（2008年）等。</p>
+<h5 id="阅读方式">阅读方式</h5><p>纸质书 作家出版社</p>
+<h5 id="阅读日期">阅读日期</h5><p>2013.6</p>
+<h3 id="书籍简介">书籍简介</h3><p>《活着(新版)》讲述了农村人福贵悲惨的人生遭遇。福贵本是个阔少爷，可他嗜赌如命，终于赌光了家业，一贫如洗。他的父亲被他活活气死，母亲则在穷困中患了重病，福贵前去求药，却在途中被国民党抓去当壮丁。经过几番波折回到家里，才知道母亲早已去世，妻子家珍含辛茹苦地养大两个儿女。此后更加悲惨的命运一次又一次降临到福贵身上，他的妻子、儿女和孙子相继死去，最后只剩福贵和一头老牛相依为命，但老人依旧活着，仿佛比往日更加洒脱与坚强。<br>《活着(新版)》荣获意大利格林扎纳•卡佛文学奖最高奖项（1998年）、台湾《中国时报》10本好书奖（1994年）、香港“博益”15本好书奖（1994年）、第三届世界华文“冰心文学奖”（2002年），入选香港《亚洲周刊》评选的“20世纪中文小说百年百强”、中国百位批评家和文学编辑评选的“20世纪90年代最有影响的10部作品”。</p>
+<h3 id="摘录笔记">摘录笔记</h3><ol>
+<li>没有什么比时间更具有说服力了，因为时间无需通知我们就可以改变一切。</li>
+<li>以笑的方式哭，在死亡的伴随下活着。</li>
+<li>作为一个词语，“ 活着”在我们中国的语言里充满了力量，它的力量不是来自于喊叫，也不是来自于进攻，而是忍受，去忍受生命赋予我们的责任，去忍受现实给予我们的幸福和苦难、无聊和平庸。</li>
+<li>最初我们来到这个世界，是因为不得不来；最终我们离开这个世界，是因为不得不走。</li>
+<li>做人不能忘记四条，话不要说错，床不要睡错，门槛不要踏错，口袋不要摸错。</li>
+<li>人类无法忍受太多的真实。</li>
+<li>人啊，活着时受了再多的苦，到了快死的时候也会想个法子来宽慰自己。</li>
+<li>做人还是平常点好，争这个争那个，争来争去赔了自己的命。像我这样，说起来是越混越没出息，可寿命长，我认识的人一个挨着一个死去，我还活着。</li>
+<li>一个人命再大，要是自己想死，那就怎么也活不了。</li>
+<li>我知道他不会和我拼命了，可他说的话就像是一把钝刀子在割我的脖子，脑袋掉不下来，倒是疼得死去活来。</li>
+<li>你千万别糊涂，死人都还想活过来，你一个大活人可不能去死。</li>
+<li>这里所说的高尚不是那种单纯的美好，而是对一切事物理解之后的超然，对善与恶一视同仁，用同情的目光看待世界。</li>
+<li>写作过程让我明白，人是为活着本身而活着，而不是为活着之外的事物所活着。</li>
+<li>“人只要活得高兴，穷也不怕。”</li>
+<li>只要一家人天天在一起，也就不在乎什么福分了。</li>
+<li>我看着那条弯曲着通向城里的小路，听不到我儿子赤脚跑来的声音，月光照在路上，像是撒满了盐。</li>
+<li>少年去游荡，中年想掘藏，老年做和尚。</li>
+<li>人是为活着本身而活着，而不是为了活着之外的任何事物所活着。</li>
+<li>我看到老人的脊背和牛背一样黝黑，两个进入垂暮的生命将那块古板的田地耕得哗哗翻动，犹如水面上荡起的波浪。</li>
+<li>老子就是啃你家祖坟里的烂骨头，也不会向你要饭。</li>
+<li>他们脸上的皱纹里积满了阳光和泥土，他们向我微笑时，我看到空洞的嘴里牙齿所剩无几。他们时常流出浑浊的眼泪，这倒不是因为他们时常悲伤，他们在高兴时甚至是在什么事都没有的平静时刻，也会泪流而出。然后举起和乡间泥路一样粗糙的手指，擦去眼泪，如同掸去身上的稻草。</li>
+<li>内心让他真实地了解自己，一旦了解了自己也就了解了世界。</li>
+<li>我知道黄昏正在转瞬即逝，黑夜从天而降了。我看到广阔的土地袒露着结实的胸膛，那是召唤的姿态，就像女人召唤着他们的儿女，土地召唤着黑夜降临。</li>
+<li>他是可以看到自己过去的模样的人 准确看到自己年轻走路的姿态 甚至可以看到自己如何衰老</li>
+<li>我看到广阔的土地袒露着结实的胸膛，那是召唤的姿态，就像女人们召唤着她们的儿女，土地召唤着黑夜的来临。</li>
+<li>他喜欢回想过去，喜欢讲述自己，似乎这样一来，他就可以一次一次的重度此生了。</li>
+</ol>
+<h3 id="心得笔记">心得笔记</h3><p>这位名叫“福贵”的老人成长于解放前期，经历了抗日战争、国内革命战争、新中国成立、大跃进时代、文革时代、改革开放初期，他的一生实则是现代中国的演变史。虽然故事情节以他及他的一家为主，但反映出来的场景却是多方位的，它让我们见识了战争的残酷，见证了神化的中国，更让我们80年后的年轻一代了解什么是文革。作为21世纪的年轻人，是应该必定是一个没有前途的民族，因而，我们更应该了解并牢记这段历史，而这也许是《活着》带给我们的启发和引思吧。</p>
+<p>在描述苦难时代的背景下，“福贵”老人也经历了人生所有的痛苦，当他看着一个个亲人离自己而去的时候，心底实际是在滴血，是在哭泣，但他仍然挺过来了，依然乐观、豁达地面对着人生，在年近古稀之时，以一头耕牛为伴，却没有一丝的沮丧。在他的脸上，我们看不到生活有多么的不好，看不到对世道的厌倦，有的只是岁月留下的沧桑，有的只是他带给我们的人生取向。</p>
+<p>“福贵”老人其实只是广大中国农民的一个缩影罢了，在他们身上遗存了太多优良品德，勤劳、善良、任劳任怨、乐观、坚韧，正是无数像“福贵”这样的老百姓，我们的国家才能在那无尽的灾难中挺过来。</p>
+<p>如今，中国的很多农民每年都要为了生计从自己的故土奔向陌生的城市，做着最辛苦的工作，得到的是最低微的收入，他们骨子里的品质让他们无怨无悔。面对困难他们勇往直前，他们才是真的勇士。因而，《活着》是一面人性的镜子，它让我们知道什么样的品质才是中华民族优良的品质，才是民族希望所在。它带给我们的还有很多，对于“福贵”这样的农民来说，土地就是命，就是生命意义所在，那么，对于我们年轻一代来说，生命的意义又是什么呢？</p>
+<p>当今的社会竞争激烈，它并不像某些人所讲的那样美好，并不像某些歌曲所颂扬的那般幸福，他们所看见的只是他们的快乐，而广大农民却是很艰难的。现在的“三农”问题并不是那么容易解决。我想，我们只有从自身做起，不断提升自己、充实自己，并极富热情地关注这个社会尽自己所能去帮助和关心他人，这样就已经很不错了。</p>
+<p>2003年的SARS，2004年的禽流感，2008的冰冻灾害，所有的一切让我感觉到了活着的艰难，我们并不比“福贵”老人幸福多少，所承载的压力与顾虑是很大的。《活着》当中的余杰、何清涟，是他们让我们感知社会并不是一片漆黑，而是有一丝光在暗暗地照着。即便生活再困苦，我们还是可以像“福贵”一样，很好地活着，人生的艰难才刚刚开始。</p>
+<p>《活着》确实被赋予太多的内涵，无疑是一种享受，它让我能更清晰地了解这个社会，了解人生的意义，也许是终生受益吧。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>《活着》</p>
+<h5 id="作者">作者</h5><p>余华 </p>
+<h5 id="作者简介">作者简介</h5><p>余华，1960年出生，1983年开始写作。至今已经出版长篇小]]>
+    </summary>
+    
+      <category term="余华" scheme="https://wustrive2008.github.io/tags/%E4%BD%99%E5%8D%8E/"/>
+    
+      <category term="活着" scheme="https://wustrive2008.github.io/tags/%E6%B4%BB%E7%9D%80/"/>
+    
+      <category term="读书笔记" scheme="https://wustrive2008.github.io/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="读书笔记" scheme="https://wustrive2008.github.io/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[三体]]></title>
+    <link href="https://wustrive2008.github.io/2015/07/26/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E4%B8%89%E4%BD%93/"/>
+    <id>https://wustrive2008.github.io/2015/07/26/读书笔记-三体/</id>
+    <published>2015-07-26T11:41:13.000Z</published>
+    <updated>2015-07-26T13:22:35.848Z</updated>
+    <content type="html"><![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>三体(全三册)</p>
+<h5 id="作者">作者</h5><p>刘慈欣 </p>
+<h5 id="作者简介">作者简介</h5><p>刘慈欣，男，汉族，1963年6月出生，1985年10月参加工作，山西阳泉人，本科学历，高级工程师，科幻作家，中国作协会员，山西省作协会员，阳泉市作协副主席，中国科幻小说代表作家之一。<br>代表作：篇小说《超新星纪元》、《球状闪电》、《三体》三部曲等，中短篇小说《流浪地球》、《乡村教师》、《朝闻道》、《全频带阻塞干扰》等。<br>其中《三体》三部曲被普遍认为是中国科幻文学的里程碑之作，将中国科幻推上了世界的高度。</p>
+<h5 id="阅读方式">阅读方式</h5><p>电子书</p>
+<h5 id="阅读日期">阅读日期</h5><p>2015.5</p>
+<h3 id="书籍简介">书籍简介</h3><p>《三体》是一部三部曲小说集，分别是《三体Ⅰ：地球往事》，《三体Ⅱ：黑暗森林》和《三体Ⅲ：死神永生》，由于《三体Ⅰ：地球往事》最早以“地球往事”为名在《科幻世界》上连载，因此《三体》又名“地球往事三部曲”。</p>
+<p>《三体Ⅰ：地球往事》：文革期间，我国军方实施了探寻外星文明的“红岸工程”，通过大功率天线向宇宙发射信号，同时监听可能的反馈。一个女科学家意外的与其他行星的智能生命建立了联系，这个行星有三个恒星，即所谓的三体世界。三体世界的三颗恒星不会像我们的太阳那样规律的运行，导致他们经常处于极热或极寒的恶劣生存环境中。三体世界拥有比地球更为发达的文明，在得知地球文明的消息后，三体世界制定了侵略地球的计划，包括两部分内容，一是派向地球派遣舰队，大概400年后到地球；二是研究出了先进工具——智子并派到了地球，简单来讲就是一个智能的微观粒子，设定是可以对人类的活动进行无所不在的监视，并可以通过干扰物理粒子对撞机实验压制人类科学的发展。</p>
+<p>《三体Ⅱ：黑暗森林》：人类了解了三体世界的入侵计划，积极制定的各种应对策略。由于智子无所不在，所以人类进行“面壁人计划”，“面壁者”被赋予调动各种资源的权力，要在心中制定出应对策略，而不能暴露真实的战略意图。有一位面壁者发现了所谓的“宇宙社会学”和其推论“黑暗森林”法则，前者认为“生存是文明的第一需要。文明不断增长和扩张，但宇宙中的物质总量保持不变。”后者认为宇宙如同一片黑暗的森林，每一个宇宙文明都是带枪的猎手，他们出于生存需要，发现一个文明就要消灭一个文明（乍一看挺奇怪，但想到被欧洲人大量屠杀甚至灭族的北美印第安人和澳大利亚土著，这样的设定又显得合情合理）。面壁人发现根据这一规则，只要向宇宙发射地球和三体世界的坐标，这两个文明就都会被摧毁，以此威胁三体世界撤回舰队。</p>
+<p>《三体Ⅲ：死神永生》：三体世界破坏了人类从地球向宇宙发展信号的能力。但信号意外的由人类的太空船发出，三体世界被更高级的文明毁灭。人类发出了三体世界的坐标的同时也暴露了自己，太阳系也随时面临被毁灭的威胁。由于了解了三体世界和其他世界是因恒星被撞击而毁灭，人类制定了“掩体计划”，即希望以太阳系内巨大的木星为掩体，躲过太阳被撞击的灾难。但高级文明发现太阳系和其他星系的星系结构不同，没有使用直接撞击恒星的方式，而是采用了“降维攻击”——即使三维空间及其中的所有物质跌落到二维的方式毁灭太阳系，只有飞行速度达到光速的物体才能躲过这次攻击。两个地球人乘坐唯一的一架光速飞船逃离了太阳系，遇到了在三体威胁时就逃离到太空的地球人。他们建立了一个封闭的小宇宙，在里面生活了一段时间后，乘坐飞船向宇宙的深处驶去。</p>
+<h3 id="摘录笔记">摘录笔记</h3><ol>
+<li>在中国，任何超脱飞扬的思想都会砰然坠地——现实的引力实在是太沉重了。</li>
+<li>给时光以生命，给岁月以文明。</li>
+<li>我们都是阴沟里的虫子,但总还是得有人仰望星空.</li>
+<li>碑是那么小，与其说是为了纪念，更像是为了忘却。</li>
+<li>死亡是一座永恒的灯塔，不管你驶向何方，最终都会朝它转向。一切都将逝去，只有死神永生</li>
+<li>在宇宙间，一个技术文明等级的重要标志，是它能够控制和使用的微观维度。对于基本粒子的一线使用，从我们那些长毛裸体的祖先在山洞中生起篝火时就开始了，对化学反应的控制，就是在一维层次上操控微观粒子。当然，这种控制也是从低级到高级，从篝火到后来的蒸汽机，再到后来的发电机；现在，人类对微观粒子一维控制的水平已达到了顶峰，有了计算机，也有了你们的纳米材料。但这一切，都局限于对微观维度的一维控制，在宇宙间一个更高级的文明看来，篝火和计算机、纳米材料等等是没有本质区别的，同属于一个层次，这也是他们仍将人类看成虫子的原因。</li>
+<li>记忆是一条早已干涸的河流，只在毫无生气的河床中剩下零落的砾石。</li>
+<li>越透明的东西越神秘，字宙本身就是透明的，只要目力能及，你想看多远就看多远，但越看越神秘。</li>
+<li>城市就是森林，每一个男人都是猎手，每一个女人都是陷阱。</li>
+<li>给岁月以文明，而不是给文明以岁月。</li>
+<li>一知道在哪儿，世界就变得像一张地图那么小了；不知道在哪儿，感觉世界才广阔。</li>
+<li>你的无畏来源于无知。</li>
+<li>空不是无，空是一种存在，你得用空这种存在填满自己。</li>
+<li>要知道，一个文学人物十分钟的行为，可能是她十年的经历的反映。</li>
+<li>上帝是个无耻的老赌徒，他抛弃了我们！</li>
+<li>在这寒冷无际的草原间，燃烧是无意义的，一腔热血喷出来，比一堆牛粪凉的更快，还不如后者有实用价值。但燃烧是他们的命运，他们是燃烧的一代。</li>
+<li>我是个懒散的人，从小就是，住校时碗从来不洗，被子从来不叠，对什么都提不起兴趣，懒得学习，甚至懒得玩，每天迷迷糊糊地混日子。</li>
+<li>唯一不可阻挡的是时间，它像一把利刃，无声地切开了坚硬和柔软的一切，恒定的向前推进着，没有任何东西能够使它的行径产生丝毫颠簸，它却改变着一切。</li>
+</ol>
+<h3 id="心得笔记">心得笔记</h3><p>让我们套用《三体》中多维空间的设定，就像三维空间投影到二维空间形成一个平面那样，看看如果《三体》投影到战略这个维度上，会带给我们哪些启示。“面壁计划”和“掩体计划”是《三体》中最为重要的两个谋略，一个成功，一个失败，但无疑都会引发读者关于战略的深入思考。</p>
+<p>“面壁计划”博弈的双方是地球人和三体人，三体人掌握地球人行动的完全信息，拥有比地球更高级的文明，地球人针对这种情况制定了面壁计划，其核心就是“选定一批战略计划的制订者和领导者，他们完全依靠自己的思维制订战略计划，不与外界进行任何形式的交流，计划的真实战略思想、完成的步骤和最后目的都只藏在他们的大脑中，我们称他们为面壁者，这个古代东方冥思者的名称很好地反映了他们的工作特点。”[10]在《三体》的故事中，作为面壁人的逻辑根据叶文洁的提示，通过研究“宇宙社会学”发现了“黑暗森林”法则，从而建立了对三体世界的威慑，保卫了地球的安全。</p>
+<p>而“掩体计划”中博弈的双方是地球人和更高等级的外星文明。地球人掌握的信息是外星人会对地球进行打击，时间不确定，但从其他星球被毁灭的经历可以总结出被打击的规律，于是地球人以巨大的木星为掩体，制定了应对计划，但是外星人出其不意的采用了一种降维攻击的方式，太阳系覆灭，只有少数地球人幸运逃离。<br>从这两个案例中，我们不难发现，成功的战略看似荒诞，但是简单有效、一招制敌；而失败的战略则看似未雨绸缪，使人觉得从现在到未来的每项计划都合情合理，步步稳妥，但是结果却不堪一击。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>三体(全三册)</p>
+<h5 id="作者">作者</h5><p>刘慈欣 </p>
+<h5 id="作者简介">作者简介</h5><p>刘慈欣，男，汉族，1963年6月出生，1985年10]]>
+    </summary>
+    
+      <category term="三体" scheme="https://wustrive2008.github.io/tags/%E4%B8%89%E4%BD%93/"/>
+    
+      <category term="刘慈欣" scheme="https://wustrive2008.github.io/tags/%E5%88%98%E6%85%88%E6%AC%A3/"/>
+    
+      <category term="电影" scheme="https://wustrive2008.github.io/tags/%E7%94%B5%E5%BD%B1/"/>
+    
+      <category term="读书笔记" scheme="https://wustrive2008.github.io/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="读书笔记" scheme="https://wustrive2008.github.io/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[解忧杂货店]]></title>
+    <link href="https://wustrive2008.github.io/2015/07/26/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E8%A7%A3%E5%BF%A7%E6%9D%82%E8%B4%A7%E5%BA%97/"/>
+    <id>https://wustrive2008.github.io/2015/07/26/读书笔记-解忧杂货店/</id>
+    <published>2015-07-26T11:41:13.000Z</published>
+    <updated>2015-07-26T13:16:55.271Z</updated>
     <content type="html"><![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>解忧杂货店</p>
 <h5 id="作者">作者</h5><p>(日)东野圭吾 </p>
 <h5 id="作者简介">作者简介</h5><p>东野圭吾<br>日本著名作家。<br>1985年，《放学后》获第31届江户川乱步奖，开始专职写作；<br>1999年，《秘密》获第52届日本推理作家协会奖；<br>2005年出版的《嫌疑人X的献身》史无前例地同时获得第134届直木奖、第6届本格推理小说大奖，以及年度三大推理小说排行榜第1名；<br>2008年，《流星之绊》获第43届新风奖；<br>2009年出版的《新参者》获两大推理小说排行榜年度第1名；<br>2012年，《解忧杂货店》获第7届中央公论文艺奖。<br>2014年，《祈りの幕が下りる時》（暂译《祈祷落幕时》）获第48届吉川英治文学奖。</p>
@@ -55,6 +373,8 @@
 <h5 id="作者">作者</h5><p>(日)东野圭吾 </p>
 <h5 id="作者简介">作者简介</h5><p>东野圭吾<br>日本著名作家。<br>1985年]]>
     </summary>
+    
+      <category term="东野圭吾" scheme="https://wustrive2008.github.io/tags/%E4%B8%9C%E9%87%8E%E5%9C%AD%E5%90%BE/"/>
     
       <category term="解忧杂货店" scheme="https://wustrive2008.github.io/tags/%E8%A7%A3%E5%BF%A7%E6%9D%82%E8%B4%A7%E5%BA%97/"/>
     

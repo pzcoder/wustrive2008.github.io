@@ -2,8 +2,33 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://wustrive2008.github.io/2015/03/21/log4j%E9%85%8D%E7%BD%AE%E5%8F%82%E8%80%83/</loc>
-    <lastmod>2015-07-26T12:44:02.807Z</lastmod>
+    <loc>https://wustrive2008.github.io/2015/07/26/memcached%E6%9C%8D%E5%8A%A1%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/</loc>
+    <lastmod>2015-07-26T13:37:55.140Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://wustrive2008.github.io/2015/07/26/chkconfig%E6%9E%84%E5%BB%BAlinux%E6%9C%8D%E5%8A%A1/</loc>
+    <lastmod>2015-07-26T13:28:43.772Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://wustrive2008.github.io/2015/07/26/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E4%B8%89%E4%BD%93/</loc>
+    <lastmod>2015-07-26T13:22:35.848Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://wustrive2008.github.io/2015/07/26/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E6%94%AF%E4%BB%98%E6%88%98%E4%BA%89/</loc>
+    <lastmod>2015-07-26T13:19:40.567Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://wustrive2008.github.io/2015/07/26/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E8%A7%A3%E5%BF%A7%E6%9D%82%E8%B4%A7%E5%BA%97/</loc>
+    <lastmod>2015-07-26T13:16:55.271Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://wustrive2008.github.io/2015/07/26/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E6%B4%BB%E7%9D%80/</loc>
+    <lastmod>2015-07-26T13:15:27.206Z</lastmod>
   </url>
   
   <url>
@@ -13,6 +38,11 @@
   
   <url>
     <loc>https://wustrive2008.github.io/2015/03/21/hexo%E5%8D%9A%E5%AE%A2%E4%B9%8Bpacman/</loc>
+    <lastmod>2015-07-26T12:44:02.807Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://wustrive2008.github.io/2015/03/21/log4j%E9%85%8D%E7%BD%AE%E5%8F%82%E8%80%83/</loc>
     <lastmod>2015-07-26T12:44:02.807Z</lastmod>
   </url>
   
@@ -29,11 +59,6 @@
   <url>
     <loc>https://wustrive2008.github.io/categories/index.html</loc>
     <lastmod>2015-07-26T12:44:02.807Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://wustrive2008.github.io/2015/07/26/%E8%A7%A3%E5%BF%A7%E6%9D%82%E8%B4%A7%E5%BA%97/</loc>
-    <lastmod>2015-07-26T12:41:18.599Z</lastmod>
   </url>
   
 </urlset>
