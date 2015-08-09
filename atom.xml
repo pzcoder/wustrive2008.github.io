@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title><![CDATA[wustrive's blog]]></title>
-  <subtitle><![CDATA[life work study notes]]></subtitle>
+  <subtitle><![CDATA[好记性不如写博客]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="https://wustrive2008.github.io/"/>
-  <updated>2015-07-26T14:08:17.401Z</updated>
+  <updated>2015-08-09T10:45:12.392Z</updated>
   <id>https://wustrive2008.github.io/</id>
   
   <author>
@@ -13,6 +13,75 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[http协议基础之URL]]></title>
+    <link href="https://wustrive2008.github.io/2015/08/09/http%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80%E4%B9%8BURL/"/>
+    <id>https://wustrive2008.github.io/2015/08/09/http协议基础之URL/</id>
+    <published>2015-08-09T08:18:33.000Z</published>
+    <updated>2015-08-09T10:45:12.392Z</updated>
+    <content type="html"><![CDATA[<h2 id="http协议之URL">http协议之URL</h2><h3 id="URI(Uniform_Resource_Identifier)_统一资源标识符">URI(Uniform Resource Identifier) 统一资源标识符</h3><p>URI就像因特网上的邮政地址一样，在世界范围内唯一标识并定位信息资源。</p>
+<h3 id="URL_统一资源定位符">URL 统一资源定位符</h3><p>是资源标识符的最常见形式，是URI的一个子集(另一个是URN)。URL描述了一台特定服务器上某资源的特定位置。它们可以说明如何从一个精确、固定的位置获取资源。</p>
+<h4 id="URL遵循的标准格式">URL遵循的标准格式</h4><ol>
+<li>URL的第一部分被称为方案(scheme)，说明了访问资源所使用的协议类型。如http://</li>
+<li>第二部分给出了服务器的因特网地址</li>
+<li>其余部分制定了Web服务器上的某个资源</li>
+</ol>
+<p><strong>现在几乎所有的URI都是URL</strong></p>
+<h4 id="URL语法">URL语法</h4><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;scheme&gt;<span class="symbol">://&lt;user&gt;</span><span class="symbol">:&lt;password&gt;</span>@&lt;host&gt;<span class="symbol">:&lt;port&gt;/&lt;path&gt;</span>;&lt;params&gt;?&lt;query&gt;<span class="comment">#&lt;flag&gt;</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>方案：使用的协议，不区分大小写</li>
+<li>用户：访问某些资源需要用户名</li>
+<li>密码：用户对应的密码 中间用:分割</li>
+<li>主机：服务器的主机名或IP地址</li>
+<li>端口：服务器正在监听的端口号</li>
+<li>路径：服务器资源的本地名，路径组件的语法是与服务器和方案有关</li>
+<li>参数：某些方案会用这个组件来指定输入参数。参数为名/值对。URL中可以包含多个参数字段</li>
+<li>查询：传递的参数，用”?”将其与URL的其余部分分隔开</li>
+<li>片段：一小片或一部分资源的名字，这个字段是在客户端内部使用的，通过字符”#”与URL其他部分分隔开来</li>
+</ol>
+<h5 id="用户名和密码">用户名和密码</h5><p>很多服务器都要求输入用户名和密码才允许用户访问资源。常见的有FTP服务器。<br>例如：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">ftp:</span><span class="comment">//192.168.1.2</span></span><br><span class="line"><span class="string">ftp:</span><span class="comment">//anonymous@192.168.1.2</span></span><br><span class="line"><span class="string">ftp:</span><span class="comment">//anonymous:my_pwd@192.168.1.2</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="参数">参数</h5><p>为了向应用程序提供它们所需的输入参数，以便正确地与服务器进行交互，URL中有一个参数组件。这个就是URL中的名值对列表，由字符”;”与其他部分分隔。<br>如：<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ftp://<span class="number">192.168</span>.<span class="number">1.2</span>;<span class="variable">type=</span>d</span><br><span class="line">http://<span class="number">192.168</span>.<span class="number">1.2</span>/index.html;<span class="variable">sale=</span><span class="constant">false</span>/login.html;<span class="variable">id=</span><span class="constant">true</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="查询字符串">查询字符串</h5><p>很多资源都可以通过提问题或者查询来缩小所请求资源类型的范围。<br>如：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">http:</span><span class="comment">//192.168.1.2/login.html?user=zhangsan&amp;password=123456</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>经常使用的http get请求传递的参数就是查询字符串</strong></p>
+<h5 id="片段">片段</h5><p>有些资源，比如html，除了资源级之外，还可以进一步划分。比如，对一个带有章节的大型文本文档来说，资源的URL会指向整个文档，但有时我们希望能够指定资源中的某些章节。<br>片段组件用来表示一个资源内部的片段。如一个特定的图片或小节<br>片段挂在URL的右边，前面用一个”#”与其他部分分隔。</p>
+<p><strong>HTTP服务器通常只处理整个对象，而不是对象的片段，客户端不能将片段传给服务器，浏览器从服务器获取整个资源后，会根据片段来显示部分资源。</strong></p>
+<h4 id="URL快捷方式">URL快捷方式</h4><p>URL有两种方式：绝对URL和相对URL，相对URL只是URL的片段或一部分。处理URL的程序(如浏览器)能够在相对和绝对URL之间进行转换。相对URL有利于资源的迁移，因为相对URL都是相对于新基础进行解释的。这样可以实现在其他服务器上提供镜像内容之类的功能。</p>
+<h5 id="基础URL">基础URL</h5><p>转换处理的第一步就是找到基础URL。基础URL是作为相对URL的参考点使用的。有以下几种方式：</p>
+<ol>
+<li>在资源中显示提供 如html中的<base>标签</li>
+<li>封装资源的基础URL 如果在一个没有显示指定基础URL的资源中发现一个相对URL，可以将它所属资源的URL作为基础</li>
+</ol>
+<h5 id="自动扩展URL">自动扩展URL</h5><p>浏览器一般都提供自动扩展URL的功能<br>主要的扩展方式：</p>
+<ol>
+<li>主机名扩展 如在浏览器中输入 google.com ,浏览器会自动扩展为<a href="http://google.com" target="_blank" rel="external">http://google.com</a></li>
+<li>历史扩展 对浏览器历史记录进行匹配查询</li>
+</ol>
+<h4 id="URL编码">URL编码</h4><p>使用一种”转义”表示法来表示各种不安全的字符(保留及受限字符)。<br>如：~ 空格 %等</p>
+<h4 id="常见的URL方案(协议)">常见的URL方案(协议)</h4><ol>
+<li>http 超文本传输协议 默认端口80</li>
+<li>https 加密的http，使用SSL进行安全加密 默认端口443</li>
+<li>mailto 指向Email地址，如mailto:wustrive2008@gmail.com</li>
+<li>ftp  文件传输协议，用来从ftp服务器上传或下载文件</li>
+<li>rtsp,rtspu   通过实时流传输协议解析音/视频媒体资源的标识符</li>
+<li>file  从一台共享主机上直接访问文件</li>
+<li>news 用来访问一些特定的文章或新闻组</li>
+<li>telnet   用户访问交互式业务</li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="http协议之URL">http协议之URL</h2><h3 id="URI(Uniform_Resource_Identifier)_统一资源标识符">URI(Uniform Resource Identifier) 统一资源标识符</h3><p>URI就像因特]]>
+    </summary>
+    
+      <category term="http" scheme="https://wustrive2008.github.io/tags/http/"/>
+    
+      <category term="url" scheme="https://wustrive2008.github.io/tags/url/"/>
+    
+      <category term="协议" scheme="https://wustrive2008.github.io/tags/%E5%8D%8F%E8%AE%AE/"/>
+    
+      <category term="http协议" scheme="https://wustrive2008.github.io/categories/http%E5%8D%8F%E8%AE%AE/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[centos搭建本地yum服务器]]></title>
