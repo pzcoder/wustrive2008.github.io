@@ -79,7 +79,7 @@
     <link href="https://wustrive2008.github.io/2015/08/11/ArrayList%E5%92%8CLinkedList%E7%9A%84%E9%81%8D%E5%8E%86%E5%92%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/"/>
     <id>https://wustrive2008.github.io/2015/08/11/ArrayList和LinkedList的遍历和性能分析/</id>
     <published>2015-08-11T11:01:15.000Z</published>
-    <updated>2015-08-11T12:15:22.704Z</updated>
+    <updated>2015-08-15T09:13:11.302Z</updated>
     <content type="html"><![CDATA[<h3 id="List的五种遍历方式">List的五种遍历方式</h3><ol>
 <li><p>for each循环</p>
 <figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> <span class="built_in">list</span> <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span>();</span><br><span class="line">for (<span class="built_in">Integer</span> j : <span class="built_in">list</span>) &#123;</span><br><span class="line">    <span class="comment">// use j</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -152,7 +152,7 @@
     <link href="https://wustrive2008.github.io/2015/08/11/HashMap%E9%81%8D%E5%8E%86%E5%8F%8A%E6%80%A7%E8%83%BD/"/>
     <id>https://wustrive2008.github.io/2015/08/11/HashMap遍历及性能/</id>
     <published>2015-08-11T10:46:49.000Z</published>
-    <updated>2015-08-11T11:57:48.624Z</updated>
+    <updated>2015-08-15T09:13:28.589Z</updated>
     <content type="html"><![CDATA[<h3 id="HashMap的四种遍历方式">HashMap的四种遍历方式</h3><ol>
 <li><p>for each map.entrySet()</p>
 <figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;<span class="keyword">String</span>, <span class="keyword">String</span>&gt; <span class="built_in">map</span> = <span class="keyword">new</span> <span class="keyword">HashMap</span>&lt;<span class="keyword">String</span>, <span class="keyword">String</span>&gt;();</span><br><span class="line"><span class="keyword">for</span> (Entry&lt;<span class="keyword">String</span>, <span class="keyword">String</span>&gt; entry : <span class="built_in">map</span>.entrySet()) &#123;</span><br><span class="line">    entry.getKey();</span><br><span class="line">    entry.getValue();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -202,7 +202,7 @@
     <link href="https://wustrive2008.github.io/2015/08/09/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E5%BF%83%E7%90%86%E7%BD%AA/"/>
     <id>https://wustrive2008.github.io/2015/08/09/读书笔记-心理罪/</id>
     <published>2015-08-09T10:31:04.000Z</published>
-    <updated>2015-08-09T11:44:47.444Z</updated>
+    <updated>2015-08-15T09:15:15.329Z</updated>
     <content type="html"><![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>心理罪</p>
 <h5 id="作者">作者</h5><p>雷米 </p>
 <h5 id="作者简介">作者简介</h5><p>雷米，以心理罪系列小说闻名于世，粉丝无数，读者言必称其“老师”。</p>
@@ -790,7 +790,7 @@ DELETED</span>
     <link href="https://wustrive2008.github.io/2015/07/26/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E6%94%AF%E4%BB%98%E6%88%98%E4%BA%89/"/>
     <id>https://wustrive2008.github.io/2015/07/26/读书笔记-支付战争/</id>
     <published>2015-07-26T12:19:00.000Z</published>
-    <updated>2015-07-26T13:19:40.567Z</updated>
+    <updated>2015-08-15T09:15:19.861Z</updated>
     <content type="html"><![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>支付战争·互联网金融创世纪</p>
 <h5 id="作者">作者</h5><p>埃里克•杰克逊(Eric M. Jackson)</p>
 <h5 id="作者简介">作者简介</h5><p>PayPal成立初期的高管之一，曾担任PayPal产品营销总监。CapLinked公司的联合创始人兼CEO。CapLinked是一家专为投资人、创业者等提供简单高效投资协作平台的创业公司。</p>
@@ -856,7 +856,7 @@ DELETED</span>
     <link href="https://wustrive2008.github.io/2015/07/26/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E8%A7%A3%E5%BF%A7%E6%9D%82%E8%B4%A7%E5%BA%97/"/>
     <id>https://wustrive2008.github.io/2015/07/26/读书笔记-解忧杂货店/</id>
     <published>2015-07-26T11:41:13.000Z</published>
-    <updated>2015-07-26T13:16:55.271Z</updated>
+    <updated>2015-08-15T09:15:27.318Z</updated>
     <content type="html"><![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>解忧杂货店</p>
 <h5 id="作者">作者</h5><p>(日)东野圭吾 </p>
 <h5 id="作者简介">作者简介</h5><p>东野圭吾<br>日本著名作家。<br>1985年，《放学后》获第31届江户川乱步奖，开始专职写作；<br>1999年，《秘密》获第52届日本推理作家协会奖；<br>2005年出版的《嫌疑人X的献身》史无前例地同时获得第134届直木奖、第6届本格推理小说大奖，以及年度三大推理小说排行榜第1名；<br>2008年，《流星之绊》获第43届新风奖；<br>2009年出版的《新参者》获两大推理小说排行榜年度第1名；<br>2012年，《解忧杂货店》获第7届中央公论文艺奖。<br>2014年，《祈りの幕が下りる時》（暂译《祈祷落幕时》）获第48届吉川英治文学奖。</p>
@@ -908,7 +908,7 @@ DELETED</span>
     <link href="https://wustrive2008.github.io/2015/07/26/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E4%B8%89%E4%BD%93/"/>
     <id>https://wustrive2008.github.io/2015/07/26/读书笔记-三体/</id>
     <published>2015-07-26T11:41:13.000Z</published>
-    <updated>2015-07-26T13:22:35.848Z</updated>
+    <updated>2015-08-15T09:15:03.301Z</updated>
     <content type="html"><![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>三体(全三册)</p>
 <h5 id="作者">作者</h5><p>刘慈欣 </p>
 <h5 id="作者简介">作者简介</h5><p>刘慈欣，男，汉族，1963年6月出生，1985年10月参加工作，山西阳泉人，本科学历，高级工程师，科幻作家，中国作协会员，山西省作协会员，阳泉市作协副主席，中国科幻小说代表作家之一。<br>代表作：篇小说《超新星纪元》、《球状闪电》、《三体》三部曲等，中短篇小说《流浪地球》、《乡村教师》、《朝闻道》、《全频带阻塞干扰》等。<br>其中《三体》三部曲被普遍认为是中国科幻文学的里程碑之作，将中国科幻推上了世界的高度。</p>
@@ -965,7 +965,7 @@ DELETED</span>
     <link href="https://wustrive2008.github.io/2015/07/26/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E6%B4%BB%E7%9D%80/"/>
     <id>https://wustrive2008.github.io/2015/07/26/读书笔记-活着/</id>
     <published>2015-07-26T11:41:13.000Z</published>
-    <updated>2015-07-26T13:15:27.206Z</updated>
+    <updated>2015-08-15T09:15:23.595Z</updated>
     <content type="html"><![CDATA[<h3 id="书籍概要">书籍概要</h3><h5 id="书名">书名</h5><p>《活着》</p>
 <h5 id="作者">作者</h5><p>余华 </p>
 <h5 id="作者简介">作者简介</h5><p>余华，1960年出生，1983年开始写作。至今已经出版长篇小说4部，中短篇小说集6部，随笔集4部。主要作品有《兄弟》《活着》《许三观卖血记》《在细雨中呼喊》等。其作品已被翻译成20多种语言在美国、英国、法国、德国、意大利、西班牙、荷兰、瑞典、挪威、希腊、俄罗斯、保加利亚、匈牙利、捷克、塞尔维亚、斯洛伐克、波兰、巴西、以色列、日本、韩国、越南、泰国和印度等国出版。曾获意大利格林扎纳·卡佛文学奖（1998年）、法国文学和艺术骑士勋章（2004年）、中华图书特殊贡献奖（2005年）、法国国际信使外国小说奖（2008年）等。</p>
@@ -1111,7 +1111,7 @@ DELETED</span>
     <link href="https://wustrive2008.github.io/2015/03/21/log4j%E9%85%8D%E7%BD%AE%E5%8F%82%E8%80%83/"/>
     <id>https://wustrive2008.github.io/2015/03/21/log4j配置参考/</id>
     <published>2015-03-21T14:00:16.000Z</published>
-    <updated>2015-07-26T12:44:02.807Z</updated>
+    <updated>2015-08-15T09:12:45.284Z</updated>
     <content type="html"><![CDATA[<p><strong>说明</strong></p>
 <blockquote>
 <ul>
