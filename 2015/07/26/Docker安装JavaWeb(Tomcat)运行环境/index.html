@@ -101,7 +101,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-07-26T12:43:05.000Z" itemprop="datePublished">2015-07-26</time>
-    更新日期:<time datetime="2015-07-26T13:45:53.321Z" itemprop="dateModified">2015-07-26</time>
+    更新日期:<time datetime="2015-08-23T17:32:45.578Z" itemprop="dateModified">2015-08-24</time>
     
   </p>
 </header>
@@ -309,10 +309,9 @@
 </li>
 </ul>
 <h3 id="常见问题">常见问题</h3><ol>
-<li><p>执行docker命令提示：</p>
-<p> <code>Get http:///var/run/docker.sock/v1.19/containers/json: dial unix /var/run/docker.sock: no such file or directory. Are you trying to connect to a TLS-enabled daemon without TLS?</code></p>
-</li>
+<li>执行docker命令提示：</li>
 </ol>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get <span class="string">http:</span><span class="comment">///var/run/docker.sock/v1.19/containers/json: dial unix /var/run/docker.sock: no such file or directory. Are you trying to connect to a TLS-enabled daemon without TLS?</span></span><br></pre></td></tr></table></figure>
 <p><strong>解决办法:</strong></p>
 <figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install apparmor</span><br><span class="line"></span><br><span class="line"><span class="keyword">service</span> docker <span class="literal">restart</span></span><br></pre></td></tr></table></figure>
 <ol>
