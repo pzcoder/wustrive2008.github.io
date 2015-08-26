@@ -4,7 +4,7 @@
   <subtitle><![CDATA[好记性不如写博客]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="https://wustrive2008.github.io/"/>
-  <updated>2015-08-21T17:40:24.568Z</updated>
+  <updated>2015-08-26T16:38:03.070Z</updated>
   <id>https://wustrive2008.github.io/</id>
   
   <author>
@@ -13,6 +13,68 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[http协议基础之报文]]></title>
+    <link href="https://wustrive2008.github.io/2015/08/26/http%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%8A%A5%E6%96%87/"/>
+    <id>https://wustrive2008.github.io/2015/08/26/http协议基础之报文/</id>
+    <published>2015-08-26T14:02:25.000Z</published>
+    <updated>2015-08-26T16:38:03.070Z</updated>
+    <content type="html"><![CDATA[<h2 id="http协议之报文">http协议之报文</h2><h3 id="报文的语法">报文的语法</h3><p>请求报文：<br><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="keyword">method</span>&gt; &lt;request-<span class="type">URL</span>&gt; &lt;version&gt;</span><br><span class="line">&lt;headers&gt;</span><br><span class="line"></span><br><span class="line">&lt;entity-body&gt;</span><br></pre></td></tr></table></figure></p>
+<p>响应报文：<br><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;version&gt;</span> <span class="tag">&lt;status&gt;</span> <span class="tag">&lt;reason-phrase&gt;</span></span><br><span class="line"><span class="tag">&lt;headers&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;entity-body&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>方法(method)<br>  客户端希望服务器对资源执行的动作，常见的有GET,POST等</li>
+<li>请求URL<br>  请求资源的绝对路径或相对路径</li>
+<li>版本<br>  格式：HTTP/<major>.<minor></minor></major></li>
+<li>状态码<br>  表示服务器处理的结果，常见的有200,404,400,415,500,502等</li>
+<li>原因短语<br>  对状态码的简单描述，如OK</li>
+<li>首部(headers)<br>  可以有零个或多个首部，每个首部都包含一个名字，后面跟着一个冒号(:),然后是一个可选的空格，接着是一个值，最后是一个CRLF</li>
+<li>实体的主体部分(entity-body)<br>  实体的主体部分包含一个由任意数据组成的数据块</li>
+</ul>
+<h3 id="首部">首部</h3><h4 id="通用首部">通用首部</h4><p>客户端和服务器端都可以使用的首部，如Date<br>Date: May, 4 Oct 2015 02:15:10 GMT</p>
+<h4 id="请求首部">请求首部</h4><p>请求报文所特有的首部，为服务器提供一些额外的信息，如Accept首部用来告知服务器客户端会接受与其请求相符的任意媒体类型：<br>Accept: */*</p>
+<h5 id="Accept首部">Accept首部</h5><p>Accept首部为客户端提供了一种将其喜好和能力告知服务器的方式，包含它们想要什么，可以使用什么，以及最重要的，它们不想要什么。这样，服务器就可以根据这些额外信息，对要发送的内容做出更明智的决定。<br>Accept首部包括：<br><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Accept                  告诉服务器能发送哪些媒体类型</span><br><span class="line">Accept-Charset          告诉服务器能发送哪些字符集</span><br><span class="line">Accept-Encoding         告诉服务器能发送哪些编码方式</span><br><span class="line">Accept-<span class="keyword">Language</span>         告诉服务器能发送哪些语言</span><br><span class="line">TE                      告诉服务器可以使用哪些扩展传输编码</span><br></pre></td></tr></table></figure></p>
+<h5 id="条件请求首部">条件请求首部</h5><p>客户端有时希望为请求加上某些限制。比如，如果客户端已经有了一份文档副本，就希望只在服务器上的文档如客户端拥有的副本有所区别时，才请求服务器传输文档，这时就可以使用条件请求首部：<br><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Expect                  允许客户端列出某请求所要求的服务器行为</span><br><span class="line">If-Match                如果实体标记与文档当前的实体标记相匹配，就获取这份文档</span><br><span class="line">If-Modified-Since       除非在某个指定日期之后资源被修改过，否则就限制这个请求<span class="instruction"></span><br><span class="line">if-None-Match </span>          如果提供的实体标记与当前文档的实体标记不相符，获取文档</span><br><span class="line">If-Range                允许对文档的某个范围进行条件请求</span><br><span class="line">If-Unmodified-since     除非在某个指定日期之后资源被未修改过,否则就限制这个请求</span><br><span class="line">Range                   如果服务器支持范围请求,就请求资源的指定范围</span><br></pre></td></tr></table></figure></p>
+<h5 id="安全请求首部">安全请求首部</h5><p>服务器可以对客户端进行简单的身份认证<br>常见的安全请求首部有：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">Authorization</span>            包含了客户端提供给服务器，以便对其自身进行认证的数据</span><br><span class="line">Cookie                   客户端向服务器传送一个令牌</span><br></pre></td></tr></table></figure></p>
+<h4 id="响应首部">响应首部</h4><p>服务器为客户端提供一些额外信息<br>如：<br><figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Age                         响应持续时间</span><br><span class="line"><span class="keyword">Public</span>                      服务器为其资源支持的请求方法列表</span><br><span class="line">Retry-After                 如果资源不可用，在此日期或时间重试</span><br><span class="line"><span class="built_in">Server</span>                      服务器应用程序的软件名称和版本</span><br></pre></td></tr></table></figure></p>
+<h4 id="实体首部">实体首部</h4><p>实体首部指的是用于应对实体主体部分的首部。比如，可以用实体首部来说明实体主体部分的数据类型。<br>Content-Type：text/html; charset=utf-8</p>
+<h5 id="内容首部">内容首部</h5><p>提供与实体内容有关的特定信息，说明了其类型，尺寸以及处理它所需的其他有用信息<br>如下：<br><figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content</span>-<span class="tag">Base</span>                    解析相对URL时使用的基础URL</span><br><span class="line"><span class="attribute">Content</span>-Encoding                对主体执行的任意编码方式</span><br><span class="line"><span class="attribute">Content</span>-Language                理解主体时最适宜使用的自然语言</span><br><span class="line"><span class="attribute">Content</span>-Length                  主体的长度或尺寸</span><br><span class="line"><span class="attribute">Content</span>-Location                资源实际所处的位置</span><br><span class="line"><span class="attribute">Content</span>-MD5                     主体的MD5校验和</span><br><span class="line"><span class="attribute">Content</span>-Range                   在整个资源中此实体表示的字节范围</span><br><span class="line"><span class="attribute">Content</span>-Type                    这个主体的对象类型</span><br></pre></td></tr></table></figure></p>
+<h4 id="扩展首部">扩展首部</h4><p>非标准的自定义首部</p>
+<h3 id="方法">方法</h3><h4 id="Get方法_Head方法">Get方法 Head方法</h4><p>get方法用于请求服务器发送某个资源<br>Head方法与Get方法类似，但服务器在响应中只返回首部。不会返回实体的主体部分，这就允许客户端在未获取实际资源的情况下，对资源首部进行检查，可以：</p>
+<ul>
+<li>在获取资源的情况下了解资源的情况</li>
+<li>通过查看响应中的状态码，看看某个对象是否存在</li>
+<li>通过查看首部，测试资源是否被修改</li>
+</ul>
+<h4 id="PUT方法">PUT方法</h4><p>用于向服务器写入文档，在实际应用中很少用，多用POST实现PUT的功能</p>
+<h4 id="POST方法">POST方法</h4><p>向服务器输入数据，如提交表单数据</p>
+<h4 id="TRACE方法">TRACE方法</h4><p>发起一个”环回”诊断，行程最后一站的服务器会发送一个TRACE响应，并在响应主体中携带收到的原始报文</p>
+<h4 id="OPTIONS方法">OPTIONS方法</h4><p>请求服务器告知其支持的各种功能，可以询问服务器支持哪些方法。<br>服务器的响应如：<br><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="status">HTTP/1.1 <span class="number">200</span> OK</span></span><br><span class="line"><span class="attribute">Allow</span>: <span class="string">GET, POST, PUT</span></span><br><span class="line"><span class="attribute">Content-Length</span>: <span class="string">0</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="状态码">状态码</h3><h4 id="100~199信息性状态码">100~199信息性状态码</h4><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">100</span>     <span class="keyword">Continue</span>        说明收到了请求的初始部分，请客户端继续。发送了这个状态码之后，服务器收到请求之后必须进行响应</span><br><span class="line"><span class="number">101</span>     Switching protocols     说明服务器正在根据客户端的指定，将协议切换成<span class="keyword">Update</span>首部所列的协议</span><br></pre></td></tr></table></figure>
+<h5 id="客户端与100_Continue">客户端与100 Continue</h5><p>如果客户端向服务器发送一个实体，并且愿意在发送实体之前等待100 Continue响应，那么客户端就要发送一个携带了值为100 Continue的Expect请求首部。如果客户端没有发送实体，就不应该发送100 Continue Expect首部，这样会使服务器误以为客户端要发送一个实体。</p>
+<p>客户端发送了100 Continue的Expect首部后不应该永远在那等待服务器的响应。超过一定时间后，应该直接发送实体。</p>
+<h5 id="服务器与100_Continue">服务器与100 Continue</h5><p>如果服务器收到一个带有只为100 Continue的Expect首部请求，会用100 Continue响应或一条错误码来进行响应。服务器永远也不应该向没有发送100 Continue期望的客户端发送100 Continue 状态码</p>
+<p>如果处于某种原因，服务器在有机会发送100 Continue之前就收到了部分或全部实体，说明客户端已经决定继续发送实体了，这时，服务器不需要发送这个状态码了。</p>
+<h5 id="代理与100_Continue">代理与100 Continue</h5><p>如果代理从客户端收到了一条带有100 Continue期望的请求，如果下一跳服务器是HTTP/1.1兼容的，或者不知道下一跳服务器与哪个版本兼容，应该将Expect首部转发到下一跳服务器。如果知道下一跳服务器与HTTP/1.1之前的版本兼容，就应该以417 Expectation Failed错误进行响应。</p>
+<h4 id="200~299_成功状态码">200~299 成功状态码</h4><p>200 OK<br>201 Create<br>202 Accepted</p>
+<h4 id="300~399_重定向状态码">300~399 重定向状态码</h4><p>304 Not Modified</p>
+<h4 id="400~499_客户端错误状态码">400~499 客户端错误状态码</h4><p>400 Bad Request     请求错误<br>401 Unauthorized    需要认证或认证错误<br>403 Forbidden       请求被拒绝，有可能是资源权限问题<br>404 Not Found       未找到资源<br>405 Method Not Allowed  不支持的方法<br>408 Request Timeout     请求超时</p>
+<h4 id="500~599_服务器错误状态码">500~599 服务器错误状态码</h4><p>500 Internal Sever Error    服务器内部错误<br>501 Not Implemented     超出服务器能力范围<br>502 Bad Gateway         网关错误，一般是代理服务器找不到下一条链路<br>503 Sevice Unavailable  暂时无法为请求提供你服务<br>504 Gateway Timeout     响应超时<br>505 HTTP Version Not Supported  不支持的协议版本</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="http协议之报文">http协议之报文</h2><h3 id="报文的语法">报文的语法</h3><p>请求报文：<br><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><s]]>
+    </summary>
+    
+      <category term="http" scheme="https://wustrive2008.github.io/tags/http/"/>
+    
+      <category term="报文" scheme="https://wustrive2008.github.io/tags/%E6%8A%A5%E6%96%87/"/>
+    
+      <category term="方法" scheme="https://wustrive2008.github.io/tags/%E6%96%B9%E6%B3%95/"/>
+    
+      <category term="http协议" scheme="https://wustrive2008.github.io/categories/http%E5%8D%8F%E8%AE%AE/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[开放接口的安全验证方案(AES+RSA)]]></title>
@@ -474,7 +536,7 @@
     <link href="https://wustrive2008.github.io/2015/08/09/http%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80%E4%B9%8BURL/"/>
     <id>https://wustrive2008.github.io/2015/08/09/http协议基础之URL/</id>
     <published>2015-08-09T08:18:33.000Z</published>
-    <updated>2015-08-09T10:45:12.392Z</updated>
+    <updated>2015-08-26T16:38:13.736Z</updated>
     <content type="html"><![CDATA[<h2 id="http协议之URL">http协议之URL</h2><h3 id="URI(Uniform_Resource_Identifier)_统一资源标识符">URI(Uniform Resource Identifier) 统一资源标识符</h3><p>URI就像因特网上的邮政地址一样，在世界范围内唯一标识并定位信息资源。</p>
 <h3 id="URL_统一资源定位符">URL 统一资源定位符</h3><p>是资源标识符的最常见形式，是URI的一个子集(另一个是URN)。URL描述了一台特定服务器上某资源的特定位置。它们可以说明如何从一个精确、固定的位置获取资源。</p>
 <h4 id="URL遵循的标准格式">URL遵循的标准格式</h4><ol>
@@ -1324,101 +1386,6 @@ DELETED</span>
       <category term="java" scheme="https://wustrive2008.github.io/tags/java/"/>
     
       <category term="集合" scheme="https://wustrive2008.github.io/tags/%E9%9B%86%E5%90%88/"/>
-    
-      <category term="java" scheme="https://wustrive2008.github.io/categories/java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[log4j配置参考]]></title>
-    <link href="https://wustrive2008.github.io/2015/03/21/log4j%E9%85%8D%E7%BD%AE%E5%8F%82%E8%80%83/"/>
-    <id>https://wustrive2008.github.io/2015/03/21/log4j配置参考/</id>
-    <published>2015-03-21T14:00:16.000Z</published>
-    <updated>2015-08-15T09:12:45.284Z</updated>
-    <content type="html"><![CDATA[<p><strong>说明</strong></p>
-<blockquote>
-<ul>
-<li>此规范使用Apache的log4j</li>
-<li>此规范只提供参考</li>
-</ul>
-</blockquote>
-<h4 id="日志配置规范(推荐)">日志配置规范(推荐)</h4><p>1, 不同级别的日志分成不同的日志文件输出</p>
-<blockquote>
-<p>尽量不要将info日志和error日志输出到一起,这样不便于日志分析</p>
-</blockquote>
-<p>2, 每天不同级别分别生成一个日志文件</p>
-<blockquote>
-<p>这样时间久了，日志文件的数量可能较多，可以定期自动删除一部分较早的文件</p>
-</blockquote>
-<p>3, 日志文件的名称为”项目名称+输出级别+日志输出日期”</p>
-<blockquote>
-<p>比如：lbt-data-layer-error.log.2014-12-15.log</p>
-</blockquote>
-<h4 id="log4j-properties配置参考">log4j.properties配置参考</h4><pre><code>### set <span class="keyword">log</span> levels ###
-log4j.rootLogger =INFO,stdout, I, E
-
-######Console#######
-log4j.appender.stdout = org.apache.log4j.ConsoleAppender
-log4j.appender.stdout.<span class="keyword">layout</span> = org.apache.log4j.PatternLayout
-log4j.appender.stdout.<span class="keyword">layout</span>.ConversionPattern = <span class="variable">%d</span>{ABSOLUTE} <span class="variable">%5p</span> <span class="variable">%c</span>:<span class="variable">%L</span> - <span class="variable">%m</span><span class="variable">%n</span>
-
-### INFO ###
-log4j.appender.I = org.apache.log4j.DailyRollingFileAppender
-log4j.appender.I.File = ${catalina.home}/logs/lbt-data-layer-info.<span class="keyword">log</span>
-log4j.appender.I.DatePattern=<span class="string">'.'</span>yyyy-MM-dd<span class="string">'.log'</span>
-log4j.appender.I.Threshold = INFO
-log4j.appender.I.<span class="keyword">layout</span> = org.apache.log4j.PatternLayout
-log4j.appender.I.<span class="keyword">layout</span>.ConversionPattern = <span class="variable">%-</span>d{yyyy-MM-dd HH:mm:ss} [<span class="variable">%t</span>:<span class="variable">%r</span>] - [<span class="variable">%p</span>] <span class="variable">%m</span><span class="variable">%n</span>
-
-### ERROR ###
-log4j.appender.E=org.apache.log4j.DailyRollingFileAppender
-log4j.appender.E.File = ${catalina.home}/logs/lbt-data-layer-<span class="keyword">error</span>.<span class="keyword">log</span>
-log4j.appender.E.DatePattern=<span class="string">'.'</span>yyyy-MM-dd<span class="string">'.log'</span>
-log4j.appender.E.Threshold = ERROR 
-log4j.appender.E.<span class="keyword">layout</span> = org.apache.log4j.PatternLayout
-log4j.appender.E.<span class="keyword">layout</span>.ConversionPattern = <span class="variable">%-</span>d{yyyy-MM-dd HH:mm:ss} [<span class="variable">%t</span>:<span class="variable">%r</span>] - [<span class="variable">%p</span>] <span class="variable">%m</span><span class="variable">%n</span>
-</code></pre><h4 id="日志输出规范">日志输出规范</h4><p>1, 定义日志变量</p>
-<blockquote>
-<p>日志变量往往不变，最好定义成final static，变量名用大写。</p>
-</blockquote>
-<p>2, 日志分级<br>Java的日志框架一般会提供以下日志级别，缺省打开info级别，也就是debug，trace级别的日志在生产环境不会输出，在开发和测试环境可以通过不同的日志配置文件打开debug级别。</p>
-<blockquote>
-<ul>
-<li>fatal - 严重的，造成服务中断的错误；</li>
-<li>error - 其他错误运行期错误；</li>
-<li>warn - 警告信息，如程序调用了一个即将作废的接口，接口的不当使用，运行状态不是期望的但仍可继续处理等；</li>
-<li>info - 有意义的事件信息，如程序启动，关闭事件，收到请求事件等；</li>
-<li>debug - 调试信息，可记录详细的业务处理到哪一步了，以及当前的变量状态；</li>
-<li>trace - 更详细的跟踪信息；</li>
-</ul>
-</blockquote>
-<p>3, 基本的Logger编码规范(参考)</p>
-<blockquote>
-<ul>
-<li>在一个对象中通常只使用一个Logger对象，Logger应该是static final的，只有在少数需要在构造函数中传递logger的情况下才使用private final</li>
-<li>输出Exceptions的全部Throwable信息，因为logger.error(msg)和logger.error(msg,e.getMessage())这样的日志输出方法会丢失掉最重要的StackTrace信息。</li>
-<li>不允许记录日志后又抛出异常，因为这样会多次记录日志，只允许记录一次日志。</li>
-<li>不允许出现System print(包括System.out.println和System.error.println)语句。</li>
-<li>不允许出现printStackTrace。</li>
-<li>日志性能的考虑，如果代码为核心代码，执行频率非常高，则输出日志建议增加判断，尽量少输出没有作用的日志，尤其是低级别的输出debug、info、warn。</li>
-<li>通常情况下在程序日志里记录一些比较有意义的状态数据：程序启动，退出的时间点；程序运行消耗时间；耗时程序的执行进度；重要变量的状态变化。</li>
-</ul>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p><strong>说明</strong></p>
-<blockquote>
-<ul>
-<li>此规范使用Apache的log4j</li>
-<li>此规范只提供参考</li>
-</ul>
-</blockquote>
-<h4 id="日志配置规范(推荐)">日志配置规范(推荐)]]>
-    </summary>
-    
-      <category term="java" scheme="https://wustrive2008.github.io/tags/java/"/>
-    
-      <category term="log4j" scheme="https://wustrive2008.github.io/tags/log4j/"/>
     
       <category term="java" scheme="https://wustrive2008.github.io/categories/java/"/>
     
