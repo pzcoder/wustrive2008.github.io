@@ -4,7 +4,7 @@
   <subtitle><![CDATA[好记性不如写博客]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="https://wustrive2008.github.io/"/>
-  <updated>2015-08-26T16:38:03.070Z</updated>
+  <updated>2015-08-28T13:10:39.550Z</updated>
   <id>https://wustrive2008.github.io/</id>
   
   <author>
@@ -13,6 +13,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[nginx平滑升级方案]]></title>
+    <link href="https://wustrive2008.github.io/2015/08/28/nginx%E5%B9%B3%E6%BB%91%E5%8D%87%E7%BA%A7%E6%96%B9%E6%A1%88/"/>
+    <id>https://wustrive2008.github.io/2015/08/28/nginx平滑升级方案/</id>
+    <published>2015-08-28T11:50:31.000Z</published>
+    <updated>2015-08-28T13:10:39.550Z</updated>
+    <content type="html"><![CDATA[<h4 id="下载版本">下载版本</h4><p>下载新版本的nginx源码包<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">http:</span>//nginx<span class="preprocessor">.org</span>/en/download.html</span><br></pre></td></tr></table></figure></p>
+<h4 id="备份配置">备份配置</h4><p>备份旧nginx二进制文件和配置文件<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cp <span class="regexp">/usr/</span>local<span class="regexp">/nginx/</span>sbin<span class="regexp">/nginx /u</span>sr<span class="regexp">/local/</span>nginx<span class="regexp">/sbin/</span>nginx_old</span><br><span class="line">cp <span class="regexp">/usr/</span>local<span class="regexp">/nginx/</span>conf<span class="regexp">/nginx.conf /u</span>sr<span class="regexp">/local/</span>nginx<span class="regexp">/conf/</span>nginx.conf.old</span><br></pre></td></tr></table></figure></p>
+<h4 id="配置安装">配置安装</h4><p>解压下载的源码包， 执行configure选项配置<br><figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure --<span class="keyword">with</span>-http_ssl_module --<span class="keyword">with</span>-openssl=/path/<span class="keyword">to</span>/openssl_src</span><br><span class="line"></span><br><span class="line">make&amp;make install</span><br></pre></td></tr></table></figure></p>
+<p>可以执行/usr/local/nginx/sbin/nginx -V命令查看以前的编译参数。</p>
+<h4 id="新旧进程同时运行">新旧进程同时运行</h4><p>向旧的nginx主进程发送USR2信号，这会启动新的nginx主进程而保留旧的nginx主进程。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">kill</span> -USR2 `cat /usr/<span class="built_in">local</span>/nginx/logs/nginx.pid`</span><br></pre></td></tr></table></figure></p>
+<h4 id="杀掉旧的子进程">杀掉旧的子进程</h4><p>发送WINCH信号到旧的nginx主进程以杀掉旧的nginx子进程。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">kill</span> -WINCH pid</span><br></pre></td></tr></table></figure></p>
+<h4 id="检测访问正常，退出旧的进程">检测访问正常，退出旧的进程</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">kill</span> -QUIT pid</span><br></pre></td></tr></table></figure>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h4 id="下载版本">下载版本</h4><p>下载新版本的nginx源码包<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><]]>
+    </summary>
+    
+      <category term="linux" scheme="https://wustrive2008.github.io/tags/linux/"/>
+    
+      <category term="nginx" scheme="https://wustrive2008.github.io/tags/nginx/"/>
+    
+      <category term="升级" scheme="https://wustrive2008.github.io/tags/%E5%8D%87%E7%BA%A7/"/>
+    
+      <category term="nginx" scheme="https://wustrive2008.github.io/categories/nginx/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[http协议基础之报文]]></title>
@@ -81,7 +109,7 @@
     <link href="https://wustrive2008.github.io/2015/08/21/%E5%BC%80%E6%94%BE%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%AE%89%E5%85%A8%E9%AA%8C%E8%AF%81%E6%96%B9%E6%A1%88(AES+RSA)/"/>
     <id>https://wustrive2008.github.io/2015/08/21/开放接口的安全验证方案(AES+RSA)/</id>
     <published>2015-08-21T14:39:13.000Z</published>
-    <updated>2015-08-21T17:40:24.568Z</updated>
+    <updated>2015-08-28T12:48:59.214Z</updated>
     <content type="html"><![CDATA[<p>随着密码分析技术的提高，新的数据加密标准AES取代了过时的DES。文章在阐述AES/RSA加密算法的基础上，分别给出了利用AES/RSA实现客户端/服务器端网络数据传输的加密流程。最后在比较AES算法和RSA算法基础上，将AES与RSA相结合提出一种新的数据加密方案。<br><a id="more"></a></p>
 <h3 id="基本需求及概念">基本需求及概念</h3><p>随着Internet网的广泛应用，信息安全问题日益突出，以数据加密技术为核心的信息安全技术也得到了极大的发展。目前的数据加密技术根据加密密钥类型可分私钥加密（对称加密）系统和公钥加密（非对称加密）系统[1]。对称加密算法是较传统的加密体制，通信双方在加/解密过程中使用他们共享的单一密钥，鉴于其算法简单和加密速度快的优点，目前仍然是主流的密码体制之一。最常用的对称密码算法是数据加密标准（DES）算法，但是由于DES密钥长度较短，已经不适合当今分布式开放网络对数据加密安全性的要求。最后，一种新的基于Rijndael算法对称高级数据加密标准AES取代了数据加密标准DES。非对称加密由于加/解密钥不同（公钥加密，私钥解密），密钥管理简单，也得到广泛应用。RSA是非对称加密系统最著名的公钥密码算法。</p>
 <h3 id="AES算法">AES算法</h3><h4 id="基本原理及算法流程">基本原理及算法流程</h4><p>美国国家标准和技术研究所（NIST）经过三轮候选算法筛选，从众多的分组密码中选中Rijndael算法作为高级加密标准（AES）。Rijndael密码是一个迭代型分组密码，分组长度和密码长度都是可变的，分组长度和密码长度可以独立的指定为128比特，192比特或者256比特。AES的加密算法的数据处理单位是字节，128位的比特信息被分成16个字节，按顺序复制到一个4*4的矩阵中，称为状态（state），AES的所有变换都是基于状态矩阵的变换。<br>用Nr表示对一个数据分组加密的轮数（加密轮数与密钥长度的关系如表1所示）。在轮函数的每一轮迭代中，包括四步变换，分别是字节代换运算(ByteSub())、行变换(ShiftRows())、列混合(MixColumns())以及轮密钥的添加变换AddRoundKey()[3]，其作用就是通过重复简单的非线形变换、混合函数变换，将字节代换运算产生的非线性扩散，达到充分的混合，在每轮迭代中引入不同的密钥，从而实现加密的有效性。<br>表1 是三种不同类型的AES加密密钥分组大小与相应的加密轮数的对照表。加密开始时，输入分组的各字节按表2 的方式装入矩阵state中。如输入ABCDEFGHIJKLMNOP，则输入块影射到如表2的状态矩阵中。<br>表1：<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">|AES类型| 密钥长度 | 分组长度 | 加密轮数|</span></span><br><span class="line"><span class="string">|AES-128|  4字     |   4字    |   10    |</span></span><br><span class="line"><span class="string">|AES-192|  6字     |   4字    |   12    |</span></span><br><span class="line"><span class="string">|AES-256|  8字     |   4字    |   14    |</span></span><br></pre></td></tr></table></figure></p>
@@ -94,7 +122,7 @@
 </ol>
 <h4 id="AES算法流程">AES算法流程</h4><p>对于发送方，它首先创建一个AES私钥，并用口令对这个私钥进行加密。然后把用口令加密后的AES密钥通过Internet发送到接收方。发送方解密这个私钥，并用此私钥加密明文得到密文，密文和加密后的AES密钥一起通过Internet发送到接收方。接收方收到后再用口令对加密密钥进行解密得到AES密钥，最后用解密后的密钥把收到的密文解密成明文。图1中是这个过程的实现流程。<br>图1：<br><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-hexoAES流程.png" alt=""></p>
 <h3 id="RSA算法">RSA算法</h3><h4 id="基本原理及流程">基本原理及流程</h4><p>RSA是在1977年发明RSA密码系统的三个人的名字的首字母的缩写，他们是：Ron Rivest、Adi Shamir和Leonard Adleman。它是第一个公钥加密算法，在很多密码协议中都有应用，如SSL和S/MIME。RSA算法是基于大质数的因数分解的公匙体系。简单的讲，就是两个很大的质数，一个作为公钥，另一个作为私钥，如用其中一个加密，则用另一个解密。密钥长度从40到2048位可变，密钥越长，加密效果越好，但加密解密的开销也大。RSA算法可简单描述如下：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">公开密钥：<span class="keyword">n</span>=pq，（p，q为两个不同的很大的质数，p和q必须保密）</span><br><span class="line">将(p-1)和(q-1)相乘得到φ(<span class="keyword">n</span>)</span><br><span class="line">选择一个整数<span class="keyword">e</span> (1&lt;<span class="keyword">e</span>&lt;φ(<span class="keyword">n</span>))与φ(<span class="keyword">n</span>)互质</span><br><span class="line">秘密密钥：<span class="keyword">d</span>=<span class="keyword">e</span>-1modφ(<span class="keyword">n</span>)，即计算一个数字<span class="keyword">d</span>，使得它满足公式 <span class="keyword">de</span>=1 modφ(<span class="keyword">n</span>)</span><br><span class="line">加密：c=mc(mod <span class="keyword">n</span>) </span><br><span class="line">解密：<span class="keyword">m</span>=<span class="keyword">cd</span>(mod <span class="keyword">n</span>)，<span class="keyword">m</span>为明文，c为密文。</span><br></pre></td></tr></table></figure></p>
-<h4 id="RSA算法实现流程">RSA算法实现流程</h4><p> 首先，接收方创建RSA密匙对，即一个公钥和一个私钥，公钥被发送到发送方,私钥则被保存在接收方。发送方在接收到这个公钥后,用该公钥对明文进行加密得到密文，然后把密文通过网络传输给接收方。接收方在收到它们后，用RSA私钥对收到的密文进行解密，最后得到明文。图2是整个过程的实现流程。<br>图2：<br><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-hexoRSA流程.png" alt=""></p>
+<h4 id="RSA算法实现流程">RSA算法实现流程</h4><p> 首先，接收方创建RSA密匙对，即一个公钥和一个私钥，公钥被发送到发送方,私钥则被保存在接收方。发送方在接收到这个公钥后,用该公钥对明文进行加密得到密文，然后把密文通过网络传输给接收方。接收方在收到它们后，用RSA私钥对收到的密文进行解密，最后得到明文。图2是整个过程的实现流程。<br>图2：<br><img src="http://7xifb5.com1.z0.glb.clouddn.com/RSA流程.png" alt=""></p>
 <h3 id="AES与RSA相结合数据加密方案">AES与RSA相结合数据加密方案</h3><p>RSA算法是公开密钥系统的代表，其安全性建立在具有大素数因子的合数，其因子分解困难这一法则之上的。Rijndael算法作为新一代的高级加密标准，运行时不需要计算机有非常高的处理能力和大的内存，操作可以很容易的抵御时间和空间的攻击，在不同的运行环境下始终能保持良好的性能。这使AES将安全，高效，性能，方便，灵活性集于一体，理应成为网络数据加密的首选。相比较，因为AES密钥的长度最长只有256比特，可以利用软件和硬件实现高速处理，而RSA算法需要进行大整数的乘幂和求模等多倍字长处理，处理速度明显慢于AES[5]；所以AES算法加解密处理效率明显高于RSA算法。在密钥管理方面，因为AES算法要求在通信前对密钥进行秘密分配，解密的私钥必须通过网络传送至加密数据接收方，而RSA采用公钥加密，私钥解密（或私钥加密，公钥解密），加解密过程中不必网络传输保密的密钥；所以RSA算法密钥管理要明显优于AES算法。<br>从上面比较得知，由于RSA加解密速度慢，不适合大量数据文件加密，因此在网络中完全用公开密码体制传输机密信息是没有必要，也是不太现实的。AES加密速度很快，但是在网络传输过程中如何安全管理AES密钥是保证AES加密安全的重要环节。这样在传送机密信息的双方，如果使用AES对称密码体制对传输数据加密，同时使用RSA不对称密码体制来传送AES的密钥，就可以综合发挥AES和RSA的优点同时避免它们缺点来实现一种新的数据加密方案。加解密实现流程如图(3)。<br>图3：<br><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-hexoAES+RSA流程.png" alt=""></p>
 <p>具体过程是先由接收方创建RSA密钥对，接收方通过Internet发送RSA公钥到发送方，同时保存RSA私钥。而发送方创建AES密钥，并用该AES密钥加密待传送的明文数据，同时用接受的RSA公钥加密AES密钥，最后把用RSA公钥加密后的AES密钥同密文一起通过Internet传输发送到接收方。当接收方收到这个被加密的AES密钥和密文后，首先调用接收方保存的RSA私钥，并用该私钥解密加密的AES密钥，得到AES密钥。最后用该AES密钥解密密文得到明文。</p>
 <h3 id="AES+RSA结合最佳实践">AES+RSA结合最佳实践</h3><h4 id="基本要求">基本要求</h4><ol>
@@ -1306,88 +1334,6 @@ DELETED</span>
       <category term="读书笔记" scheme="https://wustrive2008.github.io/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
     
       <category term="读书笔记" scheme="https://wustrive2008.github.io/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[java集合总结]]></title>
-    <link href="https://wustrive2008.github.io/2015/06/07/java%E9%9B%86%E5%90%88%E6%80%BB%E7%BB%93/"/>
-    <id>https://wustrive2008.github.io/2015/06/07/java集合总结/</id>
-    <published>2015-06-07T12:46:12.000Z</published>
-    <updated>2015-08-15T09:09:15.849Z</updated>
-    <content type="html"><![CDATA[<h2 id="List">List</h2><h3 id="ArrayList">ArrayList</h3><ol>
-<li>以数组实现，有容量限制，超出限制时会自动扩充容量，为避免不必要的复制操作，使用时尽量给出数组的预估大小。</li>
-<li>按数组小标随机访问(get(i)/set(i,e))的性能很高，删除元素性能低，适合数据比较固定，随机访问操作远多于删除操作的列表</li>
-</ol>
-<h3 id="LinkedList">LinkedList</h3><ol>
-<li>以双向链表实现，无容量限制，但双向链表本身使用了更多空间</li>
-<li>按下标访问元素，需要遍历链表移动指针</li>
-<li>插入删除元素的效率高，因为只需要修改操作节点的前后节点指针</li>
-</ol>
-<h3 id="CopyOnWriteArrayList">CopyOnWriteArrayList</h3><ol>
-<li>实现并发的ArrayList，使用CopyOnWrite策略，在修改时先复制一个快照来修改，改完后再让内部指针指向新数组，因为对快照的操作对读操作不可见，所以只有写锁没有读锁，比较适合读多写少的场景。如果更新频率较高，或数组较大时，还是Collections.synchronizedList(list)，对所有操作用同一把锁来保证线程安全更好。</li>
-<li>增加了addIfAbsent(e)方法，会遍历数组来检查元素是否已存在，性能不太好</li>
-</ol>
-<h2 id="Map">Map</h2><h3 id="HashMap">HashMap</h3><ol>
-<li>以Entry[]数组实现的哈希桶数组，用key的哈希值取模桶数组的大小可得到数组下标。</li>
-<li>插入元素时，如果两个key落在同一个桶，Entry用一个next属性实现多个Entry以单向链表方式存放，后入桶的Entry将next指向桶当前的Entry。查找哈希值为17的key时，先定位到第一个哈希桶，然后以链表遍历所有元素，逐个比较其key值</li>
-<li>当Entry数量达到桶数量的75%时，会成倍扩容桶数组，并重新分配所有原来Entry。</li>
-<li>在JDK8里，新增默认为8的閥值，当一个桶里的Entry超过8个，就不以单向链表而以红黑树来存放以加快查找速度。</li>
-</ol>
-<h3 id="LinkedHashMap">LinkedHashMap</h3><ol>
-<li>扩展HashMap增加双向链表实现，支持iterator()时按Entry的插入顺序来排序(只算插入不算更新， 如果设置accessOrder属性为true，则所有读写访问都算)</li>
-<li>实现上是在Entry上再增加属性before/after指针，插入时把自己加到Header Entry的前面去。如果所有读写访问都要排序，还要把前后Entry的before/after拼接起来以在链表中删除掉自己。</li>
-</ol>
-<h3 id="TreeMap">TreeMap</h3><ol>
-<li>以红黑树实现,支持iterator()时按Key值排序，可按实现了Comparable接口的Key的自然顺序升序排序，或由传入的Comparator控制。可想象的，在树上插入/删除元素的代价一定比HashMap的大。</li>
-<li>支持SortedMap接口，如firstKey()，lastKey()取得最大最小的key，或sub(fromKey, toKey), tailMap(fromKey)剪取Map的某一段。</li>
-</ol>
-<h3 id="ConcurrentHashMap">ConcurrentHashMap</h3><ol>
-<li>并发优化的HashMap，默认16把写锁(可以设置更多),有效分散了阻塞的概率，而且没有读锁</li>
-<li>数据结构为Segment[]，Segment里面才是哈希桶数组，每个Segment一把锁。Key先算出它在哪个Segment里，再算出它在哪个哈希桶里。</li>
-<li>支持ConcurrentMap接口，如putIfAbsent(key，value)与相反的replace(key，value)与以及实现CAS的replace(key, oldValue, newValue)。</li>
-<li>没有读锁是因为put/remove动作是个原子动作(比如put是一个对数组元素/Entry 指针的赋值操作)，因此read不会看到一个更新动作的中间状态。</li>
-</ol>
-<h3 id="ConcurrentSkipListMap">ConcurrentSkipListMap</h3><p>JDK6新增的并发优化的SortedMap，以SkipList实现。SkipList是红黑树的一种简化替代方案，是个很流行的有序集合算法，见入门教程。Concurrent包选用它是因为它支持基于CAS的无锁算法，而红黑树则没有好的无锁算法。<br>很特殊的，它的size()不能随便调，会遍历来统计。</p>
-<h2 id="Set">Set</h2><blockquote>
-<p>(Set几乎都是内部用一个Map来实现, 因为Map里的KeySet就是一个Set，而value全部使用同一个Object。Set的特征也继承了那些内部Map实现的特征。)</p>
-</blockquote>
-<ol>
-<li>HashSet：内部是HashMap。</li>
-<li>LinkedHashSet：内部是LinkedHashMap。</li>
-<li>TreeSet：内部是TreeMap的SortedSet。</li>
-<li>ConcurrentSkipListSet：内部是ConcurrentSkipListMap的并发优化的SortedSet。</li>
-<li>CopyOnWriteArraySet：内部是CopyOnWriteArrayList的并发优化的Set，利用其addIfAbsent()方法实现元素去重，如前所述该方法的性能很一般。</li>
-</ol>
-<h2 id="Queue">Queue</h2><p>Queue是在两端出入的List，所以也可以用数组或链表来实现。</p>
-<h3 id="LinkedList-1">LinkedList</h3><p>是的，以双向链表实现的LinkedList既是List，也是Queue。它是唯一一个允许放入null的Queue。</p>
-<h3 id="ArrayDeque">ArrayDeque</h3><ol>
-<li>以循环数组实现的双向Queue。大小是2的倍数，默认是16。</li>
-<li>普通数组只能快速在末尾添加元素，为了支持FIFO，从数组头快速取出元素，就需要使用循环数组：有队头队尾两个下标：弹出元素时，队头下标递增；加入元素时，如果已到数组空间的末尾，则将元素循环赋值到数组[0],同时队尾下标指向0，再插入下一个元素则赋值到数组[1]，队尾下标指向1。如果队尾的下标追上队头，说明数组所有空间已用完，进行双倍的数组扩容。</li>
-</ol>
-<h3 id="线程安全的队列">线程安全的队列</h3><ol>
-<li>ConcurrentLinkedQueue/ConcurrentLinkedDeque<br>无界的并发优化的Queue，基于链表，实现了依赖于CAS的无锁算法</li>
-<li>PriorityBlockingQueue<br>无界的并发优化的PriorityQueue，也是基于二分堆。使用一把公共的读写锁。虽然实现了BlockingQueue接口，其实没有任何阻塞队列的特征，空间不够时会自动扩容。</li>
-<li>DelayQueue<br>内部包含一个PriorityQueue，同样是无界的。元素需实现Delayed接口，每次调用时需返回当前离触发时间还有多久，小于0表示该触发了。<br>pull()时会用peek()查看队头的元素，检查是否到达触发时间。ScheduledThreadPoolExecutor用了类似的结构。</li>
-</ol>
-<h3 id="线程安全的阻塞队列">线程安全的阻塞队列</h3><ol>
-<li>BlockingQueue的队列长度受限，用以保证生产者与消费者的速度不会相差太远，避免内存耗尽。队列长度设定后不可改变。当入队时队列已满，或出队时队列已空，不同函数的效果见下表：<table><tr><td></td><td>可能报异常</td><td>返回布尔值</td><td>可能阻塞等待</td><br><td>可设定等待时间</td></tr><tr><td>入队</td><td>add(e)</td><td>offer(e)</td><td>put(e)</td><td>offer(e, timeout, unit)</td></tr><tr><td>出队</td><td>remove()</td><td>poll()</td><td>take()</td><td>poll(timeout, unit)</td><br></tr><tr><td>查看</td><td>element()</td><td>peek()</td><td>无</td><td>无</td><br></tr></table></li>
-<li>ArrayBlockingQueue<br>定长的并发优化的BlockingQueue，基于循环数组实现。也由一把公共读写锁与notFull、notEmpty两个Condition管理阻塞状态。</li>
-<li>LinkedBlockingQueue<br>可选定长的并发优化的BlockingQueue，基于链表实现，所以可以把长度设为Integer.MAX_VALUE。有takeLock、putLock两把锁及notFull、notEmpty两个Condition精细复杂的管理阻塞状态。</li>
-</ol>
-<h3 id="参考">参考</h3><p><a href="http://calvin1978.blogcn.com/articles/collection.html" target="_blank" rel="external">关于Java集合的小抄</a><br><a href="https://onedrive.live.com/redir?resid=5E1CBCB0E85E3260!3073&amp;authkey=!AHbyMJW_M24fmdY&amp;ithint=file%2cxmind" target="_blank" rel="external">java知识结构原文件(xmind)</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="List">List</h2><h3 id="ArrayList">ArrayList</h3><ol>
-<li>以数组实现，有容量限制，超出限制时会自动扩充容量，为避免不必要的复制操作，使用时尽量给出数组的预估大小。</li>
-<li>按数组小标随机访问(get]]>
-    </summary>
-    
-      <category term="java" scheme="https://wustrive2008.github.io/tags/java/"/>
-    
-      <category term="集合" scheme="https://wustrive2008.github.io/tags/%E9%9B%86%E5%90%88/"/>
-    
-      <category term="java" scheme="https://wustrive2008.github.io/categories/java/"/>
     
   </entry>
   

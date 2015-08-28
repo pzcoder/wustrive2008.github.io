@@ -90,7 +90,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-08-21T14:39:13.000Z" itemprop="datePublished">2015-08-21</time>
-    更新日期:<time datetime="2015-08-21T17:40:24.568Z" itemprop="dateModified">2015-08-22</time>
+    更新日期:<time datetime="2015-08-28T12:48:59.214Z" itemprop="dateModified">2015-08-28</time>
     
   </p>
 </header>
@@ -124,7 +124,7 @@
 </ol>
 <h4 id="AES算法流程">AES算法流程</h4><p>对于发送方，它首先创建一个AES私钥，并用口令对这个私钥进行加密。然后把用口令加密后的AES密钥通过Internet发送到接收方。发送方解密这个私钥，并用此私钥加密明文得到密文，密文和加密后的AES密钥一起通过Internet发送到接收方。接收方收到后再用口令对加密密钥进行解密得到AES密钥，最后用解密后的密钥把收到的密文解密成明文。图1中是这个过程的实现流程。<br>图1：<br><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-hexoAES流程.png" alt=""></p>
 <h3 id="RSA算法">RSA算法</h3><h4 id="基本原理及流程">基本原理及流程</h4><p>RSA是在1977年发明RSA密码系统的三个人的名字的首字母的缩写，他们是：Ron Rivest、Adi Shamir和Leonard Adleman。它是第一个公钥加密算法，在很多密码协议中都有应用，如SSL和S/MIME。RSA算法是基于大质数的因数分解的公匙体系。简单的讲，就是两个很大的质数，一个作为公钥，另一个作为私钥，如用其中一个加密，则用另一个解密。密钥长度从40到2048位可变，密钥越长，加密效果越好，但加密解密的开销也大。RSA算法可简单描述如下：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">公开密钥：<span class="keyword">n</span>=pq，（p，q为两个不同的很大的质数，p和q必须保密）</span><br><span class="line">将(p-1)和(q-1)相乘得到φ(<span class="keyword">n</span>)</span><br><span class="line">选择一个整数<span class="keyword">e</span> (1&lt;<span class="keyword">e</span>&lt;φ(<span class="keyword">n</span>))与φ(<span class="keyword">n</span>)互质</span><br><span class="line">秘密密钥：<span class="keyword">d</span>=<span class="keyword">e</span>-1modφ(<span class="keyword">n</span>)，即计算一个数字<span class="keyword">d</span>，使得它满足公式 <span class="keyword">de</span>=1 modφ(<span class="keyword">n</span>)</span><br><span class="line">加密：c=mc(mod <span class="keyword">n</span>) </span><br><span class="line">解密：<span class="keyword">m</span>=<span class="keyword">cd</span>(mod <span class="keyword">n</span>)，<span class="keyword">m</span>为明文，c为密文。</span><br></pre></td></tr></table></figure></p>
-<h4 id="RSA算法实现流程">RSA算法实现流程</h4><p> 首先，接收方创建RSA密匙对，即一个公钥和一个私钥，公钥被发送到发送方,私钥则被保存在接收方。发送方在接收到这个公钥后,用该公钥对明文进行加密得到密文，然后把密文通过网络传输给接收方。接收方在收到它们后，用RSA私钥对收到的密文进行解密，最后得到明文。图2是整个过程的实现流程。<br>图2：<br><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-hexoRSA流程.png" alt=""></p>
+<h4 id="RSA算法实现流程">RSA算法实现流程</h4><p> 首先，接收方创建RSA密匙对，即一个公钥和一个私钥，公钥被发送到发送方,私钥则被保存在接收方。发送方在接收到这个公钥后,用该公钥对明文进行加密得到密文，然后把密文通过网络传输给接收方。接收方在收到它们后，用RSA私钥对收到的密文进行解密，最后得到明文。图2是整个过程的实现流程。<br>图2：<br><img src="http://7xifb5.com1.z0.glb.clouddn.com/RSA流程.png" alt=""></p>
 <h3 id="AES与RSA相结合数据加密方案">AES与RSA相结合数据加密方案</h3><p>RSA算法是公开密钥系统的代表，其安全性建立在具有大素数因子的合数，其因子分解困难这一法则之上的。Rijndael算法作为新一代的高级加密标准，运行时不需要计算机有非常高的处理能力和大的内存，操作可以很容易的抵御时间和空间的攻击，在不同的运行环境下始终能保持良好的性能。这使AES将安全，高效，性能，方便，灵活性集于一体，理应成为网络数据加密的首选。相比较，因为AES密钥的长度最长只有256比特，可以利用软件和硬件实现高速处理，而RSA算法需要进行大整数的乘幂和求模等多倍字长处理，处理速度明显慢于AES[5]；所以AES算法加解密处理效率明显高于RSA算法。在密钥管理方面，因为AES算法要求在通信前对密钥进行秘密分配，解密的私钥必须通过网络传送至加密数据接收方，而RSA采用公钥加密，私钥解密（或私钥加密，公钥解密），加解密过程中不必网络传输保密的密钥；所以RSA算法密钥管理要明显优于AES算法。<br>从上面比较得知，由于RSA加解密速度慢，不适合大量数据文件加密，因此在网络中完全用公开密码体制传输机密信息是没有必要，也是不太现实的。AES加密速度很快，但是在网络传输过程中如何安全管理AES密钥是保证AES加密安全的重要环节。这样在传送机密信息的双方，如果使用AES对称密码体制对传输数据加密，同时使用RSA不对称密码体制来传送AES的密钥，就可以综合发挥AES和RSA的优点同时避免它们缺点来实现一种新的数据加密方案。加解密实现流程如图(3)。<br>图3：<br><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-hexoAES+RSA流程.png" alt=""></p>
 <p>具体过程是先由接收方创建RSA密钥对，接收方通过Internet发送RSA公钥到发送方，同时保存RSA私钥。而发送方创建AES密钥，并用该AES密钥加密待传送的明文数据，同时用接受的RSA公钥加密AES密钥，最后把用RSA公钥加密后的AES密钥同密文一起通过Internet传输发送到接收方。当接收方收到这个被加密的AES密钥和密文后，首先调用接收方保存的RSA私钥，并用该私钥解密加密的AES密钥，得到AES密钥。最后用该AES密钥解密密文得到明文。</p>
 <h3 id="AES+RSA结合最佳实践">AES+RSA结合最佳实践</h3><h4 id="基本要求">基本要求</h4><ol>
@@ -215,6 +215,8 @@
 		
 			<li><a href="/categories/java/" title="java">java<sup>4</sup></a></li>
 		
+			<li><a href="/categories/nginx/" title="nginx">nginx<sup>1</sup></a></li>
+		
 			<li><a href="/categories/缓存/" title="缓存">缓存<sup>1</sup></a></li>
 		
 			<li><a href="/categories/网络安全/" title="网络安全">网络安全<sup>1</sup></a></li>
@@ -258,17 +260,17 @@
 		
 			<li><a href="/tags/linkedlist/" title="linkedlist">linkedlist<sup>1</sup></a></li>
 		
-			<li><a href="/tags/linux/" title="linux">linux<sup>1</sup></a></li>
+			<li><a href="/tags/linux/" title="linux">linux<sup>2</sup></a></li>
 		
 			<li><a href="/tags/log4j/" title="log4j">log4j<sup>1</sup></a></li>
 		
 			<li><a href="/tags/memcached/" title="memcached">memcached<sup>1</sup></a></li>
 		
+			<li><a href="/tags/nginx/" title="nginx">nginx<sup>1</sup></a></li>
+		
 			<li><a href="/tags/pacman/" title="pacman">pacman<sup>1</sup></a></li>
 		
 			<li><a href="/tags/paypal/" title="paypal">paypal<sup>1</sup></a></li>
-		
-			<li><a href="/tags/rsa/" title="rsa">rsa<sup>1</sup></a></li>
 		
 		</ul>
 </div>

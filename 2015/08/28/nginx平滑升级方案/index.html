@@ -4,29 +4,19 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>chkconfig构建linux服务 | wustrive&#39;s blog</title>
+    <title>nginx平滑升级方案 | wustrive&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="wustrive">
     
-    <meta name="description" content="手动构建linux服务Linux运行级别
-0 - 停机
-1 - 单用户模式
-2 - 多用户，没有NFS和网络
-3 - 完全多用户
-4 - 暂无
-5 - 图形界面
-6 - 重启
-
- 默认的运行级别在/etc/inittab中设置 
-写服务控制脚本 示例：
-12345678910111213141516">
+    <meta name="description" content="下载版本下载新版本的nginx源码包1http://nginx.org/en/download.html
+备份配置备份旧nginx二进制文件和配置文件12cp /usr/local/nginx/sbin/nginx /usr/local/nginx/sbin/nginx_oldcp /usr/loc">
     
     
     
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="wustrive" />
-    <meta name="twitter:title" content="chkconfig构建linux服务 | wustrive&#39;s blog" />
+    <meta name="twitter:title" content="nginx平滑升级方案 | wustrive&#39;s blog" />
       
     
     
@@ -93,15 +83,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/07/26/chkconfig构建linux服务/" title="chkconfig构建linux服务" itemprop="url">chkconfig构建linux服务</a>
+      <a href="/2015/08/28/nginx平滑升级方案/" title="nginx平滑升级方案" itemprop="url">nginx平滑升级方案</a>
   </h1>
   <p class="article-author">By
     
       <a href="https://wustrive2008.github.io" title="wustrive">wustrive</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-07-26T12:27:41.000Z" itemprop="datePublished">2015-07-26</time>
-    更新日期:<time datetime="2015-07-26T13:39:51.852Z" itemprop="dateModified">2015-07-26</time>
+    <time datetime="2015-08-28T11:50:31.000Z" itemprop="datePublished">2015-08-28</time>
+    更新日期:<time datetime="2015-08-28T13:10:39.550Z" itemprop="dateModified">2015-08-28</time>
     
   </p>
 </header>
@@ -110,51 +100,36 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#手动构建linux服务"><span class="toc-number">1.</span> <span class="toc-text">手动构建linux服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux运行级别"><span class="toc-number">1.1.</span> <span class="toc-text">Linux运行级别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#写服务控制脚本"><span class="toc-number">1.2.</span> <span class="toc-text">写服务控制脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装服务"><span class="toc-number">1.3.</span> <span class="toc-text">安装服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用服务"><span class="toc-number">1.4.</span> <span class="toc-text">使用服务</span></a></li></ol></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#下载版本"><span class="toc-number">1.</span> <span class="toc-text">下载版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#备份配置"><span class="toc-number">2.</span> <span class="toc-text">备份配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置安装"><span class="toc-number">3.</span> <span class="toc-text">配置安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#新旧进程同时运行"><span class="toc-number">4.</span> <span class="toc-text">新旧进程同时运行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#杀掉旧的子进程"><span class="toc-number">5.</span> <span class="toc-text">杀掉旧的子进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#检测访问正常，退出旧的进程"><span class="toc-number">6.</span> <span class="toc-text">检测访问正常，退出旧的进程</span></a></li></ol>
 		</div>
 		
-		<h2 id="手动构建linux服务">手动构建linux服务</h2><h3 id="Linux运行级别">Linux运行级别</h3><ul>
-<li>0 - 停机</li>
-<li>1 - 单用户模式</li>
-<li>2 - 多用户，没有NFS和网络</li>
-<li>3 - 完全多用户</li>
-<li>4 - 暂无</li>
-<li>5 - 图形界面</li>
-<li>6 - 重启</li>
-</ul>
-<p><strong> 默认的运行级别在/etc/inittab中设置 </strong></p>
-<h3 id="写服务控制脚本">写服务控制脚本</h3><p><strong> 示例：</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#!/bin/sh   </span></span><br><span class="line"><span class="comment">#   </span></span><br><span class="line"><span class="comment"># memcached:    MemCached Daemon   </span></span><br><span class="line"><span class="comment">#   </span></span><br><span class="line"><span class="comment"># chkconfig:    35 90 25  </span></span><br><span class="line"><span class="comment"># description:  MemCached Daemon   </span></span><br><span class="line"><span class="comment">#   </span></span><br><span class="line"><span class="comment"># Source function library.   </span></span><br><span class="line">. /etc/rc.d/init.d/<span class="built_in">functions</span>   </span><br><span class="line">. /etc/sysconfig/network   </span><br><span class="line"><span class="function"><span class="title">start</span></span>()   </span><br><span class="line">&#123;   </span><br><span class="line">        <span class="built_in">echo</span> -n $<span class="string">"Starting memcached: "</span>  </span><br><span class="line">        daemon <span class="variable">$MEMCACHED</span> -u lbt <span class="operator">-d</span> -m <span class="number">1024</span> <span class="operator">-l</span> <span class="number">192.168</span>.<span class="number">32.193</span> -p <span class="number">12000</span> </span><br><span class="line">        <span class="built_in">echo</span>   </span><br><span class="line">&#125;   </span><br><span class="line"><span class="function"><span class="title">stop</span></span>()   </span><br><span class="line">&#123;   </span><br><span class="line">        <span class="built_in">echo</span> -n $<span class="string">"Shutting down memcached: "</span>  </span><br><span class="line">        killproc memcached   </span><br><span class="line">        <span class="built_in">echo</span>   </span><br><span class="line">&#125;   </span><br><span class="line">MEMCACHED=<span class="string">"/usr/local/bin/memcached"</span>  </span><br><span class="line">[ <span class="operator">-f</span> <span class="variable">$MEMCACHED</span> ] || <span class="built_in">exit</span> <span class="number">1</span>  </span><br><span class="line"><span class="comment"># See how we were called.   </span></span><br><span class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span>   </span><br><span class="line">  start)   </span><br><span class="line">        start   </span><br><span class="line">        ;;   </span><br><span class="line">  stop)   </span><br><span class="line">        stop   </span><br><span class="line">        ;;   </span><br><span class="line">  restart)   </span><br><span class="line">        stop   </span><br><span class="line">        sleep <span class="number">3</span>  </span><br><span class="line">        start   </span><br><span class="line">        ;;   </span><br><span class="line">    *)   </span><br><span class="line">        <span class="built_in">echo</span> $<span class="string">"Usage: <span class="variable">$0</span> &#123;start|stop|restart&#125;"</span>  </span><br><span class="line">        <span class="built_in">exit</span> <span class="number">1</span>  </span><br><span class="line"><span class="keyword">esac</span>   </span><br><span class="line"><span class="built_in">exit</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
-<p><strong> 说明 </strong></p>
-<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># chkconfig:    35 90 25     </span></span><br><span class="line"><span class="preprocessor"># description:  MemCached Daemon</span></span><br></pre></td></tr></table></figure>
-<p>这两行必须，chkconfig 35 90 25  ,数字分别代表，启动级别，启动运行 ，关闭顺序</p>
-<h3 id="安装服务">安装服务</h3><ol>
-<li>将脚本拷贝到/etc/init.d/目录</li>
-<li>chkconfig add  servername(脚本名称)</li>
-<li>chkconfig —level 35 servername on </li>
-<li>chkconfig  —list | grep servername</li>
-</ol>
-<h3 id="使用服务">使用服务</h3><pre><code><span class="keyword">service</span>  servername  <span class="literal">start</span>|<span class="literal">stop</span>|<span class="literal">restart</span>
-</code></pre>  
+		<h4 id="下载版本">下载版本</h4><p>下载新版本的nginx源码包<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">http:</span>//nginx<span class="preprocessor">.org</span>/en/download.html</span><br></pre></td></tr></table></figure></p>
+<h4 id="备份配置">备份配置</h4><p>备份旧nginx二进制文件和配置文件<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cp <span class="regexp">/usr/</span>local<span class="regexp">/nginx/</span>sbin<span class="regexp">/nginx /u</span>sr<span class="regexp">/local/</span>nginx<span class="regexp">/sbin/</span>nginx_old</span><br><span class="line">cp <span class="regexp">/usr/</span>local<span class="regexp">/nginx/</span>conf<span class="regexp">/nginx.conf /u</span>sr<span class="regexp">/local/</span>nginx<span class="regexp">/conf/</span>nginx.conf.old</span><br></pre></td></tr></table></figure></p>
+<h4 id="配置安装">配置安装</h4><p>解压下载的源码包， 执行configure选项配置<br><figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure --<span class="keyword">with</span>-http_ssl_module --<span class="keyword">with</span>-openssl=/path/<span class="keyword">to</span>/openssl_src</span><br><span class="line"></span><br><span class="line">make&amp;make install</span><br></pre></td></tr></table></figure></p>
+<p>可以执行/usr/local/nginx/sbin/nginx -V命令查看以前的编译参数。</p>
+<h4 id="新旧进程同时运行">新旧进程同时运行</h4><p>向旧的nginx主进程发送USR2信号，这会启动新的nginx主进程而保留旧的nginx主进程。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">kill</span> -USR2 `cat /usr/<span class="built_in">local</span>/nginx/logs/nginx.pid`</span><br></pre></td></tr></table></figure></p>
+<h4 id="杀掉旧的子进程">杀掉旧的子进程</h4><p>发送WINCH信号到旧的nginx主进程以杀掉旧的nginx子进程。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">kill</span> -WINCH pid</span><br></pre></td></tr></table></figure></p>
+<h4 id="检测访问正常，退出旧的进程">检测访问正常，退出旧的进程</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">kill</span> -QUIT pid</span><br></pre></td></tr></table></figure>
+  
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/chkconfig/">chkconfig</a><a href="/tags/服务器/">服务器</a>
+  <span></span> <a href="/tags/linux/">linux</a><a href="/tags/nginx/">nginx</a><a href="/tags/升级/">升级</a>
   </div>
 
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Linux/">Linux</a>
+  <a class="article-category-link" href="/categories/nginx/">nginx</a>
 </div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="https://wustrive2008.github.io/2015/07/26/chkconfig构建linux服务/" data-title="chkconfig构建linux服务 | wustrive&#39;s blog" data-tsina="null" class="share clearfix">
+  <div data-url="https://wustrive2008.github.io/2015/08/28/nginx平滑升级方案/" data-title="nginx平滑升级方案 | wustrive&#39;s blog" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -163,19 +138,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/07/26/memcached服务安装及使用/" title="memcached高速缓存服务安装及使用">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  memcached高速缓存服务安装及使用</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/07/26/读书笔记-支付战争/"  title="支付战争">
+<a href="/2015/08/26/http协议基础之报文/"  title="http协议基础之报文">
  <strong>NEXT:</strong><br/> 
- <span>支付战争
+ <span>http协议基础之报文
 </span>
 </a>
 </div>
@@ -192,7 +159,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#手动构建linux服务"><span class="toc-number">1.</span> <span class="toc-text">手动构建linux服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux运行级别"><span class="toc-number">1.1.</span> <span class="toc-text">Linux运行级别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#写服务控制脚本"><span class="toc-number">1.2.</span> <span class="toc-text">写服务控制脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装服务"><span class="toc-number">1.3.</span> <span class="toc-text">安装服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用服务"><span class="toc-number">1.4.</span> <span class="toc-text">使用服务</span></a></li></ol></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#下载版本"><span class="toc-number">1.</span> <span class="toc-text">下载版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#备份配置"><span class="toc-number">2.</span> <span class="toc-text">备份配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置安装"><span class="toc-number">3.</span> <span class="toc-text">配置安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#新旧进程同时运行"><span class="toc-number">4.</span> <span class="toc-text">新旧进程同时运行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#杀掉旧的子进程"><span class="toc-number">5.</span> <span class="toc-text">杀掉旧的子进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#检测访问正常，退出旧的进程"><span class="toc-number">6.</span> <span class="toc-text">检测访问正常，退出旧的进程</span></a></li></ol>
   </div>
 
 <div id="asidepart">
