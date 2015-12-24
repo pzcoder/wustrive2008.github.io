@@ -4,7 +4,7 @@
   <subtitle><![CDATA[好记性不如写博客]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="https://wustrive2008.github.io/"/>
-  <updated>2015-10-24T12:38:25.674Z</updated>
+  <updated>2015-12-24T15:50:36.211Z</updated>
   <id>https://wustrive2008.github.io/</id>
   
   <author>
@@ -13,6 +13,82 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[深入理解JVM]]></title>
+    <link href="https://wustrive2008.github.io/2015/12/24/java/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3jvm/"/>
+    <id>https://wustrive2008.github.io/2015/12/24/java/深入理解jvm/</id>
+    <published>2015-12-24T13:21:29.000Z</published>
+    <updated>2015-12-24T15:50:36.211Z</updated>
+    <content type="html"><![CDATA[<h2 id="Java内存区域与内存溢出异常">Java内存区域与内存溢出异常</h2><h3 id="运行时数据区域">运行时数据区域</h3><p><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-blog%2Fjava%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA.jpg" alt="java虚拟机内存分区"></p>
+<h4 id="程序计数器">程序计数器</h4><ul>
+<li>当前线程所执行的字节码的行号指示器</li>
+<li>当前线程私有</li>
+<li>不会出现OutOfMemoryError情况</li>
+</ul>
+<h4 id="java虚拟机栈">java虚拟机栈</h4><ul>
+<li>线程私有，生命周期与线程相同</li>
+<li>java方法执行的内存模型，每个方法执行的同时都会创建一个栈帧，存储局部变量表(基本类型、对象引用)、操作数栈、动态链接、方法出口等信息</li>
+<li>StackOverflowError异常：当线程请求的栈深度大于虚拟机所允许的深度</li>
+<li>OutOfMemoryError异常：如果栈的扩展时无法申请到足够的内存</li>
+</ul>
+<h4 id="本地方法栈">本地方法栈</h4><p>与虚拟机栈相似，主要为虚拟机使用到的Native方法服务，在HotSpot虚拟机中直接把本地方法栈与虚拟机栈二合一</p>
+<h4 id="Java堆(Java_Heap)">Java堆(Java Heap)</h4><p>java堆是被所有线程共享的一块内存区域，在虚拟机启动时创建。此区域的唯一目的就是存储对象实例。java堆是垃圾收集器管理的主要区域。java堆还可以细分为：新生代与老年代。在细一点有Eden空间、Form Survivor空间、To Survivor空间等。</p>
+<ul>
+<li>可以通过-Xmx和-Xms控制堆的大小</li>
+<li>OutOfMemoryError异常：当在堆中没有内存完成实例分配，且堆也无法再扩展时。</li>
+</ul>
+<h4 id="方法区">方法区</h4><ul>
+<li>线程间共享</li>
+<li>用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据</li>
+<li>OutOfMemoryError异常：当方法区无法满足内存的分配需求时</li>
+</ul>
+<h4 id="运行时常量池">运行时常量池</h4><ul>
+<li>方法区的一部分</li>
+<li>用于存放编译期生成的各种字面量与符号引用</li>
+<li>OutOfMemoryError异常：当常量池无法再申请到内存时</li>
+</ul>
+<h4 id="直接内存">直接内存</h4><ul>
+<li>NIO可以使用Native函数库直接分配堆外内存，堆中的DirectByteBuffer对象作为这块内存的引用进行操作</li>
+<li>大小不受Java堆大小的限制，受本机(服务器)内存限制</li>
+<li>OutOfMemoryError异常：系统内存不足时</li>
+</ul>
+<h3 id="HotSpot虚拟机">HotSpot虚拟机</h3><h4 id="对象的创建">对象的创建</h4><p>虚拟机遇到一条new指令时，首先将去检查这个对象的参数是否在常量池中定位到一个类的符号引用，并且检查这个符号引用代表的类是否已被加载、解析和初始化过。如果没有，必须先执行类的加载过程。<br>在类加载检查通过后，虚拟机将为新生对象分配内存。对象所需内存大小再类加载完成后便可确定。内存分配可以采用“指针碰撞”与“空闲列表”的方式。</p>
+<h4 id="对象的访问定位">对象的访问定位</h4><p>java程序需要通过栈上的reference数据来操作堆上的具体对象。访问方式有使用句柄和直接指针两种。</p>
+<ul>
+<li>句柄访问 java堆中将会划分出一块内存来作为句柄池，reference中存储的就是对象的句柄地址，而句柄中包含了对象实例数据与类型数据各自的具体地址信息</li>
+<li>直接指针访问 java堆对象的布局中必须考虑如何放置访问类型数据的相关信息，reference中存储的就是对象地址</li>
+</ul>
+<h3 id="OOM异常的解决思路">OOM异常的解决思路</h3><p>生成Dump快照文件：</p>
+<ul>
+<li>通过jvm参数—XX:-HeapDumpOnOutOfMemoryError可以让JVM在出现内存溢出是Dump出当前的内存转储快照</li>
+<li>用jmap生产dump文件，win通过任务管理器查看tomcat的进程pid，linux用ps命令查看进程pid,然后用jmap命令</li>
+</ul>
+<p>先通过内存映像分析工具(如Eclipse的Memory Analyzer)进行分析，常见的情况有：</p>
+<ul>
+<li>内存泄露，对象已经死了，无法通过垃圾收集器进行自动回收，通过找出泄露的代码位置和原因，才好确定解决方案；</li>
+<li>内存溢出，内存中的对象都还必须存活着，这说明Java堆分配空间不足，检查堆设置大小（-Xmx与-Xms），检查代码是否存在对象生命周期太长、持有状态时间过长的情况。</li>
+</ul>
+<p>OOM异常示例：<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">package oom;</span><br><span class="line"></span><br><span class="line"><span class="literal">import</span> java.util.ArrayList;</span><br><span class="line"><span class="literal">import</span> java.util.<span class="built_in">List</span>;</span><br><span class="line"></span><br><span class="line"><span class="dartdoc"><span class="markdown">/**</span><br><span class="line"> * VM Args: -Xms20m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError</span><br><span class="line"><span class="bullet">* </span>@ClassName: HeapOOM </span><br><span class="line"><span class="bullet">*</span><br><span class="line"> </span>*/</span></span></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">HeapOOM</span> </span>&#123;</span><br><span class="line">    <span class="literal">static</span> <span class="class"><span class="keyword">class</span> <span class="title">OOMObject</span></span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public <span class="literal">static</span> <span class="keyword">void</span> main(<span class="built_in">String</span>[] args) &#123;</span><br><span class="line">        <span class="built_in">List</span>&lt;OOMObject&gt; list = <span class="keyword">new</span> ArrayList&lt;OOMObject&gt;();</span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">            list.add(<span class="keyword">new</span> OOMObject());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="参考">参考</h3><p>《深入理解java虚拟机 JVM高级特性与最佳实践》</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="Java内存区域与内存溢出异常">Java内存区域与内存溢出异常</h2><h3 id="运行时数据区域">运行时数据区域</h3><p><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-blog%2]]>
+    </summary>
+    
+      <category term="HotSpot" scheme="https://wustrive2008.github.io/tags/HotSpot/"/>
+    
+      <category term="java" scheme="https://wustrive2008.github.io/tags/java/"/>
+    
+      <category term="jvm" scheme="https://wustrive2008.github.io/tags/jvm/"/>
+    
+      <category term="性能" scheme="https://wustrive2008.github.io/tags/%E6%80%A7%E8%83%BD/"/>
+    
+      <category term="虚拟机" scheme="https://wustrive2008.github.io/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/"/>
+    
+      <category term="java" scheme="https://wustrive2008.github.io/categories/java/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[重构之代码的坏味道]]></title>
@@ -1296,53 +1372,6 @@ DELETED</span>
       <category term="缓存" scheme="https://wustrive2008.github.io/tags/%E7%BC%93%E5%AD%98/"/>
     
       <category term="缓存" scheme="https://wustrive2008.github.io/categories/%E7%BC%93%E5%AD%98/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[chkconfig构建linux服务]]></title>
-    <link href="https://wustrive2008.github.io/2015/07/26/Linux/chkconfig%E6%9E%84%E5%BB%BAlinux%E6%9C%8D%E5%8A%A1/"/>
-    <id>https://wustrive2008.github.io/2015/07/26/Linux/chkconfig构建linux服务/</id>
-    <published>2015-07-26T12:27:41.000Z</published>
-    <updated>2015-07-26T13:39:51.852Z</updated>
-    <content type="html"><![CDATA[<h2 id="手动构建linux服务">手动构建linux服务</h2><h3 id="Linux运行级别">Linux运行级别</h3><ul>
-<li>0 - 停机</li>
-<li>1 - 单用户模式</li>
-<li>2 - 多用户，没有NFS和网络</li>
-<li>3 - 完全多用户</li>
-<li>4 - 暂无</li>
-<li>5 - 图形界面</li>
-<li>6 - 重启</li>
-</ul>
-<p><strong> 默认的运行级别在/etc/inittab中设置 </strong></p>
-<h3 id="写服务控制脚本">写服务控制脚本</h3><p><strong> 示例：</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#!/bin/sh   </span></span><br><span class="line"><span class="comment">#   </span></span><br><span class="line"><span class="comment"># memcached:    MemCached Daemon   </span></span><br><span class="line"><span class="comment">#   </span></span><br><span class="line"><span class="comment"># chkconfig:    35 90 25  </span></span><br><span class="line"><span class="comment"># description:  MemCached Daemon   </span></span><br><span class="line"><span class="comment">#   </span></span><br><span class="line"><span class="comment"># Source function library.   </span></span><br><span class="line">. /etc/rc.d/init.d/<span class="built_in">functions</span>   </span><br><span class="line">. /etc/sysconfig/network   </span><br><span class="line"><span class="function"><span class="title">start</span></span>()   </span><br><span class="line">&#123;   </span><br><span class="line">        <span class="built_in">echo</span> -n $<span class="string">"Starting memcached: "</span>  </span><br><span class="line">        daemon <span class="variable">$MEMCACHED</span> -u lbt <span class="operator">-d</span> -m <span class="number">1024</span> <span class="operator">-l</span> <span class="number">192.168</span>.<span class="number">32.193</span> -p <span class="number">12000</span> </span><br><span class="line">        <span class="built_in">echo</span>   </span><br><span class="line">&#125;   </span><br><span class="line"><span class="function"><span class="title">stop</span></span>()   </span><br><span class="line">&#123;   </span><br><span class="line">        <span class="built_in">echo</span> -n $<span class="string">"Shutting down memcached: "</span>  </span><br><span class="line">        killproc memcached   </span><br><span class="line">        <span class="built_in">echo</span>   </span><br><span class="line">&#125;   </span><br><span class="line">MEMCACHED=<span class="string">"/usr/local/bin/memcached"</span>  </span><br><span class="line">[ <span class="operator">-f</span> <span class="variable">$MEMCACHED</span> ] || <span class="built_in">exit</span> <span class="number">1</span>  </span><br><span class="line"><span class="comment"># See how we were called.   </span></span><br><span class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span>   </span><br><span class="line">  start)   </span><br><span class="line">        start   </span><br><span class="line">        ;;   </span><br><span class="line">  stop)   </span><br><span class="line">        stop   </span><br><span class="line">        ;;   </span><br><span class="line">  restart)   </span><br><span class="line">        stop   </span><br><span class="line">        sleep <span class="number">3</span>  </span><br><span class="line">        start   </span><br><span class="line">        ;;   </span><br><span class="line">    *)   </span><br><span class="line">        <span class="built_in">echo</span> $<span class="string">"Usage: <span class="variable">$0</span> &#123;start|stop|restart&#125;"</span>  </span><br><span class="line">        <span class="built_in">exit</span> <span class="number">1</span>  </span><br><span class="line"><span class="keyword">esac</span>   </span><br><span class="line"><span class="built_in">exit</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
-<p><strong> 说明 </strong></p>
-<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># chkconfig:    35 90 25     </span></span><br><span class="line"><span class="preprocessor"># description:  MemCached Daemon</span></span><br></pre></td></tr></table></figure>
-<p>这两行必须，chkconfig 35 90 25  ,数字分别代表，启动级别，启动运行 ，关闭顺序</p>
-<h3 id="安装服务">安装服务</h3><ol>
-<li>将脚本拷贝到/etc/init.d/目录</li>
-<li>chkconfig add  servername(脚本名称)</li>
-<li>chkconfig —level 35 servername on </li>
-<li>chkconfig  —list | grep servername</li>
-</ol>
-<h3 id="使用服务">使用服务</h3><pre><code><span class="keyword">service</span>  servername  <span class="literal">start</span>|<span class="literal">stop</span>|<span class="literal">restart</span>
-</code></pre>]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="手动构建linux服务">手动构建linux服务</h2><h3 id="Linux运行级别">Linux运行级别</h3><ul>
-<li>0 - 停机</li>
-<li>1 - 单用户模式</li>
-<li>2 - 多用户，没有NFS和网络</li>
-<li>]]>
-    </summary>
-    
-      <category term="Linux" scheme="https://wustrive2008.github.io/tags/Linux/"/>
-    
-      <category term="chkconfig" scheme="https://wustrive2008.github.io/tags/chkconfig/"/>
-    
-      <category term="服务器" scheme="https://wustrive2008.github.io/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
-    
-      <category term="Linux" scheme="https://wustrive2008.github.io/categories/Linux/"/>
     
   </entry>
   
