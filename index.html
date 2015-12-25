@@ -81,9 +81,24 @@
 
   <section class="post" itemscope itemprop="blogPost">
   
-    <a href="/2015/12/24/java/深入理解jvm/" title="深入理解JVM" itemprop="url">
+    <a href="/2015/12/25/java/深入理解jvm之垃圾收集器/" title="深入理解jvm之垃圾收集器" itemprop="url">
   
-    <h1 itemprop="name">深入理解JVM</h1>
+    <h1 itemprop="name">深入理解jvm之垃圾收集器</h1>
+    
+     
+           <p itemprop="description" >判断对象是否存活可达性分析算法通过一系列称为”GC Roots”的对象作为起点，从这些节点开始向下搜索，搜索所有走过的路径称为引用链，当一个对象到GC Roots没有任何引用链相连时(从GC Roots到此对象不可达)，则证明此对象是不可用的。可作为GC Roots的对象包括：
+</p>
+        
+    
+    <time datetime="2015-12-25T13:00:59.000Z" itemprop="datePublished">2015-12-25</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/12/24/java/深入理解jvm之内存区域与内存溢出/" title="深入理解jvm之内存区域与内存溢出" itemprop="url">
+  
+    <h1 itemprop="name">深入理解jvm之内存区域与内存溢出</h1>
     
      
            <p itemprop="description" >Java内存区域与内存溢出异常运行时数据区域
@@ -219,22 +234,6 @@ java栈与程序计数器一样，java栈（虚拟机栈）也是线程私有的
   </a>
 </section>
 
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2015/08/16/读书笔记/读书笔记-穆斯林的葬礼/" title="穆斯林的葬礼" itemprop="url">
-  
-    <h1 itemprop="name">穆斯林的葬礼</h1>
-    
-     
-           <p itemprop="description" >书籍概要书名《穆斯林的葬礼》
-作者霍达 
-作者简介霍达，国家一级作家，全国政协委员，中央文史研究馆馆员。著有多种体裁的义学作品约500万字，其中长篇小说《穆斯林的葬礼》获第三届茅盾文学奖，作品《补天裂》获第七届全国五个一工程奖长篇小说和电视剧两个奖项，建国五十周年全国十部优秀长篇</p>
-        
-    
-    <time datetime="2015-08-16T13:15:27.000Z" itemprop="datePublished">2015-08-16</time>
-  </a>
-</section>
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -258,7 +257,7 @@ java栈与程序计数器一样，java栈（虚拟机栈）也是线程私有的
 		
 			<li><a href="/categories/http协议/" title="http协议">http协议<sup>2</sup></a></li>
 		
-			<li><a href="/categories/java/" title="java">java<sup>7</sup></a></li>
+			<li><a href="/categories/java/" title="java">java<sup>8</sup></a></li>
 		
 			<li><a href="/categories/nginx/" title="nginx">nginx<sup>1</sup></a></li>
 		
@@ -311,9 +310,9 @@ java栈与程序计数器一样，java栈（虚拟机栈）也是线程私有的
 		
 			<li><a href="/tags/http/" title="http">http<sup>2</sup></a></li>
 		
-			<li><a href="/tags/java/" title="java">java<sup>10</sup></a></li>
+			<li><a href="/tags/java/" title="java">java<sup>11</sup></a></li>
 		
-			<li><a href="/tags/jvm/" title="jvm">jvm<sup>1</sup></a></li>
+			<li><a href="/tags/jvm/" title="jvm">jvm<sup>2</sup></a></li>
 		
 			<li><a href="/tags/linkedlist/" title="linkedlist">linkedlist<sup>1</sup></a></li>
 		
