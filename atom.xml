@@ -62,7 +62,7 @@
     <link href="https://wustrive2008.github.io/2015/12/25/java/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3jvm%E4%B9%8B%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/"/>
     <id>https://wustrive2008.github.io/2015/12/25/java/深入理解jvm之垃圾收集器/</id>
     <published>2015-12-25T13:00:59.000Z</published>
-    <updated>2015-12-25T14:48:52.413Z</updated>
+    <updated>2016-01-02T16:31:54.003Z</updated>
     <content type="html"><![CDATA[<h2 id="判断对象是否存活">判断对象是否存活</h2><h3 id="可达性分析算法">可达性分析算法</h3><p>通过一系列称为”GC Roots”的对象作为起点，从这些节点开始向下搜索，搜索所有走过的路径称为引用链，当一个对象到GC Roots没有任何引用链相连时(从GC Roots到此对象不可达)，则证明此对象是不可用的。<br>可作为GC Roots的对象包括：</p>
 <ul>
 <li>虚拟机栈中所引用的对象</li>
@@ -130,6 +130,8 @@
 </li>
 </ol>
 <h3 id="参考">参考</h3><p>《深入理解java虚拟机 JVM高级特性与最佳实践》</p>
+<h3 id="捐赠">捐赠</h3><p>如何觉得本文章对你有帮助，欢迎捐赠</p>
+<p><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-hexo%E6%94%AF%E4%BB%98%E5%AE%9D%E4%BB%98%E6%AC%BE%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%9C%80%E5%B0%8F.png" alt="捐赠"></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="判断对象是否存活">判断对象是否存活</h2><h3 id="可达性分析算法">可达性分析算法</h3><p>通过一系列称为”GC Roots”的对象作为起点，从这些节点开始向下搜索，搜索所有走过的路径称为引用链，当一个对象到GC Roots没有任何引用链相连时(]]>
@@ -154,7 +156,7 @@
     <link href="https://wustrive2008.github.io/2015/12/24/java/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3jvm%E4%B9%8B%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E4%B8%8E%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA/"/>
     <id>https://wustrive2008.github.io/2015/12/24/java/深入理解jvm之内存区域与内存溢出/</id>
     <published>2015-12-24T13:21:29.000Z</published>
-    <updated>2015-12-25T12:59:50.070Z</updated>
+    <updated>2016-01-02T16:32:04.636Z</updated>
     <content type="html"><![CDATA[<h2 id="Java内存区域与内存溢出异常">Java内存区域与内存溢出异常</h2><h3 id="运行时数据区域">运行时数据区域</h3><p><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-blog%2Fjava%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA.jpg" alt="java虚拟机内存分区"></p>
 <h4 id="程序计数器">程序计数器</h4><ul>
 <li>当前线程所执行的字节码的行号指示器</li>
@@ -206,6 +208,8 @@
 </ul>
 <p>OOM异常示例：<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">package oom;</span><br><span class="line"></span><br><span class="line"><span class="literal">import</span> java.util.ArrayList;</span><br><span class="line"><span class="literal">import</span> java.util.<span class="built_in">List</span>;</span><br><span class="line"></span><br><span class="line"><span class="dartdoc"><span class="markdown">/**</span><br><span class="line"> * VM Args: -Xms20m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError</span><br><span class="line"><span class="bullet">* </span>@ClassName: HeapOOM </span><br><span class="line"><span class="bullet">*</span><br><span class="line"> </span>*/</span></span></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">HeapOOM</span> </span>&#123;</span><br><span class="line">    <span class="literal">static</span> <span class="class"><span class="keyword">class</span> <span class="title">OOMObject</span></span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public <span class="literal">static</span> <span class="keyword">void</span> main(<span class="built_in">String</span>[] args) &#123;</span><br><span class="line">        <span class="built_in">List</span>&lt;OOMObject&gt; list = <span class="keyword">new</span> ArrayList&lt;OOMObject&gt;();</span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">            list.add(<span class="keyword">new</span> OOMObject());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="参考">参考</h3><p>《深入理解java虚拟机 JVM高级特性与最佳实践》</p>
+<h3 id="捐赠">捐赠</h3><p>如何觉得本文章对你有帮助，欢迎捐赠</p>
+<p><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-hexo%E6%94%AF%E4%BB%98%E5%AE%9D%E4%BB%98%E6%AC%BE%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%9C%80%E5%B0%8F.png" alt="捐赠"></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="Java内存区域与内存溢出异常">Java内存区域与内存溢出异常</h2><h3 id="运行时数据区域">运行时数据区域</h3><p><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-blog%2]]>
@@ -423,8 +427,8 @@
     <title><![CDATA[面向对象设计的基本原则]]></title>
     <link href="https://wustrive2008.github.io/2015/08/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E5%88%99/"/>
     <id>https://wustrive2008.github.io/2015/08/28/设计模式/面向对象设计的基本原则/</id>
-    <published>2015-08-28T12:51:44.000Z</published>
-    <updated>2015-08-28T14:14:48.725Z</updated>
+    <published>2015-08-28T13:51:44.000Z</published>
+    <updated>2016-01-02T16:32:16.604Z</updated>
     <content type="html"><![CDATA[<p>对于面向对象软件系统的设计而言，在支持可维护性的同时，提高系统的可复用性是一个至关重要的问题，如何同时提高一个软件系统的可维护性和可复用性是面向对象设计需要解决的核心问题之一。在面向对象设计中，可维护性的复用是以设计原则为基础的。每一个原则都蕴含一些面向对象设计的思想，可以从不同的角度提升一个软件结构的设计水平。<br><a id="more"></a></p>
 <h3 id="单一职责原则">单一职责原则</h3><h4 id="定义">定义</h4><p>一个类只负责一个功能领域中的相应职责，或者可以定义为：就一个类而言，应该只有一个引起它变化的原因。</p>
 <h4 id="理解">理解</h4><p>单一职责原则是实现高内聚、低耦合的指导方针，它是最简单但又最难运用的原则。<br>每一个职责都是变化的一个轴线，如果一个类有一个以上的职责，这些职责就耦合在了一起。这会导致脆弱的设计。当一个职责发生变化时，可能会影响其它的职责。另外，多个职责耦合在一起，会影响复用性。</p>
@@ -457,6 +461,8 @@
 <p>迪米特法则要求我们在设计系统时，应该尽量减少对象之间的交互，如果两个对象之间不必彼此直接通信，那么这两个对象就不应当发生任何直接的相互作用，如果其中的一个对象需要调用另一个对象的某一个方法的话，可以通过第三者转发这个调用。简言之，就是通过引入一个合理的第三者来降低现有对象之间的耦合度。</p>
 <p>在将迪米特法则运用到系统设计中时，要注意下面的几点：在类的划分上，应当尽量创建松耦合的类，类之间的耦合度越低，就越有利于复用，一个处在松耦合中的类一旦被修改，不会对关联的类造成太大波及；在类的结构设计上，每一个类都应当尽量降低其成员变量和成员函数的访问权限；在类的设计上，只要有可能，一个类型应当设计成不变类；在对其他类的引用上，一个对象对其他对象的引用应当降到最低。</p>
 <h3 id="参考">参考</h3><p><a href="http://blog.csdn.net/LoveLion/article/category/738450" target="_blank" rel="external">刘伟技术博客</a></p>
+<h3 id="捐赠">捐赠</h3><p>如何觉得本文章对你有帮助，欢迎捐赠</p>
+<p><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-hexo%E6%94%AF%E4%BB%98%E5%AE%9D%E4%BB%98%E6%AC%BE%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%9C%80%E5%B0%8F.png" alt="捐赠"></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>对于面向对象软件系统的设计而言，在支持可维护性的同时，提高系统的可复用性是一个至关重要的问题，如何同时提高一个软件系统的可维护性和可复用性是面向对象设计需要解决的核心问题之一。在面向对象设计中，可维护性的复用是以设计原则为基础的。每一个原则都蕴含一些面向对象设计的思想，可以从不同的角度提升一个软件结构的设计水平。<br>]]>
@@ -505,8 +511,8 @@
     <title><![CDATA[http协议基础之报文]]></title>
     <link href="https://wustrive2008.github.io/2015/08/26/http%E5%8D%8F%E8%AE%AE/http%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%8A%A5%E6%96%87/"/>
     <id>https://wustrive2008.github.io/2015/08/26/http协议/http协议基础之报文/</id>
-    <published>2015-08-26T14:02:25.000Z</published>
-    <updated>2015-08-26T16:38:03.070Z</updated>
+    <published>2015-08-26T15:02:25.000Z</published>
+    <updated>2016-01-02T16:32:35.048Z</updated>
     <content type="html"><![CDATA[<h2 id="http协议之报文">http协议之报文</h2><h3 id="报文的语法">报文的语法</h3><p>请求报文：<br><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="keyword">method</span>&gt; &lt;request-<span class="type">URL</span>&gt; &lt;version&gt;</span><br><span class="line">&lt;headers&gt;</span><br><span class="line"></span><br><span class="line">&lt;entity-body&gt;</span><br></pre></td></tr></table></figure></p>
 <p>响应报文：<br><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;version&gt;</span> <span class="tag">&lt;status&gt;</span> <span class="tag">&lt;reason-phrase&gt;</span></span><br><span class="line"><span class="tag">&lt;headers&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;entity-body&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>说明：</p>
@@ -548,6 +554,8 @@
 <h4 id="300~399_重定向状态码">300~399 重定向状态码</h4><p>304 Not Modified</p>
 <h4 id="400~499_客户端错误状态码">400~499 客户端错误状态码</h4><p>400 Bad Request     请求错误<br>401 Unauthorized    需要认证或认证错误<br>403 Forbidden       请求被拒绝，有可能是资源权限问题<br>404 Not Found       未找到资源<br>405 Method Not Allowed  不支持的方法<br>408 Request Timeout     请求超时</p>
 <h4 id="500~599_服务器错误状态码">500~599 服务器错误状态码</h4><p>500 Internal Sever Error    服务器内部错误<br>501 Not Implemented     超出服务器能力范围<br>502 Bad Gateway         网关错误，一般是代理服务器找不到下一条链路<br>503 Sevice Unavailable  暂时无法为请求提供你服务<br>504 Gateway Timeout     响应超时<br>505 HTTP Version Not Supported  不支持的协议版本</p>
+<h3 id="捐赠">捐赠</h3><p>如何觉得本文章对你有帮助，欢迎捐赠</p>
+<p><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-hexo%E6%94%AF%E4%BB%98%E5%AE%9D%E4%BB%98%E6%AC%BE%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%9C%80%E5%B0%8F.png" alt="捐赠"></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="http协议之报文">http协议之报文</h2><h3 id="报文的语法">报文的语法</h3><p>请求报文：<br><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><s]]>
@@ -567,8 +575,8 @@
     <title><![CDATA[开放接口的安全验证方案(AES+RSA)]]></title>
     <link href="https://wustrive2008.github.io/2015/08/21/%E5%BC%80%E6%94%BE%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%AE%89%E5%85%A8%E9%AA%8C%E8%AF%81%E6%96%B9%E6%A1%88(AES+RSA)/"/>
     <id>https://wustrive2008.github.io/2015/08/21/开放接口的安全验证方案(AES+RSA)/</id>
-    <published>2015-08-21T14:39:13.000Z</published>
-    <updated>2015-08-28T12:48:59.214Z</updated>
+    <published>2015-08-21T15:39:13.000Z</published>
+    <updated>2016-01-02T16:33:47.038Z</updated>
     <content type="html"><![CDATA[<p>随着密码分析技术的提高，新的数据加密标准AES取代了过时的DES。文章在阐述AES/RSA加密算法的基础上，分别给出了利用AES/RSA实现客户端/服务器端网络数据传输的加密流程。最后在比较AES算法和RSA算法基础上，将AES与RSA相结合提出一种新的数据加密方案。<br><a id="more"></a></p>
 <h3 id="基本需求及概念">基本需求及概念</h3><p>随着Internet网的广泛应用，信息安全问题日益突出，以数据加密技术为核心的信息安全技术也得到了极大的发展。目前的数据加密技术根据加密密钥类型可分私钥加密（对称加密）系统和公钥加密（非对称加密）系统[1]。对称加密算法是较传统的加密体制，通信双方在加/解密过程中使用他们共享的单一密钥，鉴于其算法简单和加密速度快的优点，目前仍然是主流的密码体制之一。最常用的对称密码算法是数据加密标准（DES）算法，但是由于DES密钥长度较短，已经不适合当今分布式开放网络对数据加密安全性的要求。最后，一种新的基于Rijndael算法对称高级数据加密标准AES取代了数据加密标准DES。非对称加密由于加/解密钥不同（公钥加密，私钥解密），密钥管理简单，也得到广泛应用。RSA是非对称加密系统最著名的公钥密码算法。</p>
 <h3 id="AES算法">AES算法</h3><h4 id="基本原理及算法流程">基本原理及算法流程</h4><p>美国国家标准和技术研究所（NIST）经过三轮候选算法筛选，从众多的分组密码中选中Rijndael算法作为高级加密标准（AES）。Rijndael密码是一个迭代型分组密码，分组长度和密码长度都是可变的，分组长度和密码长度可以独立的指定为128比特，192比特或者256比特。AES的加密算法的数据处理单位是字节，128位的比特信息被分成16个字节，按顺序复制到一个4*4的矩阵中，称为状态（state），AES的所有变换都是基于状态矩阵的变换。<br>用Nr表示对一个数据分组加密的轮数（加密轮数与密钥长度的关系如表1所示）。在轮函数的每一轮迭代中，包括四步变换，分别是字节代换运算(ByteSub())、行变换(ShiftRows())、列混合(MixColumns())以及轮密钥的添加变换AddRoundKey()[3]，其作用就是通过重复简单的非线形变换、混合函数变换，将字节代换运算产生的非线性扩散，达到充分的混合，在每轮迭代中引入不同的密钥，从而实现加密的有效性。<br>表1 是三种不同类型的AES加密密钥分组大小与相应的加密轮数的对照表。加密开始时，输入分组的各字节按表2 的方式装入矩阵state中。如输入ABCDEFGHIJKLMNOP，则输入块影射到如表2的状态矩阵中。<br>表1：<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">|AES类型| 密钥长度 | 分组长度 | 加密轮数|</span></span><br><span class="line"><span class="string">|AES-128|  4字     |   4字    |   10    |</span></span><br><span class="line"><span class="string">|AES-192|  6字     |   4字    |   12    |</span></span><br><span class="line"><span class="string">|AES-256|  8字     |   4字    |   14    |</span></span><br></pre></td></tr></table></figure></p>
@@ -591,10 +599,11 @@
 </ol>
 <h4 id="基本流程">基本流程</h4><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">请求：</span><br><span class="line"><span class="number">1.</span> 服务器端(<span class="keyword">server</span>)和客户端(<span class="keyword">client</span>)分别生成自己的密钥对</span><br><span class="line"><span class="number">2.</span> <span class="keyword">server</span>和<span class="keyword">client</span>分别交换自己的公钥</span><br><span class="line"><span class="number">3.</span> <span class="keyword">client</span>生成AES密钥(aesKey)</span><br><span class="line"><span class="number">4.</span> <span class="keyword">client</span>使用自己的RSA私钥(privateKey)对请求明文数据(params)进行数字签名</span><br><span class="line"><span class="number">5.</span> 将签名加入到请求参数中，然后转换为json格式</span><br><span class="line"><span class="number">6.</span> <span class="keyword">client</span>使用aesKey对json数据进行加密得到密文(data)</span><br><span class="line"><span class="number">7.</span> <span class="keyword">client</span>使用sever的RSA公钥对aesKey进行加密(encryptkey)</span><br><span class="line"><span class="number">8.</span> 分别将data和encryptkey作为参数传输给服务器端</span><br><span class="line"></span><br><span class="line">服务器端进行请求响应时将上面流程反过来即可</span><br></pre></td></tr></table></figure>
 <h4 id="java版示例">java版示例</h4><p><a href="https://github.com/wustrive2008/aes-rsa-java" target="_blank" rel="external">AES+RSA双重加密Java示例</a></p>
-<p>参考：</p>
-<ol>
+<h3 id="参考：">参考：</h3><ol>
 <li>RSA密钥生成方法参考：<br><a href="https://cshall.alipay.com/support/help_detail.htm?help_id=397433&amp;keyword=%C3%DC%D4%BF%B6%D4&amp;sToken=s-39515fca081c4ba4bad6a8eceac4bf89&amp;from=search&amp;flag=0" target="_blank" rel="external">如何生成RSA密钥</a></li>
 </ol>
+<h3 id="捐赠">捐赠</h3><p>如何觉得本文章对你有帮助，欢迎捐赠</p>
+<p><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-hexo%E6%94%AF%E4%BB%98%E5%AE%9D%E4%BB%98%E6%AC%BE%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%9C%80%E5%B0%8F.png" alt="捐赠"></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>随着密码分析技术的提高，新的数据加密标准AES取代了过时的DES。文章在阐述AES/RSA加密算法的基础上，分别给出了利用AES/RSA实现客户端/服务器端网络数据传输的加密流程。最后在比较AES算法和RSA算法基础上，将AES与RSA相结合提出一种新的数据加密方案。<br>]]>
@@ -1091,8 +1100,8 @@
     <title><![CDATA[centos搭建本地yum服务器]]></title>
     <link href="https://wustrive2008.github.io/2015/07/26/Linux/centos%E6%90%AD%E5%BB%BA%E6%9C%AC%E5%9C%B0yum%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
     <id>https://wustrive2008.github.io/2015/07/26/Linux/centos搭建本地yum服务器/</id>
-    <published>2015-07-26T13:02:51.000Z</published>
-    <updated>2015-07-26T14:08:17.401Z</updated>
+    <published>2015-07-26T14:02:51.000Z</published>
+    <updated>2016-01-02T16:33:18.590Z</updated>
     <content type="html"><![CDATA[<p>YUM是Yellow dog Updater, Modified的缩写，是由Duke University所发起的计划，目的就是为了解决RPM的依赖关系的问题，方便使用者进行软件的安装、升级等等工作。在此在特别说明的是，YUM只是为了解决RPM的依赖关系的问题，而不是一种其它的软件安装模式。</p>
 <p>虽然在centos中可以直接使用yum源，但是也存在着与外网隔绝的现状，因此需要搭建本地yum源  </p>
 <p>系统：centos 6.5  </p>
@@ -1105,6 +1114,8 @@
 <p>7、加载yum缓存<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># yum clean all  </span></span><br><span class="line"><span class="preprocessor"># yum makecache</span></span><br></pre></td></tr></table></figure></p>
 <p>8、测试下载<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"># yum -y install php</span></span><br></pre></td></tr></table></figure></p>
 <p>这里就可以看到可以直接安装php，而不需要通过网上去下载。</p>
+<h3 id="捐赠">捐赠</h3><p>如何觉得本文章对你有帮助，欢迎捐赠</p>
+<p><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-hexo%E6%94%AF%E4%BB%98%E5%AE%9D%E4%BB%98%E6%AC%BE%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%9C%80%E5%B0%8F.png" alt="捐赠"></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>YUM是Yellow dog Updater, Modified的缩写，是由Duke University所发起的计划，目的就是为了解决RPM的依赖关系的问题，方便使用者进行软件的安装、升级等等工作。在此在特别说明的是，YUM只是为了解决RPM的依赖关系的问题，而不是一种其]]>
@@ -1126,8 +1137,8 @@
     <title><![CDATA[CentOS6.5下samba服务器搭建与配置]]></title>
     <link href="https://wustrive2008.github.io/2015/07/26/Linux/CentOS6.5%E4%B8%8Bsamba%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA%E4%B8%8E%E9%85%8D%E7%BD%AE/"/>
     <id>https://wustrive2008.github.io/2015/07/26/Linux/CentOS6.5下samba服务器搭建与配置/</id>
-    <published>2015-07-26T12:52:19.000Z</published>
-    <updated>2015-07-26T14:00:21.212Z</updated>
+    <published>2015-07-26T13:52:19.000Z</published>
+    <updated>2016-01-02T16:33:27.411Z</updated>
     <content type="html"><![CDATA[<h3 id="一、samba服务器的安装与配置">一、samba服务器的安装与配置</h3><ol>
 <li><p>samba服务器所需的软件包：</p>
 <p> [root@localhost ~]# yum -y install samba samba-common samba-client </p>
@@ -1173,6 +1184,8 @@
 <p>这是因为此用户没有成为samba服务的用户，解决办法是将此系统用户加入到samba中：</p>
 <p>执行命令： smbpasswd -a username</p>
 <p>设置密码即可</p>
+<h3 id="捐赠">捐赠</h3><p>如何觉得本文章对你有帮助，欢迎捐赠</p>
+<p><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-hexo%E6%94%AF%E4%BB%98%E5%AE%9D%E4%BB%98%E6%AC%BE%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%9C%80%E5%B0%8F.png" alt="捐赠"></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<h3 id="一、samba服务器的安装与配置">一、samba服务器的安装与配置</h3><ol>

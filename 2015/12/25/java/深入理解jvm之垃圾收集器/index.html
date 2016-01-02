@@ -64,6 +64,8 @@
 					
 						<li><a href="/archives">归档</a></li>
 					
+						<li><a href="/aboutme">关于</a></li>
+					
 					<li>
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
@@ -92,7 +94,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-12-25T13:00:59.000Z" itemprop="datePublished">2015-12-25</time>
-    更新日期:<time datetime="2015-12-25T14:48:52.413Z" itemprop="dateModified">2015-12-25</time>
+    更新日期:<time datetime="2016-01-02T16:31:54.003Z" itemprop="dateModified">2016-01-03</time>
     
   </p>
 </header>
@@ -111,7 +113,7 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#判断对象是否存活"><span class="toc-number">1.</span> <span class="toc-text">判断对象是否存活</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可达性分析算法"><span class="toc-number">1.1.</span> <span class="toc-text">可达性分析算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾收集算法"><span class="toc-number">2.</span> <span class="toc-text">垃圾收集算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#标记-清除算法"><span class="toc-number">2.1.</span> <span class="toc-text">标记-清除算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复制算法"><span class="toc-number">2.2.</span> <span class="toc-text">复制算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标记-复制算法"><span class="toc-number">2.3.</span> <span class="toc-text">标记-复制算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾收集器"><span class="toc-number">3.</span> <span class="toc-text">垃圾收集器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CMS收集器"><span class="toc-number">3.1.</span> <span class="toc-text">CMS收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G1收集器"><span class="toc-number">3.2.</span> <span class="toc-text">G1收集器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存分配与回收策略"><span class="toc-number">4.</span> <span class="toc-text">内存分配与回收策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#参考"><span class="toc-number">4.1.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#判断对象是否存活"><span class="toc-number">1.</span> <span class="toc-text">判断对象是否存活</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可达性分析算法"><span class="toc-number">1.1.</span> <span class="toc-text">可达性分析算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾收集算法"><span class="toc-number">2.</span> <span class="toc-text">垃圾收集算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#标记-清除算法"><span class="toc-number">2.1.</span> <span class="toc-text">标记-清除算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复制算法"><span class="toc-number">2.2.</span> <span class="toc-text">复制算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标记-复制算法"><span class="toc-number">2.3.</span> <span class="toc-text">标记-复制算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾收集器"><span class="toc-number">3.</span> <span class="toc-text">垃圾收集器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CMS收集器"><span class="toc-number">3.1.</span> <span class="toc-text">CMS收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G1收集器"><span class="toc-number">3.2.</span> <span class="toc-text">G1收集器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存分配与回收策略"><span class="toc-number">4.</span> <span class="toc-text">内存分配与回收策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#参考"><span class="toc-number">4.1.</span> <span class="toc-text">参考</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#捐赠"><span class="toc-number">4.2.</span> <span class="toc-text">捐赠</span></a></li></ol></li></ol>
 		</div>
 		
 		<h2 id="判断对象是否存活">判断对象是否存活</h2><h3 id="可达性分析算法">可达性分析算法</h3><p>通过一系列称为”GC Roots”的对象作为起点，从这些节点开始向下搜索，搜索所有走过的路径称为引用链，当一个对象到GC Roots没有任何引用链相连时(从GC Roots到此对象不可达)，则证明此对象是不可用的。<br>可作为GC Roots的对象包括：</p>
@@ -181,6 +183,8 @@
 </li>
 </ol>
 <h3 id="参考">参考</h3><p>《深入理解java虚拟机 JVM高级特性与最佳实践》</p>
+<h3 id="捐赠">捐赠</h3><p>如何觉得本文章对你有帮助，欢迎捐赠</p>
+<p><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-hexo%E6%94%AF%E4%BB%98%E5%AE%9D%E4%BB%98%E6%AC%BE%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%9C%80%E5%B0%8F.png" alt="捐赠"></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -238,7 +242,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#判断对象是否存活"><span class="toc-number">1.</span> <span class="toc-text">判断对象是否存活</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可达性分析算法"><span class="toc-number">1.1.</span> <span class="toc-text">可达性分析算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾收集算法"><span class="toc-number">2.</span> <span class="toc-text">垃圾收集算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#标记-清除算法"><span class="toc-number">2.1.</span> <span class="toc-text">标记-清除算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复制算法"><span class="toc-number">2.2.</span> <span class="toc-text">复制算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标记-复制算法"><span class="toc-number">2.3.</span> <span class="toc-text">标记-复制算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾收集器"><span class="toc-number">3.</span> <span class="toc-text">垃圾收集器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CMS收集器"><span class="toc-number">3.1.</span> <span class="toc-text">CMS收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G1收集器"><span class="toc-number">3.2.</span> <span class="toc-text">G1收集器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存分配与回收策略"><span class="toc-number">4.</span> <span class="toc-text">内存分配与回收策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#参考"><span class="toc-number">4.1.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#判断对象是否存活"><span class="toc-number">1.</span> <span class="toc-text">判断对象是否存活</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可达性分析算法"><span class="toc-number">1.1.</span> <span class="toc-text">可达性分析算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾收集算法"><span class="toc-number">2.</span> <span class="toc-text">垃圾收集算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#标记-清除算法"><span class="toc-number">2.1.</span> <span class="toc-text">标记-清除算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复制算法"><span class="toc-number">2.2.</span> <span class="toc-text">复制算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标记-复制算法"><span class="toc-number">2.3.</span> <span class="toc-text">标记-复制算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垃圾收集器"><span class="toc-number">3.</span> <span class="toc-text">垃圾收集器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CMS收集器"><span class="toc-number">3.1.</span> <span class="toc-text">CMS收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#G1收集器"><span class="toc-number">3.2.</span> <span class="toc-text">G1收集器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存分配与回收策略"><span class="toc-number">4.</span> <span class="toc-text">内存分配与回收策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#参考"><span class="toc-number">4.1.</span> <span class="toc-text">参考</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#捐赠"><span class="toc-number">4.2.</span> <span class="toc-text">捐赠</span></a></li></ol></li></ol>
   </div>
 
 <div id="asidepart">

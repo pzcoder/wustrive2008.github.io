@@ -1,5 +1,6 @@
 
-  <!DOCTYPE HTML>
+  
+    <!DOCTYPE HTML>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -41,9 +42,9 @@
 
 </head>
 
-    <body>
-      <header>
-        <div>
+      <body>
+        <header>
+          <div>
 		
 			<div id="imglogo">
 				<a href="/"><img src="/img/logo.png" alt="wustrive&#39;s blog" title="wustrive&#39;s blog"/></a>
@@ -77,33 +78,57 @@
 			</nav>			
 </div>
 
-      </header>
-      <div id="container">
-        
-
-<div class="archive-title" >
-  <h2 class="tag-icon">升级</h2>
-  
-</div>
-<div id="main" class="archive-part clearfix">
-  <div id="archive-page">
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2015/08/28/nginx/nginx平滑升级方案/" title="nginx平滑升级方案" itemprop="url">
-  
-    <h1 itemprop="name">nginx平滑升级方案</h1>
+        </header>
+        <div id="container">
+          <div id="main" class="page" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
     
-    <time datetime="2015-08-28T11:50:31.000Z" itemprop="datePublished">2015-08-28</time>
-  </a>
+      <a href="/aboutme/index.html" title="" itemprop="url"></a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="https://wustrive2008.github.io" title="wustrive">wustrive</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-01-02T16:19:18.473Z" itemprop="datePublished">2016-01-03</time>
+    更新日期:<time datetime="2016-01-02T16:19:18.473Z" itemprop="dateModified">2016-01-03</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<h1 id="关于本博客"><center>关于本博客</center></h1><p><strong>本博客的大部分文章属于原创文章，凡是转载和参考都在博客结尾有说明和链接。如有涉及版权问题，请联系 wustrive2008@gmail.com</strong></p>
+<h3 id="微信公众号">微信公众号</h3><p>欢迎关注微信公众号，关注本博客的更新</p>
+<p><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-hexo%2F%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97" alt="公众号"></p>
+<h3 id="捐赠">捐赠</h3><p>如何觉得本博客对你有帮助，欢迎捐赠</p>
+<p><img src="http://7xifb5.com1.z0.glb.clouddn.com/wustrive-hexo%E6%94%AF%E4%BB%98%E5%AE%9D%E4%BB%98%E6%AC%BE%E4%BA%8C%E7%BB%B4%E7%A0%81.png" alt="捐赠"></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="https://wustrive2008.github.io/aboutme/index.html" data-title="wustrive&#39;s blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+	
+<section class="comment">
+	<div class="ds-thread"></div>
 </section>
 
-
-  </div>
-</div>
-
-      </div>
-      <footer><div id="footer" >
+</div>  
+        </div>
+        <footer><div id="footer" >
 	
 	<div class="line">
 		<span></span>
@@ -136,7 +161,7 @@
 		</p>
 </div>
 </footer>
-      <script src="/js/jquery-2.1.0.min.js"></script>
+        <script src="/js/jquery-2.1.0.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
   $('.navbar').click(function(){
@@ -183,6 +208,46 @@ $(document).ready(function(){
 </script>
 
 
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"wustrive"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
 
 
 
@@ -208,5 +273,6 @@ ga('send', 'pageview');
 
 </script>
 
-    </body>
-   </html>
+      </body>
+     </html>
+     
